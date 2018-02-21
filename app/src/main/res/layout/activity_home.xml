@@ -6,13 +6,51 @@
     android:layout_height="match_parent"
     tools:context="com.vietlh.wethoong.HomeActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/lblTracuuvanbanphapluat"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="@string/tra_cuu_van_ban_phap_luat"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/lblTracuumucphat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/tra_cuu_muc_phat"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/lblTracuuvanbanphapluat" />
+
+    <Button
+        android:id="@+id/lblTracuubienbaohieu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/tra_cuu_bien_bao_hieu"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/lblTracuumucphat" />
+
+    <Button
+        android:id="@+id/lblTracuuvachkeduong"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/tra_cuu_vach_ke_duong"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/lblTracuubienbaohieu" />
+
+    <Button
+        android:id="@+id/lblChungtoilaai"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/chung_toi_la_ai"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintVertical_bias="0.075" />
+
 
 </android.support.constraint.ConstraintLayout>
