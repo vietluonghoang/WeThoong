@@ -4,6 +4,59 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.vietlh.wethoong.SearchActivity">
+    <EditText
+        android:id="@+id/txtSearch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        android:inputType="text" />
+    <LinearLayout
+        android:id="@+id/locTheoView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/txtSearch" >
+        <Button
+            android:id="@+id/btnLoctheo"
+            android:background="@android:color/transparent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight=".10"
+            android:text="@string/loc_theo"
+            android:textColor="#0000ff"/>
+        <TextView
+            android:id="@+id/lblLoctheo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight=".90"
+            style="@style/smallText"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/resultLayout"
+        android:layout_width="match_parent"
+        app:layout_constraintTop_toBottomOf="@id/locTheoView"
+        app:layout_constraintBottom_toTopOf="@id/adsView"
+        android:layout_height="0dp">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/search_result"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"
+            >
+        </android.support.v7.widget.RecyclerView>
+    </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/adsView"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 </android.support.constraint.ConstraintLayout>
