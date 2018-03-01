@@ -95,7 +95,8 @@ public class ListRecyclerViewAdapter extends RecyclerView.Adapter<ListRecyclerVi
         }
 
         public void setBtnBreadscrubs(int parentId) {
-            String breadscrubs = "";
+            //TODO: implement breadscrumb text
+            String breadscrubs = "---";
             this.btnBreadscrubs.setText(breadscrubs);
         }
     }
@@ -113,9 +114,10 @@ public class ListRecyclerViewAdapter extends RecyclerView.Adapter<ListRecyclerVi
     @Override
     public void onBindViewHolder(ViewHolder Vholder, int position){
 
+        Dieukhoan dk = allDieukhoan.get(position);
         try {
-            if(allDieukhoan.get(position).getMinhhoa().size() > 0) {
-                Bitmap bitmap = uHelper.getBitmapFromAssets(context, "/minhhoa/QC41-Bang_01.png");
+            if(dk.getMinhhoa().size() > 0) {
+                Bitmap bitmap = uHelper.getBitmapFromAssets(context, dk.getMinhhoa().get(0));
                 Vholder.setImgView(bitmap);
             }else{
                 Vholder.hideMinhhoa();
@@ -123,10 +125,16 @@ public class ListRecyclerViewAdapter extends RecyclerView.Adapter<ListRecyclerVi
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
-        Vholder.setBtnBreadscrubs(allDieukhoan.get(position).getCha());
-        Vholder.setLblDieukhoan(allDieukhoan.get(position).getSo());
-        Vholder.setLblNoidung(allDieukhoan.get(position).getNoidung());
-        Vholder.setLblVanban(allDieukhoan.get(position).getVanban().getMa());
+        Vholder.setBtnBreadscrubs(dk.getCha());
+        Vholder.setLblDieukhoan(dk.getSo());
+        String noidung = "";
+        if(dk.getTieude().length() < 1){
+            noidung = dk.getNoidung();
+        }else {
+            noidung = dk.getTieude()+"\n"+dk.getNoidung();
+        }
+        Vholder.setLblNoidung(noidung);
+        Vholder.setLblVanban(dk.getVanban().getMa());
     }
 
     @Override

@@ -38,4 +38,5 @@
     <string name="oto_oto_tai_ro_mooc">Ô tô (ô tô tải, rơ moóc)</string>
     <string name="title_activity_details">DetailsActivity</string>
     <string name="tam_giu_phuong_tien">Tạm giữ phương tiện:</string>
+    <string name="underconstruction">Tính năng này sẽ sớm ra mắt trong một ngày gần đây!</string>
 </resources>

@@ -11,18 +11,17 @@ import com.vietlh.wethoong.utils.Queries;
 
 public class HomeActivity extends AppCompatActivity {
     private DBConnection connection;
-    private Queries queries;
     private Button btnTracuuvanban;
     private Button btnTracuumucphat;
     private Button btnTracuubienbao;
     private Button btnTracuuvachkeduong;
+    private Button btnChungtoilaai;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         this.connection = DBConnection.getInstance(this);
-        queries = new Queries(connection);
         initComponents();
     }
 
@@ -32,7 +31,7 @@ public class HomeActivity extends AppCompatActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        openSearchScreen();
+                        openTracuuvanbanScreen();
                     }
                 }
         );
@@ -41,7 +40,7 @@ public class HomeActivity extends AppCompatActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        openTracuumucphatScreen();
                     }
                 }
         );
@@ -50,12 +49,21 @@ public class HomeActivity extends AppCompatActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        openUnderconstructionScreen();
                     }
                 }
         );
         btnTracuuvachkeduong = (Button) findViewById(R.id.btnTracuuvachkeduong);
         btnTracuuvachkeduong.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        openUnderconstructionScreen();
+                    }
+                }
+        );
+        btnChungtoilaai = (Button) findViewById(R.id.btnChungtoilaai);
+        btnChungtoilaai.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -65,9 +73,23 @@ public class HomeActivity extends AppCompatActivity {
         );
     }
     
-    private void openSearchScreen() {
+    private void openTracuuvanbanScreen() {
         Intent i = new Intent(getApplicationContext(), SearchActivity.class);
-        i.putExtra("queries", queries);
+        startActivity(i);
+    }
+
+    private void openTracuumucphatScreen() {
+        Intent i = new Intent(getApplicationContext(), SearchActivity.class);
+        startActivity(i);
+    }
+
+    private void openChungtoiScreen() {
+        Intent i = new Intent(getApplicationContext(), ChungtoiActivity.class);
+        startActivity(i);
+    }
+
+    private void openUnderconstructionScreen() {
+        Intent i = new Intent(getApplicationContext(), UnderconstructionActivity.class);
         startActivity(i);
     }
 }

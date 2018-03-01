@@ -17,7 +17,7 @@ public class SearchActivity extends AppCompatActivity {
     private ListRecyclerViewAdapter searchResultListRecyclerAdapter;
     private RecyclerView.LayoutManager recyclerLayoutManager;
     private ArrayList<Dieukhoan> allDieukhoan;
-    private Queries queries;
+    private Queries queries = new Queries(DBConnection.getInstance(this));
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +43,7 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void getPassingParameters(){
-        queries = (Queries)getIntent().getSerializableExtra("queries");
+//        queries = (Queries)getIntent().getSerializableExtra("queries");
     }
 
     private void initResultList(){

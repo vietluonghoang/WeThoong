@@ -15,10 +15,11 @@ import java.io.OutputStream;
  * Created by vietlh on 2/23/18.
  */
 
-public class DBConnection extends SQLiteOpenHelper {
+public class DBConnection extends SQLiteOpenHelper{
     private static final String TAG = "SQLiteOpenHelper";
 
     private final Context context;
+    private static String assetPath = "database";
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "Hieuluat";
 
@@ -52,8 +53,8 @@ public class DBConnection extends SQLiteOpenHelper {
         OutputStream myOutput = null;
         try {
             // Open db packaged as asset as the input stream
-            myInput = context.getAssets().open("/database/Hieuluat.sqlite");
-
+            System.out.print("==="+context.getAssets().list(assetPath));
+            myInput = context.getAssets().open("database/Hieuluat.sqlite");
             // Open the db in the application package context:
             myOutput = new FileOutputStream(db.getPath());
 
@@ -137,7 +138,6 @@ public class DBConnection extends SQLiteOpenHelper {
             this.database.close();
         }
     }
-
 
     public Cursor executeQuery(String query){
         return this.database.rawQuery(query,null);

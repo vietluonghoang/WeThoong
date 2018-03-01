@@ -1,17 +1,21 @@
 package com.vietlh.wethoong.utils;
 
+import java.util.HashMap;
+
 /**
  * Created by vietlh on 2/23/18.
  */
 
 public class GeneralSettings {
     public static String[] mucphatRange = {"50.000","60.000","80.000","100.000","120.000","200.000","300.000","400.000","500.000","600.000","800.000","1.000.000","1.200.000","500.000","1.600.000","2.000.000","2.500.000","3.000.000","4.000.000","5.000.000","6.000.000","7.000.000","8.000.000","10.000.000","12.000.000","14.000.000","15.000.000","16.000.000","18.000.000","20.000.000","25.000.000","28.000.000","30.000.000","32.000.000","36.000.000","37.500.000","40.000.000","50.000.000","52.500.000","56.000.000","64.000.000","70.000.000","75.000.000","80.000.000","150.000.000"};
-    public static String nd46Id = "2";
-    public static String qc41Id = "1";
-    public static String tt01Id = "3";
-    public static String lgtId = "4";
-    public static String lxlvphcId = "5";
+    private static String nd46Id = "2";
+    private static String qc41Id = "1";
+    private static String tt01Id = "3";
+    private static String lgtId = "4";
+    private static String lxlvphcId = "5";
     public static String tamgiuPhuongtienDieukhoanID = "2820";
+    private static HashMap<String,HashMap<String,String>> vanbanInfo;
+    public static boolean isAdsEnabled = true;
 
     public static int getRecordCapByRam(){
         float ram = getFreePhysicalMemorySize();
@@ -57,4 +61,42 @@ public class GeneralSettings {
         }
         return (float)(freeSize / 1048576L);
     }
+
+    public static String getVanbanInfo(String name, String info){
+        String value = "";
+        value = vanbanInfo.get(name).get(info);
+
+        if(value == null){
+            HashMap<String,String> vbInfo = new HashMap<>();
+            switch (name){
+                case "nd46":
+                    vbInfo.put("id",nd46Id);
+                    vbInfo.put("fullName","Nghị định 46 - 2016");
+                    break;
+                case "qc41":
+                    vbInfo.put("id",qc41Id);
+                    vbInfo.put("fullName","Quy chuẩn 41 - 2016");
+                    break;
+                case "tt01":
+                    vbInfo.put("id",tt01Id);
+                    vbInfo.put("fullName","Thông tư 01 - 2016");
+                    break;
+                case "lgt":
+                    vbInfo.put("id",lgtId);
+                    vbInfo.put("fullName","Luật giao thông 2008");
+                    break;
+                case "lxlvphc":
+                    vbInfo.put("id",lxlvphcId);
+                    vbInfo.put("fullName","Luật xử lý vi phạm hành chính 2012");
+                    break;
+                default:
+                    break;
+            }
+            vanbanInfo.put(name,vbInfo);
+            value = vanbanInfo.get(name).get(info);
+        }
+        return value;
+    }
+
+    
 }
