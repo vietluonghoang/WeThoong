@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.vietlh.wethoong.R;
 import com.vietlh.wethoong.entities.Dieukhoan;
+import com.vietlh.wethoong.utils.SearchFor;
 import com.vietlh.wethoong.utils.UtilsHelper;
 
 import java.net.URI;
@@ -27,15 +28,16 @@ public class ListRecyclerViewAdapter extends RecyclerView.Adapter<ListRecyclerVi
     ArrayList<Dieukhoan> allDieukhoan = new ArrayList<>();
     Context context;
     UtilsHelper uHelper = new UtilsHelper();
+    SearchFor search;
 
     public ListRecyclerViewAdapter(Context context, ArrayList<Dieukhoan> allDieukhoan){
 
         this.allDieukhoan = allDieukhoan;
-
         this.context = context;
+        this.search = new SearchFor(this.context);
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder{
 
         private ImageView imgView;
         private TextView lblVanban;
@@ -94,9 +96,10 @@ public class ListRecyclerViewAdapter extends RecyclerView.Adapter<ListRecyclerVi
             return btnBreadscrubs;
         }
 
-        public void setBtnBreadscrubs(int parentId) {
-            //TODO: implement breadscrumb text
-            String breadscrubs = "---";
+        public void setBtnBreadscrubs(Dieukhoan parent) {
+            ArrayList<String> vanbanid = new ArrayList<String>();
+            vanbanid.add(parent.getVanban().getId() + "");
+            String breadscrubs = search.getAncestersNumber(parent,vanbanid);
             this.btnBreadscrubs.setText(breadscrubs);
         }
     }
@@ -125,7 +128,7 @@ public class ListRecyclerViewAdapter extends RecyclerView.Adapter<ListRecyclerVi
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
-        Vholder.setBtnBreadscrubs(dk.getCha());
+        Vholder.setBtnBreadscrubs(dk);
         Vholder.setLblDieukhoan(dk.getSo());
         String noidung = "";
         if(dk.getTieude().length() < 1){

@@ -16,6 +16,8 @@ public class Dieukhoan {
     private String hinhphatbosung = "";
     private String bienphapkhacphuc = "";
     private int sortPoint = 0;
+    private int matchCount = 0;
+    private int firstAppearanceDistance = 0;
 
     public int getId() {
         return id;
@@ -95,6 +97,22 @@ public class Dieukhoan {
 
     public void setSortPoint(int sortPoint) {
         this.sortPoint = sortPoint;
+    }
+
+    public int getMatchCount() {
+        return matchCount;
+    }
+
+    public void setMatchCount(int matchCount) {
+        this.matchCount = matchCount;
+    }
+
+    public int getFirstAppearanceDistance() {
+        return firstAppearanceDistance;
+    }
+
+    public void setFirstAppearanceDistance(int firstAppearanceDistance) {
+        this.firstAppearanceDistance = firstAppearanceDistance;
     }
 
     public Dieukhoan(int id, int cha, Vanban vanban) {

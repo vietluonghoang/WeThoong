@@ -16,6 +16,7 @@ public class GeneralSettings {
     public static String tamgiuPhuongtienDieukhoanID = "2820";
     private static HashMap<String,HashMap<String,String>> vanbanInfo;
     public static boolean isAdsEnabled = true;
+    public static int resultCountLimit = 100;
 
     public static int getRecordCapByRam(){
         float ram = getFreePhysicalMemorySize();
