@@ -2,11 +2,18 @@ package com.vietlh.wethoong.utils;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.content.res.ColorStateList;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.RippleDrawable;
+import android.widget.Button;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
 
 /**
  * Created by vietlh on 2/26/18.
@@ -37,7 +44,7 @@ public class UtilsHelper {
                     Throws
                         IOException
             */
-            is = am.open(fileName);
+            is = am.open("minhhoa/" + fileName);
         }catch(IOException e){
             e.printStackTrace();
         }
@@ -62,5 +69,36 @@ public class UtilsHelper {
         return bitmap;
     }
 
+    public int getButtonBackgroundColor(Button button){
+        int buttonColor = 0;
 
+        if (button.getBackground() instanceof ColorDrawable) {
+            ColorDrawable cd = (ColorDrawable) button.getBackground();
+            buttonColor = cd.getColor();
+        }
+
+        if (button.getBackground() instanceof RippleDrawable) {
+            RippleDrawable rippleDrawable = (RippleDrawable) button.getBackground();
+            Drawable.ConstantState state = rippleDrawable.getConstantState();
+            try {
+                Field colorField = state.getClass().getDeclaredField("mColor");
+                colorField.setAccessible(true);
+                ColorStateList colorStateList = (ColorStateList) colorField.get(state);
+                buttonColor = colorStateList.getDefaultColor();
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+        return buttonColor;
+    }
+
+    public int getScreenWidth() {
+        return Resources.getSystem().getDisplayMetrics().widthPixels;
+    }
+
+    public int getScreenHeight() {
+        return Resources.getSystem().getDisplayMetrics().heightPixels;
+    }
 }

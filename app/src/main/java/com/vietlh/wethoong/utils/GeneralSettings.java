@@ -8,14 +8,24 @@ import java.util.HashMap;
 
 public class GeneralSettings {
     public static String[] mucphatRange = {"50.000","60.000","80.000","100.000","120.000","200.000","300.000","400.000","500.000","600.000","800.000","1.000.000","1.200.000","500.000","1.600.000","2.000.000","2.500.000","3.000.000","4.000.000","5.000.000","6.000.000","7.000.000","8.000.000","10.000.000","12.000.000","14.000.000","15.000.000","16.000.000","18.000.000","20.000.000","25.000.000","28.000.000","30.000.000","32.000.000","36.000.000","37.500.000","40.000.000","50.000.000","52.500.000","56.000.000","64.000.000","70.000.000","75.000.000","80.000.000","150.000.000"};
+    public static String[] danhsachvanban = {"nd46","qc41","tt01","lgt","lxlvphc"};
+    public static final String SEARCH_TYPE_VANBAN = "vanban";
+    public static final String SEARCH_TYPE_MUCPHAT = "mucphat";
+    public static final String PHUONGTIEN_OTO = "Ô tô";
+    public static final String PHUONGTIEN_XEMAY = "Xe máy";
+    public static final String PHUONGTIEN_XEDAP = "Xe đạp";
+    public static final String PHUONGTIEN_XECHUYENDUNG = "Xe chuyên dùng";
+    public static final String PHUONGTIEN_TAUHOA = "Tàu hoả";
+    public static final String PHUONGTIEN_DIBO = "Đi bộ";
+
     private static String nd46Id = "2";
     private static String qc41Id = "1";
     private static String tt01Id = "3";
     private static String lgtId = "4";
     private static String lxlvphcId = "5";
-    public static String tamgiuPhuongtienDieukhoanID = "2820";
-    private static HashMap<String,HashMap<String,String>> vanbanInfo;
-    public static boolean isAdsEnabled = true;
+    private static String tamgiuPhuongtienDieukhoanID = "2820";
+    private static HashMap<String,HashMap<String,String>> vanbanInfo = new HashMap<>();
+    private static boolean isAdsEnabled = true;
     public static int resultCountLimit = 100;
 
     public static int getRecordCapByRam(){
@@ -64,8 +74,7 @@ public class GeneralSettings {
     }
 
     public static String getVanbanInfo(String name, String info){
-        String value = "";
-        value = vanbanInfo.get(name).get(info);
+        HashMap<String,String> value = vanbanInfo.get(name);
 
         if(value == null){
             HashMap<String,String> vbInfo = new HashMap<>();
@@ -94,9 +103,10 @@ public class GeneralSettings {
                     break;
             }
             vanbanInfo.put(name,vbInfo);
-            value = vanbanInfo.get(name).get(info);
+            return vanbanInfo.get(name).get(info);
+        } else {
+            return value.get(info);
         }
-        return value;
     }
 
     

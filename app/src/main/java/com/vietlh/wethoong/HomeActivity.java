@@ -75,11 +75,15 @@ public class HomeActivity extends AppCompatActivity {
     
     private void openTracuuvanbanScreen() {
         Intent i = new Intent(getApplicationContext(), SearchActivity.class);
+        //TODO: need to change the hardcode searchType to something that configurable.
+        i.putExtra("searchType","vanban");
         startActivity(i);
     }
 
     private void openTracuumucphatScreen() {
         Intent i = new Intent(getApplicationContext(), SearchActivity.class);
+        //TODO: need to change the hardcode searchType to something that configurable.
+        i.putExtra("searchType","mucphat");
         startActivity(i);
     }
 

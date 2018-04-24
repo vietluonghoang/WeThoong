@@ -58,7 +58,7 @@
                 app:layout_constraintTop_toBottomOf="@id/lblNoidung" >
 
                 <LinearLayout
-                    android:id="@+id/mucphat"
+                    android:id="@+id/mucphatView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
@@ -78,11 +78,11 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/phuongtien"
+                    android:id="@+id/phuongtienView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    app:layout_constraintTop_toBottomOf="@id/mucphat" >
+                    app:layout_constraintTop_toBottomOf="@id/mucphatView" >
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -98,11 +98,11 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/linhvuc"
+                    android:id="@+id/linhvucView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    app:layout_constraintTop_toBottomOf="@id/phuongtien" >
+                    app:layout_constraintTop_toBottomOf="@id/phuongtienView" >
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -118,11 +118,11 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/doituong"
+                    android:id="@+id/doituongView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    app:layout_constraintTop_toBottomOf="@id/linhvuc"
+                    app:layout_constraintTop_toBottomOf="@id/linhvucView"
                     app:layout_constraintBottom_toBottomOf="parent" >
 
                     <TextView
@@ -286,6 +286,7 @@
                 app:layout_constraintTop_toBottomOf="@id/minhhoaView"
                 app:layout_constraintBottom_toBottomOf="parent">
                 <TableLayout
+                    android:id="@+id/tblChildrenDieukhoan"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                 </TableLayout>

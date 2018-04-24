@@ -23,14 +23,14 @@
             android:background="@android:color/transparent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight=".10"
+            android:layout_weight="1"
             android:text="@string/loc_theo"
             android:textColor="#0000ff"/>
         <TextView
             android:id="@+id/lblLoctheo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight=".90"
+            android:layout_weight="9"
             style="@style/smallText"/>
     </LinearLayout>
     <LinearLayout

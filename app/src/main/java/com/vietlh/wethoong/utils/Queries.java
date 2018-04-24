@@ -438,7 +438,7 @@ public class Queries{
     public ArrayList<Dieukhoan> searchDieukhoanBySo(String keyword, ArrayList<String> vanbanid) {
         connection.open();
         String specificVanban = generateWhereClauseForVanbanid(vanbanid, "vbId");
-        String sql = getRawQuery() + "(dkSo = ? or dk.forsearch like ? or dk.forsearch like ?)" + specificVanban;
+        String sql = getRawQuery() + "(dkSo = '" + keyword + "' or dk.forsearch like '" + keyword + "' or dk.forsearch like '" + keyword + "')" + specificVanban;
 
         ArrayList<Dieukhoan> allDieukhoan = new ArrayList<>();
         Cursor cursor = connection.executeQuery(sql);
@@ -452,7 +452,7 @@ public class Queries{
     public ArrayList<Dieukhoan> searchDieukhoanByID(String keyword, ArrayList<String> vanbanid) {
         connection.open();
         String specificVanban = generateWhereClauseForVanbanid(vanbanid, "vbId");
-        String sql = getRawQuery() + " dkId = ? " + specificVanban;
+        String sql = getRawQuery() + " dkId = " + keyword + " " + specificVanban;
 
         ArrayList<Dieukhoan> allDieukhoan = new ArrayList<>();
         Cursor cursor = connection.executeQuery(sql);
@@ -485,7 +485,7 @@ public class Queries{
         String specificVanban = generateWhereClauseForVanbanid(vanbanid, "vbId");
         String appendString = generateWhereClauseForKeywordsWithDifferentAccentType(keyword, "dkSearch");
 
-        String sql = getRawQuery()+ " " + appendString + " " + specificVanban;
+        String sql = getRawQuery()+ " (" + appendString + ") " + specificVanban;
 
         ArrayList<Dieukhoan> allDieukhoan = new ArrayList<>();
         Cursor cursor = connection.executeQuery(sql);
@@ -546,7 +546,9 @@ public class Queries{
                 ArrayList<String> minhhoa = new ArrayList<>();
                 for (String mh :
                         cursor.getString(4).split(";")) {
-                    minhhoa.add(mh);
+                    if (mh.length() > 0) {
+                        minhhoa.add(mh);
+                    }
                 }
                 Loaivanban loaivanban = new Loaivanban(cursor.getInt(6),cursor.getString(7));
                 Coquanbanhanh coquanbanhanh = new Coquanbanhanh(cursor.getInt(14),cursor.getString(15));
@@ -559,7 +561,7 @@ public class Queries{
 
     }
 
-    private ArrayList<String> convertKeywordsForDifferentAccentType(String keyword) {
+    public ArrayList<String> convertKeywordsForDifferentAccentType(String keyword) {
         String convertedKeyword = "";
 
         String[] vnChars = {"á", "à", "ả", "ã", "ạ", "a", "ấ", "ầ", "ẩ", "ẫ", "ậ", "â", "ắ", "ằ", "ẳ", "ẵ", "ặ", "ă", "é", "è", "ẻ", "ẽ", "ẹ", "e", "ế", "ề", "ể", "ễ", "ệ", "ê", "í", "ì", "ỉ", "ĩ", "ị", "i", "ó", "ò", "ỏ", "õ", "ọ", "o", "ố", "ồ", "ổ", "ỗ", "ộ", "ô", "ớ", "ờ", "ở", "ỡ", "ợ", "ơ", "ú", "ù", "ủ", "ũ", "ụ", "u", "ứ", "ừ", "ử", "ữ", "ự", "ư", "ý", "ỳ", "ỷ", "ỹ", "ỵ", "y"};

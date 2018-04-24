@@ -30,7 +30,7 @@
             android:orientation="vertical"
             app:layout_constraintLeft_toRightOf="@id/imageView"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent" >
 
             <TextView
                 android:id="@+id/lblVanban"
@@ -53,15 +53,18 @@
                     android:layout_height="wrap_content"
                     android:layout_weight=".30"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:text="123"/>
 
                 <Button
                     android:id="@+id/btnBreadscrubs"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight=".70"
                     android:background="@android:color/transparent"
+                    android:text="123"
                     android:textColor="#0000ff"
+                    app:layout_constraintBottom_toBottomOf="@id/lblDieukhoan"
                     app:layout_constraintLeft_toRightOf="@id/lblDieukhoan"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
