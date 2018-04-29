@@ -1,13 +1,14 @@
 package com.vietlh.wethoong;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
+import com.google.android.gms.ads.MobileAds;
+import com.vietlh.wethoong.utils.AdsHelper;
 import com.vietlh.wethoong.utils.DBConnection;
-import com.vietlh.wethoong.utils.Queries;
 
 public class HomeActivity extends AppCompatActivity {
     private DBConnection connection;
@@ -16,6 +17,7 @@ public class HomeActivity extends AppCompatActivity {
     private Button btnTracuubienbao;
     private Button btnTracuuvachkeduong;
     private Button btnChungtoilaai;
+    private AdsHelper adsHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +25,9 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
         this.connection = DBConnection.getInstance(this);
         initComponents();
+        MobileAds.initialize(this, "ca-app-pub-1832172217205335~8071107814");
+        adsHelper = new AdsHelper();
+        adsHelper.updateLastConnectionState();
     }
 
     private void initComponents(){
@@ -67,7 +72,7 @@ public class HomeActivity extends AppCompatActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        openChungtoiScreen();
                     }
                 }
         );

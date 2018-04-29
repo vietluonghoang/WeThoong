@@ -17,16 +17,18 @@ public class GeneralSettings {
     public static final String PHUONGTIEN_XECHUYENDUNG = "Xe chuyên dùng";
     public static final String PHUONGTIEN_TAUHOA = "Tàu hoả";
     public static final String PHUONGTIEN_DIBO = "Đi bộ";
+    public static String tamgiuPhuongtienDieukhoanID = "2820";
+    public static boolean isAdsEnabled = true;
+    public static boolean isDevMode = true;
+    public static int resultCountLimit = 100;
+    public static boolean wasConnectedToInternet = false;
 
     private static String nd46Id = "2";
     private static String qc41Id = "1";
     private static String tt01Id = "3";
     private static String lgtId = "4";
     private static String lxlvphcId = "5";
-    private static String tamgiuPhuongtienDieukhoanID = "2820";
     private static HashMap<String,HashMap<String,String>> vanbanInfo = new HashMap<>();
-    private static boolean isAdsEnabled = true;
-    public static int resultCountLimit = 100;
 
     public static int getRecordCapByRam(){
         float ram = getFreePhysicalMemorySize();

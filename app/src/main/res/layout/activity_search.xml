@@ -6,37 +6,61 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.vietlh.wethoong.SearchActivity">
-    <EditText
-        android:id="@+id/txtSearch"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        android:inputType="text" />
+
     <LinearLayout
-        android:id="@+id/locTheoView"
+        android:id="@+id/searchView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/txtSearch" >
-        <Button
-            android:id="@+id/btnLoctheo"
-            android:background="@android:color/transparent"
-            android:layout_width="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <EditText
+            android:id="@+id/txtSearch"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/loc_theo"
-            android:textColor="#0000ff"/>
-        <TextView
-            android:id="@+id/lblLoctheo"
-            android:layout_width="wrap_content"
+            android:inputType="text" />
+
+        <LinearLayout
+            android:id="@+id/locTheoView"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="9"
-            style="@style/smallText"/>
+            android:baselineAligned="false"
+            android:orientation="horizontal"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txtSearch">
+
+            <Button
+                android:id="@+id/btnLoctheo"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:maxLines="1"
+                android:text="@string/loc_theo"
+                android:textColor="#0000ff"
+                android:minHeight="0dp"
+                app:layout_constraintBottom_toBottomOf="@id/lblLoctheo"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/lblLoctheo"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/lblLoctheo"
+                style="@style/smallText"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="6"
+                android:baselineAligned="false"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </LinearLayout>
     </LinearLayout>
+
     <LinearLayout
         android:id="@+id/resultLayout"
         android:layout_width="match_parent"
-        app:layout_constraintTop_toBottomOf="@id/locTheoView"
+        app:layout_constraintTop_toBottomOf="@id/searchView"
         app:layout_constraintBottom_toTopOf="@id/adsView"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -57,8 +81,17 @@
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+        <!--<com.google.android.gms.ads.AdView-->
+            <!--xmlns:ads="http://schemas.android.com/apk/res-auto"-->
+            <!--android:id="@+id/googleAdView"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_centerHorizontal="true"-->
+            <!--android:layout_alignParentBottom="true"-->
+            <!--ads:adSize="BANNER"-->
+            <!--ads:adUnitId="ca-app-pub-3940256099942544/6300978111"-->
+            <!--&gt;-->
+            <!--&lt;!&ndash;ads:adUnitId="ca-app-pub-1832172217205335/3658533168"&ndash;&gt;-->
+        <!--</com.google.android.gms.ads.AdView>-->
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

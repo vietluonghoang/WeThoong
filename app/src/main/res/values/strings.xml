@@ -44,4 +44,9 @@
     <string name="optionTT01">Thông tư 01 - BCA - 2016</string>
     <string name="optionLGT">Luật Giao thông Đường bộ - 2008</string>
     <string name="optionLXLVPHC">Luật Xử lý Vi phạm Hành chính - 2012</string>
+    <string name="founderTitle">Founder</string>
+    <string name="wethoongFB">https://fb.me/wethoong</string>
+    <string name="wethoongEmail">wethoong@gmail.com</string>
+    <string name="fbTitle">F:</string>
+    <string name="eTitle">E:</string>
 </resources>

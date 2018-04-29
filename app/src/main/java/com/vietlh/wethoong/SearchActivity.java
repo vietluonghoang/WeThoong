@@ -22,8 +22,13 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.vietlh.wethoong.adapters.ListRecyclerViewAdapter;
 import com.vietlh.wethoong.entities.Dieukhoan;
+import com.vietlh.wethoong.utils.AdsHelper;
 import com.vietlh.wethoong.utils.DBConnection;
 import com.vietlh.wethoong.utils.GeneralSettings;
 import com.vietlh.wethoong.utils.Queries;
@@ -40,14 +45,17 @@ public class SearchActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager recyclerLayoutManager;
     private ArrayList<Dieukhoan> allDieukhoan;
     private Queries queries = new Queries(DBConnection.getInstance(this));
+    private LinearLayout searchView;
     private Button btnLoctheo;
     private TextView txtLoctheo;
     private EditText tfSearch;
+    private LinearLayout adsView;
     private ArrayList<String> vanbanid = new ArrayList<>();
     private ArrayList<String> phuongtien = new ArrayList<>();
     private HashMap<String,String> mucphat = new HashMap<>();
     private String searchType;
     private UtilsHelper helper = new UtilsHelper();
+    private AdsHelper adsHelper = new AdsHelper();
 
     //Filter popup elements
     private AlertDialog.Builder builder;
@@ -73,6 +81,7 @@ public class SearchActivity extends AppCompatActivity {
     private Spinner spMucphatTu;
     private Spinner spMucphatDen;
     private int colorNormalBtnBg;
+    private int colorNormalBtnFg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,12 +89,13 @@ public class SearchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search);
         getPassingParameters();
         initComponents();
+        builder = new AlertDialog.Builder(this);
 
         searchResultRecyclerView = (RecyclerView) findViewById(R.id.search_result);
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
-        searchResultRecyclerView.setHasFixedSize(true);
+        searchResultRecyclerView.setHasFixedSize(false);
 
         // use a linear layout manager
         recyclerLayoutManager = new LinearLayoutManager(this);
@@ -93,7 +103,11 @@ public class SearchActivity extends AppCompatActivity {
 
         // specify an adapter (see also next example)
         searchResultListRecyclerAdapter = new ListRecyclerViewAdapter(this,allDieukhoan);
-        updateResultList("");
+        if (!searchType.equals("lienquan")) {
+            updateResultList("");
+        }else {
+            updateResultListWithRelatedDieukhoan();
+        }
         searchResultRecyclerView.setAdapter(searchResultListRecyclerAdapter);
 
         //workaround to make searchResultRecyclerView to match parent width
@@ -101,7 +115,28 @@ public class SearchActivity extends AppCompatActivity {
         searchResultLayoutParams.width = helper.getScreenWidth();
         searchResultRecyclerView.setLayoutParams(searchResultLayoutParams);
 
-        builder = new AlertDialog.Builder(this);
+        initAds();
+    }
+
+    private void initAds(){
+        adsView = (LinearLayout) findViewById(R.id.adsView);
+        adsHelper.updateLastConnectionState();
+        if (GeneralSettings.wasConnectedToInternet) {
+            AdView googleAdView = new AdView(this);
+            adsHelper.addBannerViewtoView(googleAdView, adsView);
+            AdRequest adRequest = new AdRequest.Builder().build();
+            googleAdView.loadAd(adRequest);
+        }else {
+            Button btnFBBanner = new Button(this);
+            btnFBBanner.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    helper.openUrlInExternalBrowser(getApplicationContext(),getResources().getString(R.string.wethoongFB));
+                }
+            });
+            btnFBBanner.setBackgroundResource(R.drawable.facebook_banner_wethoong);
+            adsHelper.addButtonToView(btnFBBanner,adsView);
+        }
     }
 
     private void getPassingParameters(){
@@ -109,6 +144,7 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void initComponents(){
+        searchView = (LinearLayout) findViewById(R.id.searchView);
         tfSearch = (EditText)findViewById(R.id.txtSearch);
         btnLoctheo = (Button)((LinearLayout)findViewById(R.id.locTheoView)).findViewById(R.id.btnLoctheo);
         txtLoctheo = (TextView)((LinearLayout)findViewById(R.id.locTheoView)).findViewById(R.id.lblLoctheo);
@@ -155,6 +191,21 @@ public class SearchActivity extends AppCompatActivity {
 
     private void updateResultList(String keyword){
         allDieukhoan = search(keyword.trim());
+        searchResultListRecyclerAdapter.updateView(allDieukhoan);
+    }
+
+    private void updateResultListWithRelatedDieukhoan(){
+        searchView.removeAllViews();
+        helper.hideSection(searchView);
+        String dieukhoanId = (String) getIntent().getStringExtra("dieukhoanId");
+        allDieukhoan = new ArrayList<>();
+
+        for (Dieukhoan dk : queries.getAllDirectRelatedDieukhoan(Integer.parseInt(dieukhoanId))) {
+            allDieukhoan.add(dk);
+        }
+        for (Dieukhoan dk : queries.getAllRelativeRelatedDieukhoan(Integer.parseInt(dieukhoanId))) {
+            allDieukhoan.add(dk);
+        }
         searchResultListRecyclerAdapter.updateView(allDieukhoan);
     }
 
@@ -268,14 +319,12 @@ public class SearchActivity extends AppCompatActivity {
 
         lineLoutLoaivanban = (LinearLayout)customView.findViewById(R.id.Loaivanban);
         lineLoutMucphat = (LinearLayout)customView.findViewById(R.id.mucphatSection);
-        ViewGroup.LayoutParams hiddenSection;
+//        ViewGroup.LayoutParams hiddenSection;
         switch (searchType){
             case GeneralSettings.SEARCH_TYPE_VANBAN:
                 lineLoutMucphat.setVisibility(View.INVISIBLE);
                 lineLoutLoaivanban.setVisibility(View.VISIBLE);
-                hiddenSection = lineLoutMucphat.getLayoutParams();
-                hiddenSection.height = 0;
-                lineLoutMucphat.setLayoutParams(hiddenSection);
+                helper.hideSection(lineLoutMucphat);
 
                 initVanbanFilters();
 
@@ -283,9 +332,7 @@ public class SearchActivity extends AppCompatActivity {
             case GeneralSettings.SEARCH_TYPE_MUCPHAT:
                 lineLoutMucphat.setVisibility(View.VISIBLE);
                 lineLoutLoaivanban.setVisibility(View.INVISIBLE);
-                hiddenSection = lineLoutLoaivanban.getLayoutParams();
-                hiddenSection.height = 0;
-                lineLoutLoaivanban.setLayoutParams(hiddenSection);
+                helper.hideSection(lineLoutLoaivanban);
 
                 lineLoutPhuongtien = (LinearLayout)customView.findViewById(R.id.phuongtienLines);
                 swtPhuongtien = (Switch)customView.findViewById(R.id.phuongtienSectionToggleSwitch);
@@ -295,7 +342,15 @@ public class SearchActivity extends AppCompatActivity {
                         if (swtPhuongtien.isChecked()){
                             lineLoutPhuongtien.setVisibility(View.VISIBLE);
                         }else {
-                            lineLoutPhuongtien.setVisibility(View.INVISIBLE);
+                            lineLoutPhuongtien.setVisibility(View.GONE);
+
+                            //reset all phuongtien buttons
+                            setButtonBackgroundColor(btnPhuongtienOto,false);
+                            setButtonBackgroundColor(btnPhuongtienTauhoa,false);
+                            setButtonBackgroundColor(btnPhuongtienXemay,false);
+                            setButtonBackgroundColor(btnPhuongtienXedap,false);
+                            setButtonBackgroundColor(btnPhuongtienXechuyendung,false);
+                            setButtonBackgroundColor(btnPhuongtienDibo,false);
                             phuongtien.clear();
                         }
                         updateFilterLabel();
@@ -310,7 +365,7 @@ public class SearchActivity extends AppCompatActivity {
                     lineLoutPhuongtien.setVisibility(View.VISIBLE);
                 }else {
                     swtPhuongtien.setChecked(false);
-                    lineLoutPhuongtien.setVisibility(View.INVISIBLE);
+                    lineLoutPhuongtien.setVisibility(View.GONE);
                 }
 
                 lineLoutMucphatSelection = (LinearLayout)customView.findViewById(R.id.mucphatSelectionTuDen);
@@ -321,16 +376,18 @@ public class SearchActivity extends AppCompatActivity {
                         if (swtMucphat.isChecked()){
                             lineLoutMucphatSelection.setVisibility(View.VISIBLE);
                         }else {
-                            lineLoutMucphatSelection.setVisibility(View.INVISIBLE);
+                            lineLoutMucphatSelection.setVisibility(View.GONE);
                             mucphat.remove("tu");
                             mucphat.remove("den");
+                            spMucphatDen.setSelection(0);
+                            spMucphatTu.setSelection(0);
                         }
                         updateFilterLabel();
                     }
                 });
 
                 if (mucphat.isEmpty()){
-                    lineLoutMucphatSelection.setVisibility(View.INVISIBLE);
+                    lineLoutMucphatSelection.setVisibility(View.GONE);
                     swtMucphat.setChecked(false);
                 }else {
                     lineLoutMucphatSelection.setVisibility(View.VISIBLE);
@@ -352,6 +409,7 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
         colorNormalBtnBg = helper.getButtonBackgroundColor(btnXong);
+        colorNormalBtnFg = btnXong.getCurrentTextColor();
 
         builder.setView(customView);
         builder.create();
@@ -796,8 +854,10 @@ public class SearchActivity extends AppCompatActivity {
     private void setButtonBackgroundColor(Button button, boolean isActive){
         if (isActive){
             button.setBackgroundColor(getResources().getColor(R.color.blue));
+            button.setTextColor(getResources().getColor(R.color.white));
         }else {
             button.setBackgroundColor(colorNormalBtnBg);
+            button.setTextColor(colorNormalBtnFg);
         }
     }
 }

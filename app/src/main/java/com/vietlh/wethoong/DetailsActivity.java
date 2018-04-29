@@ -1,30 +1,59 @@
 package com.vietlh.wethoong;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.vietlh.wethoong.adapters.ListRecyclerViewAdapter;
+import com.vietlh.wethoong.entities.BosungKhacphuc;
 import com.vietlh.wethoong.entities.Dieukhoan;
+import com.vietlh.wethoong.utils.AdsHelper;
 import com.vietlh.wethoong.utils.DBConnection;
+import com.vietlh.wethoong.utils.GeneralSettings;
 import com.vietlh.wethoong.utils.Queries;
+import com.vietlh.wethoong.utils.SearchFor;
 import com.vietlh.wethoong.utils.UtilsHelper;
 
 import org.w3c.dom.Text;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class DetailsActivity extends AppCompatActivity {
 
     private Queries queries = new Queries(DBConnection.getInstance(this));
     private UtilsHelper helper = new UtilsHelper();
+    private AdsHelper adsHelper = new AdsHelper();
+    private SearchFor search = new SearchFor(this);
     private Dieukhoan dieukhoan;
+    private Dieukhoan parentDieukhoan;
     private String dieukhoanId;
     private ArrayList<String> vanbanid = new ArrayList<>();
+    private ArrayList<Dieukhoan> relatedChildren = new ArrayList<>();
+    private ArrayList<Dieukhoan> children = new ArrayList<>();
+    private ArrayList<Dieukhoan> tamgiuphuongtienList = new ArrayList<>();
+    private ArrayList<Dieukhoan> thamquyenList = new ArrayList<>();
+    private ArrayList<BosungKhacphuc> hinhphatbosungList = new ArrayList<>();
+    private ArrayList<BosungKhacphuc> bienphapkhacphucList = new ArrayList<>();
+    private ListRecyclerViewAdapter searchResultListRecyclerAdapter;
+    private RecyclerView.LayoutManager recyclerLayoutManager;
 
     private ScrollView scrollView;
     private TextView lblVanban;
@@ -49,13 +78,13 @@ public class DetailsActivity extends AppCompatActivity {
     private LinearLayout thamquyen;
     private TextView thamquyenDetails;
     private LinearLayout minhhoaView;
-    private LinearLayout childrenDieukhoan;
-    private TableLayout tblChildrenDieukhoan;
+    private RelativeLayout childrenDieukhoan;
+    private RecyclerView rclChildrenDieukhoan;
 
     private ConstraintLayout btnXemthemView;
     private Button btnXemthem;
 
-    private ConstraintLayout adsView;
+    private LinearLayout adsView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,19 +94,12 @@ public class DetailsActivity extends AppCompatActivity {
         getPassingParameters();
         initComponents();
         dieukhoan = queries.searchDieukhoanByID(dieukhoanId,vanbanid).get(0);
+        vanbanid.add(String.valueOf(dieukhoan.getVanban().getId()));
+        updateDetails();
 
-        if(relatedChildren.count>0){
-            lblSeeMore.isEnabled = true
-            consLblSeeMoreHeight.constant = 50
-        }else{
-            lblSeeMore.isEnabled = false
-            consLblSeeMoreHeight.constant = 0
-        }
-        showDieukhoan()
+        showDieukhoan();
 
-        tblView.reloadData()
-        updateTableViewHeight()
-        initAds()
+        initAds();
     }
 
     private void getPassingParameters(){
@@ -87,7 +109,6 @@ public class DetailsActivity extends AppCompatActivity {
     private void initComponents(){
         scrollView = (ScrollView)findViewById(R.id.scrollView);
         btnXemthemView = (ConstraintLayout)findViewById(R.id.btnXemthemView);
-        adsView = (ConstraintLayout)findViewById(R.id.adsView);
 
         lblVanban = (TextView)findViewById(R.id.lblVanban);
         lblDieukhoan = (TextView)findViewById(R.id.lblDieukhoan);
@@ -102,7 +123,23 @@ public class DetailsActivity extends AppCompatActivity {
         thamquyenDetails = (TextView)findViewById(R.id.thamquyenDetails);
 
         btnXemthem = (Button)findViewById(R.id.btnXemthem);
+        btnXemthem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showRelatedDieukhoan();
+            }
+        });
         btnBreadscrubs = (Button)findViewById(R.id.btnBreadscrubs);
+        btnBreadscrubs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("Message","tapping on: "+ parentDieukhoan.getId());
+                Intent i = new Intent(getApplicationContext(), DetailsActivity.class);
+                //TODO: need to change the hardcode dieukhoanId to something that configurable.
+                i.putExtra("dieukhoanId", String.valueOf(parentDieukhoan.getId()));
+                startActivity(i);
+            }
+        });
 
         extraView = (LinearLayout)findViewById(R.id.extraView);
         mucphatView = (LinearLayout)findViewById(R.id.mucphatView);
@@ -114,436 +151,298 @@ public class DetailsActivity extends AppCompatActivity {
         tamgiu = (LinearLayout)findViewById(R.id.tamgiu);
         thamquyen = (LinearLayout)findViewById(R.id.thamquyen);
         minhhoaView = (LinearLayout)findViewById(R.id.minhhoaView);
-        childrenDieukhoan = (LinearLayout)findViewById(R.id.childrenDieukhoan);
+        childrenDieukhoan = (RelativeLayout)findViewById(R.id.childrenDieukhoan);
 
-        tblChildrenDieukhoan = (TableLayout)findViewById(R.id.tblChildrenDieukhoan);
+        rclChildrenDieukhoan = (RecyclerView) findViewById(R.id.rclChildrenDieukhoan);
     }
 
-    func updateTableViewHeight() {
-        consHeightTblView.constant = 50000
-        tblView.reloadData()
-        tblView.layoutIfNeeded()
-
-        var tableHeight:CGFloat = 0
-        for obj in tblView.visibleCells {
-            if let cell = obj as? UITableViewCell {
-                tableHeight += cell.bounds.height
-            }
-        }
-        consHeightTblView.constant = tableHeight
-        tblView.sizeToFit()
-        tblView.layoutIfNeeded()
-    }
-
-    //TODO: Init Google Admob
-//    func initAds() {
-//        if GeneralSettings.isAdEnabled && AdsHelper.isConnectedToNetwork() {
-//            bannerView = GADBannerView(adSize: kGADAdSizeSmartBannerPortrait)
-//            AdsHelper.addBannerViewToView(bannerView: bannerView,toView: viewAds, root: self)
-//        }else{
-//            btnFBBanner.addTarget(self, action: #selector(btnFouderFBAction), for: .touchDown)
-//            AdsHelper.addButtonToView(btnFBBanner: btnFBBanner, toView: viewAds)
-//        }
-//    }
-
-    //TODO: Handle internet connection off for adsView
-//    func btnFouderFBAction() {
-//        let url = URL(string: GeneralSettings.getFBLink)
-//        if UIApplication.shared.canOpenURL(url!) {
-//            if #available(iOS 10.0, *) {
-//                UIApplication.shared.open(url!, options: [:], completionHandler: nil)
-//            } else {
-//                UIApplication.shared.openURL(url!)
-//            }
-//        }
-//    }
-
-    func updateDetails(dieukhoan: Dieukhoan) {
-        self.dieukhoan = dieukhoan
-        specificVanbanId.append( String(describing:dieukhoan.getVanban().getId()))
-
-        for child in getChildren(keyword: String(describing: dieukhoan.id)) {
-            children.append(child)
-        }
-        rowCount = children.count
-
-        for child in Queries.getAllDirectRelatedDieukhoan(dieukhoanId: dieukhoan.getId()) {
-            relatedChildren.append(child)
-        }
-
-        for child in Queries.getAllRelativeRelatedDieukhoan(dieukhoanId: dieukhoan.getId()) {
-            relatedChildren.append(child)
-        }
-
-        hinhphatbosungList = Queries.getAllHinhphatbosung(dieukhoanId: dieukhoan.getId())
-        bienphapkhacphucList = Queries.getAllBienphapkhacphuc(dieukhoanId: dieukhoan.getId())
-        tamgiuphuongtienList = getTamgiuPhuongtienList()
-        thamquyenList = getThamquyenList()
-
-        for parent in getParent(keyword: String(describing: dieukhoan.cha)) {
-            parentDieukhoan = parent
-        }
-
-    }
-
-
-    func hideMinhhoaStackview(isHidden: Bool)  {
-        consSvStackviewHeightSmall.constant = 0
-        if(isHidden){
-            svStackview.isHidden = true
-            consSvStackviewHeightSmall.isActive = true
-        }else{
-            svStackview.isHidden = false
-            consSvStackviewHeightSmall.isActive = false
-        }
-    }
-
-    func hideMinhhoaView(isHidden: Bool) {
-        consViewMinhhoaHeight.constant = 0
-        if isHidden {
-            consViewMinhhoaHeight.isActive = true
+    private void initAds(){
+        adsView = (LinearLayout) findViewById(R.id.adsView);
+        adsHelper.updateLastConnectionState();
+        if (GeneralSettings.wasConnectedToInternet) {
+            AdView googleAdView = new AdView(this);
+            adsHelper.addBannerViewtoView(googleAdView, adsView);
+            AdRequest adRequest = new AdRequest.Builder().build();
+            googleAdView.loadAd(adRequest);
         }else {
-            consViewMinhhoaHeight.isActive = false
+            Button btnFBBanner = new Button(this);
+            btnFBBanner.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    helper.openUrlInExternalBrowser(getApplicationContext(),getResources().getString(R.string.wethoongFB));
+                }
+            });
+            btnFBBanner.setBackgroundResource(R.drawable.facebook_banner_wethoong);
+            adsHelper.addButtonToView(btnFBBanner,adsView);
         }
     }
 
-    func hideExtraInfoView(isHidden: Bool)  {
+    private void updateDetails() {
+
+        for (Dieukhoan dk : getChildren(dieukhoanId)) {
+            children.add(dk);
+        }
+
+        for (Dieukhoan dk : queries.getAllDirectRelatedDieukhoan(Integer.parseInt(dieukhoanId))) {
+            relatedChildren.add(dk);
+        }
+
+        for (Dieukhoan dk : queries.getAllRelativeRelatedDieukhoan(Integer.parseInt(dieukhoanId))) {
+            relatedChildren.add(dk);
+        }
+
+        hinhphatbosungList = queries.getAllHinhphatbosung(Integer.parseInt(dieukhoanId));
+        bienphapkhacphucList = queries.getAllBienphapkhacphuc(Integer.parseInt(dieukhoanId));
+        tamgiuphuongtienList = getTamgiuPhuongtienList();
+        thamquyenList = getThamquyenList();
+
+        for (Dieukhoan parent : getParent(String.valueOf(dieukhoan.getCha()))) {
+            parentDieukhoan = parent;
+        }
+    }
+
+    private void showRelatedDieukhoan(){
+        Intent i = new Intent(getApplicationContext(), SearchActivity.class);
+        //TODO: need to change the hardcode searchType to something that configurable.
+        i.putExtra("searchType","lienquan");
+        i.putExtra("dieukhoanId",dieukhoanId);
+        startActivity(i);
+    }
+
+    private void hideMinhhoaView(Boolean isHidden) {
         if(isHidden){
-            consExtraViewHeight.constant = 0
-            consExtraViewHeight.isActive = true
-            populateExtraInfoView()
-            viewExtraInfo.isHidden = true
+            helper.hideSection(minhhoaView);
         }else{
-            consExtraViewHeight.isActive = false
-            viewExtraInfo.isHidden = false
+            helper.showSection(minhhoaView);
         }
     }
 
-    func hideBosungKhacphucView(isHidden: Bool)  {
+    private void hideExtraInfoView(Boolean isHidden)  {
         if(isHidden){
-            consViewHinhphatbosungHeight.isActive = true
-            consViewBienphapkhacphucHeight.isActive = true
-            consViewTamgiuPhuongtienHeight.isActive = true
-            consViewThamquyenHeight.isActive = true
-            consViewBosungKhacphucHeight.constant = 0
-            consViewBosungKhacphucHeight.isActive = true
-            viewBosungKhacphuc.isHidden = true
+            helper.hideSection(extraView);
+            populateExtraInfoView();
         }else{
-            consViewBosungKhacphucHeight.isActive = false
-            consViewHinhphatbosungHeight.isActive = false
-            consViewBienphapkhacphucHeight.isActive = false
-            consViewTamgiuPhuongtienHeight.isActive = false
-            consViewThamquyenHeight.isActive = false
-            viewBosungKhacphuc.isHidden = false
+            helper.showSection(extraView);
         }
     }
 
-    func hideHinhphatbosungView(isHidden: Bool)  {
-        if(isHidden){
-            consViewHinhphatbosungHeight.constant = 0
-            consViewHinhphatbosungHeight.isActive = true
-        }else{
-            consViewBosungKhacphucHeight.isActive = false
-            consViewHinhphatbosungHeight.isActive = false
-            viewBosungKhacphuc.isHidden = false
-        }
-    }
-
-    func hideBienphapkhacphucView(isHidden: Bool)  {
-        if(isHidden){
-            consViewBienphapkhacphucHeight.constant = 0
-            consViewBienphapkhacphucHeight.isActive = true
-        }else{
-            consViewBosungKhacphucHeight.isActive = false
-            consViewBienphapkhacphucHeight.isActive = false
-            viewBosungKhacphuc.isHidden = false
-        }
-    }
-
-    func hideTamgiuPhuongtienView(isHidden: Bool)  {
-        if(isHidden){
-            consViewTamgiuPhuongtienHeight.constant = 0
-            consViewTamgiuPhuongtienHeight.isActive = true
-        }else{
-            consViewBosungKhacphucHeight.isActive = false
-            consViewTamgiuPhuongtienHeight.isActive = false
-            viewBosungKhacphuc.isHidden = false
-        }
-    }
-
-    func hideThamquyenView(isHidden: Bool)  {
-        if(isHidden){
-            consViewThamquyenHeight.constant = 0
-            consViewThamquyenHeight.isActive = true
-        }else{
-            consViewBosungKhacphucHeight.isActive = false
-            consViewThamquyenHeight.isActive = false
-            viewBosungKhacphuc.isHidden = false
-        }
-    }
-
-    func showDieukhoan() {
-        lblVanban.text = dieukhoan!.getVanban().getMa()
-        lblDieukhoan.text = dieukhoan!.getSo()
-        let breadscrubText = search.getAncestersNumber(dieukhoan: dieukhoan!, vanbanId: [String(describing: dieukhoan!.getVanban().getId())])
-        if breadscrubText.characters.count > 0 {
-            btnParentBreadscrub.setTitle(breadscrubText, for: .normal)
-            btnParentBreadscrub.isEnabled = true
+    private void showDieukhoan() {
+        lblVanban.setText(dieukhoan.getVanban().getMa());
+        lblDieukhoan.setText(dieukhoan.getSo());
+        String breadscrubText = search.getAncestersNumber(dieukhoan, vanbanid);
+        if (breadscrubText.length() > 0) {
+            btnBreadscrubs.setText(breadscrubText);
+            btnBreadscrubs.setEnabled(true);
         }else {
-            btnParentBreadscrub.setTitle("", for: .normal)
-            btnParentBreadscrub.isEnabled = false
+            btnBreadscrubs.setVisibility(View.GONE);
         }
 
-        let noidung = "\(String(describing: dieukhoan!.getTieude())) \n \(String(describing: dieukhoan!.getNoidung()))"
-        lblNoidung.text = noidung
+        String noidung = "";
+        if(dieukhoan.getTieude().length() < 1){
+            noidung = dieukhoan.getNoidung();
+        }else if (dieukhoan.getNoidung().length() < 1){
+            noidung = dieukhoan.getTieude();
+        }else {
+            noidung = dieukhoan.getTieude() + "\n" + dieukhoan.getNoidung();
+        }
+        lblNoidung.setText(noidung);
 
-        images = dieukhoan!.getMinhhoa()
+        ArrayList<String> images = dieukhoan.getMinhhoa();
 
-        if(images.count > 0){
-            fillMinhhoaToViewMinhhoa(images: images)
+        if(images.size() > 0){
+            fillMinhhoaToViewMinhhoa(images);
         }else{
-            hideMinhhoaView(isHidden: true)
+            hideMinhhoaView(true);
         }
 
         // Enable extra section for details of ND46
-        if String(describing:dieukhoan!.vanban.getId()) == GeneralSettings.getVanbanInfo(name: "ND46", info: "id") {
-            hideExtraInfoView(isHidden: false)
-            populateExtraInfoView()
+        if (String.valueOf(dieukhoan.getVanban().getId()).equals(GeneralSettings.getVanbanInfo(GeneralSettings.danhsachvanban[0],"id"))) {
+            hideExtraInfoView(false);
+            populateExtraInfoView();
         }else{
-            hideExtraInfoView(isHidden: true)
+            hideExtraInfoView(true);
         }
-        if hinhphatbosungList.count < 1 && bienphapkhacphucList.count < 1 && thamquyenList.count < 1 && tamgiuphuongtienList.count < 1{
-            hideBosungKhacphucView(isHidden: true)
+        if (hinhphatbosungList.size() < 1 && bienphapkhacphucList.size() < 1 && thamquyenList.size() < 1
+                && tamgiuphuongtienList.size() < 1) {
+            helper.hideSection(hinhphatbosung);
+            helper.hideSection(bienphapkhacphuc);
+            helper.hideSection(thamquyen);
+            helper.hideSection(tamgiu);
         } else {
-            populateBosungKhacphucView()
+            populateBosungKhacphucView();
+        }
+
+        if(relatedChildren.size() < 1){
+            btnXemthem.setVisibility(View.GONE);
+            helper.hideSection(btnXemthemView);
+        }
+
+        if(children.size() > 0) {
+            helper.showSection(childrenDieukhoan);
+            // use this setting to improve performance if you know that changes
+            // in content do not change the layout size of the RecyclerView
+            rclChildrenDieukhoan.setHasFixedSize(true);
+
+            // use a linear layout manager
+            recyclerLayoutManager = new LinearLayoutManager(this);
+            rclChildrenDieukhoan.setLayoutManager(recyclerLayoutManager);
+
+            // specify an adapter (see also next example)
+            searchResultListRecyclerAdapter = new ListRecyclerViewAdapter(this, children, 1);
+            rclChildrenDieukhoan.setAdapter(searchResultListRecyclerAdapter);
+
+            //workaround to make searchResultRecyclerView to match parent width
+            ViewGroup.LayoutParams searchResultLayoutParams = rclChildrenDieukhoan.getLayoutParams();
+            searchResultLayoutParams.width = helper.getScreenWidth();
+            rclChildrenDieukhoan.setLayoutParams(searchResultLayoutParams);
+        }else {
+            helper.hideSection(childrenDieukhoan);
         }
     }
 
-    func populateBosungKhacphucView(){
-        if hinhphatbosungList.count > 0 {
-            hideHinhphatbosungView(isHidden: false)
-            lblHinhphatbosungTitle.numberOfLines = 0
-            lblHinhphatbosungTitle.lineBreakMode = NSLineBreakMode.byWordWrapping
-            lblHinhphatbosungTitle.text = "Hình phạt bổ sung:"
-            lblHinhphatbosungDetails.numberOfLines = 0
-            lblHinhphatbosungDetails.lineBreakMode = NSLineBreakMode.byWordWrapping
-            lblHinhphatbosungDetails.text = ""
-            for bosung in hinhphatbosungList {
-                lblHinhphatbosungDetails.text = "\(lblHinhphatbosungDetails.text!)\(bosung.getNoidung())\n"
+    private void populateBosungKhacphucView(){
+        if (hinhphatbosungList.size() > 0) {
+            helper.showSection(hinhphatbosung);
+            String bosungDetails = "";
+            for (BosungKhacphuc bosung: hinhphatbosungList) {
+                bosungDetails += bosung.getNoidung() + "\n";
             }
+            hinhphatbosungDetails.setText(bosungDetails);
         } else {
-            hideHinhphatbosungView(isHidden: true)
+            helper.hideSection(hinhphatbosung);
         }
 
-        if bienphapkhacphucList.count > 0 {
-            hideBienphapkhacphucView(isHidden: false)
-            lblBienphapkhacphucTitle.numberOfLines = 0
-            lblBienphapkhacphucTitle.lineBreakMode = NSLineBreakMode.byWordWrapping
-            lblBienphapkhacphucTitle.text = "Biện pháp khắc phục:"
-            lblBienphapkhacphucDetails.numberOfLines = 0
-            lblBienphapkhacphucDetails.lineBreakMode = NSLineBreakMode.byWordWrapping
-            lblBienphapkhacphucDetails.text = ""
-            for khacphuc in bienphapkhacphucList {
-                lblBienphapkhacphucDetails.text = "\(lblBienphapkhacphucDetails.text!)\(khacphuc.getNoidung())\n"
+        if (bienphapkhacphucList.size() > 0) {
+            helper.showSection(bienphapkhacphuc);
+            String khacphucDetails = "";
+            for (BosungKhacphuc khacphuc: bienphapkhacphucList) {
+                khacphucDetails += khacphuc.getNoidung() + "\n";
             }
-        }else{
-            hideBienphapkhacphucView(isHidden: true)
+            bienphapkhacphucDetails.setText(khacphucDetails);
+        } else {
+            helper.hideSection(bienphapkhacphuc);
         }
 
-        if tamgiuphuongtienList.count > 0 {
-            hideTamgiuPhuongtienView(isHidden: false)
-            lblTamgiuPhuongtienTitle.numberOfLines = 0
-            lblTamgiuPhuongtienTitle.lineBreakMode = NSLineBreakMode.byWordWrapping
-            lblTamgiuPhuongtienTitle.text = "Tạm giữ phương tiện:"
-            lblTamgiuPhuongtienDetails.numberOfLines = 0
-            lblTamgiuPhuongtienDetails.lineBreakMode = NSLineBreakMode.byWordWrapping
-            lblTamgiuPhuongtienDetails.text = "07 ngày"
-        }else{
-            hideTamgiuPhuongtienView(isHidden: true)
+        if (tamgiuphuongtienList.size() > 0) {
+            helper.showSection(tamgiu);
+            tamgiuDetails.setText("07 ngày");
+        } else {
+            helper.hideSection(tamgiu);
         }
 
-        if thamquyenList.count > 0 {
-            hideThamquyenView(isHidden: false)
-            lblThamquyenTitle.numberOfLines = 0
-            lblThamquyenTitle.lineBreakMode = NSLineBreakMode.byWordWrapping
-            lblThamquyenTitle.text = "Biện pháp khắc phục:"
-            lblThamquyenDetails.numberOfLines = 0
-            lblThamquyenDetails.lineBreakMode = NSLineBreakMode.byWordWrapping
-            lblThamquyenDetails.text = ""
-            for thamquyen in thamquyenList {
-                lblThamquyenDetails.text = "\(lblThamquyenDetails.text!)\(thamquyen.getNoidung())\n"
+        if (thamquyenList.size() > 0) {
+            helper.showSection(thamquyen);
+            String tqDetails = "";
+            for (Dieukhoan tq: thamquyenList) {
+                tqDetails += tq.getNoidung() + "\n";
             }
-        }else{
-            hideThamquyenView(isHidden: true)
+            thamquyenDetails.setText(tqDetails);
+        } else {
+            helper.hideSection(thamquyen);
         }
     }
 
-    func populateExtraInfoView(){
-        let mpText = getMucphat(id: String(describing: dieukhoan!.getId()))
-        let ptText = getPhuongtien(id: String(describing: dieukhoan!.getId()))
-        let lvText = getLinhvuc(id: String(describing: dieukhoan!.getId()))
-        let dtText = getDoituong(id: String(describing: dieukhoan!.getId()))
+    private void populateExtraInfoView(){
+        String mpText = getMucphat(String.valueOf(dieukhoan.getId()));
+        String ptText = getPhuongtien(String.valueOf(dieukhoan.getId()));
+        String lvText = getLinhvuc(String.valueOf(dieukhoan.getId()));
+        String dtText = getDoituong(String.valueOf(dieukhoan.getId()));
 
-        if mpText.characters.count > 0 {
-            consLblMucphatHeight.isActive = false
-            consLblMucphatDetailsHeight.isActive = false
-            lblMucphat.text = mpText
+        if (mpText.length() > 0) {
+            helper.showSection(mucphatView);
+            mucphatDetails.setText(mpText);
         }else{
-            consLblMucphatHeight.isActive = true
-            consLblMucphatDetailsHeight.isActive = true
-            consLblMucphatHeight.constant =  0
-            consLblMucphatDetailsHeight.constant =  0
+            helper.hideSection(mucphatView);
         }
-        if ptText.characters.count > 0 {
-            consLblPhuongtienHeight.isActive = false
-            consLblPhuongtienDetailsHeight.isActive = false
-            lblPhuongtien.text = ptText
+        if (ptText.length() > 0) {
+            helper.showSection(phuongtienView);
+            phuongtienDetails.setText(ptText);
         }else{
-            consLblPhuongtienHeight.isActive = true
-            consLblPhuongtienDetailsHeight.isActive = true
-            consLblPhuongtienHeight.constant =  0
-            consLblPhuongtienDetailsHeight.constant =  0
+            helper.hideSection(phuongtienView);
         }
-        if lvText.characters.count > 0 {
-            consLblLinhvucHeight.isActive = false
-            consLblLinhvucDetailsHeight.isActive = false
-            lblLinhvuc.text = lvText
+        if (lvText.length() > 0) {
+            helper.showSection(linhvucView);
+            linhvucDetails.setText(lvText);
         }else{
-            consLblLinhvucHeight.isActive = true
-            consLblLinhvucDetailsHeight.isActive = true
-            consLblLinhvucHeight.constant =  0
-            consLblLinhvucDetailsHeight.constant =  0
+            helper.hideSection(linhvucView);
         }
-        if dtText.characters.count > 0 {
-            consLblDoituongHeight.isActive = false
-            consLblDoituongDetailsHeight.isActive = false
-            lblDoituong.text = dtText
+        if (dtText.length() > 0) {
+            helper.showSection(doituongView);
+            doituongDetails.setText(dtText);
         }else{
-            consLblDoituongHeight.isActive = true
-            consLblDoituongDetailsHeight.isActive = true
-            consLblDoituongHeight.constant =  0
-            consLblDoituongDetailsHeight.constant =  0
+            helper.hideSection(doituongView);
         }
     }
 
-    //TODO: Handle scaling images if needed
-//    func scaleImage(image: UIImage, targetWidth: CGFloat) -> UIImage {
-//        let size = image.size
-//
-//        let widthRatio  = targetWidth / image.size.width
-//
-//        //        let ratio:Float = Float(size.width)/Float(size.height)
-//
-//
-//        // Figure out what our orientation is, and use that to form the rectangle
-//        var newSize: CGSize
-//                newSize = CGSize(width: size.width * widthRatio, height: CGFloat(Float(size.height) * Float(widthRatio)))
-//
-//        // This is the rect that we've calculated out and this is what is actually used below
-//        let rect = CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height)
-//
-//        // Actually do the resizing to the rect using the ImageContext stuff
-//        UIGraphicsBeginImageContextWithOptions(newSize, false, 0.0)
-//        image.draw(in: rect)
-//        let newImage = UIGraphicsGetImageFromCurrentImageContext()
-//        UIGraphicsEndImageContext()
-//
-//        return newImage!
-//    }
+    //TODO: Handle scaling images if needed (not sure why it works)
+    private Bitmap scaleImage(Bitmap image, int targetWidth) {
+        int nh = (int) ( image.getHeight() * (targetWidth / image.getWidth()) );
+        Bitmap scaled = Bitmap.createScaledBitmap(image, targetWidth, nh, true);
+        return scaled;
+    }
 
-    func fillMinhhoaToViewMinhhoa(images: [String]) {
-        hideMinhhoaView(isHidden: false)
-        viewMinhhoa.translatesAutoresizingMaskIntoConstraints = false
+    private void fillMinhhoaToViewMinhhoa(ArrayList<String> images) {
+        hideMinhhoaView( false);
 
-        var order = 0
-//        var previousImageView = UIImageView()
-
-        for img in images {
-            if (img.replacingOccurrences(of: ".png", with: "").replacingOccurrences(of: "\n", with: "")).trimmingCharacters(in: .whitespacesAndNewlines).characters.count < 1{
+        for (String img : images) {
+            String imgName = img.replace("\n","").trim();
+            if (imgName.length() < 1){
 
             }else{
-                let image = UIImage(named: (img.replacingOccurrences(of: ".png", with: "").replacingOccurrences(of: "\n", with: "")).trimmingCharacters(in: .whitespacesAndNewlines))!
+                Bitmap image = helper.getBitmapFromAssets(this,"minhhoa/" + imgName);
 
-                        let imgView = UIImageView(image: scaleImage(image: image, targetWidth: getScreenWidth()))
-                imgView.translatesAutoresizingMaskIntoConstraints = false
-                imgView.clipsToBounds = true
-                imgView.contentMode = UIViewContentMode.scaleAspectFit
-                imgView.autoresizesSubviews = true
-//                viewMinhhoa.insertSubview(imgView, at: order)
-                if order == 0 {
-                    if images.count == 1 {
-                        generateNewComponentConstraints(parent: viewMinhhoa, topComponent: viewMinhhoa, bottomComponent: viewMinhhoa, component: imgView, top: 0, left: 0, right: 0, bottom: 0, isInside: true)
-                    }else{
-                        generateNewComponentConstraints(parent: viewMinhhoa, topComponent: viewMinhhoa, component: imgView, top: 0, left: 0, right: 0, isInside: true)
-                    }
-                }else{
-                    if order < (images.count - 1) {
-//                        generateNewComponentConstraints(parent: viewMinhhoa, topComponent: previousImageView, component: imgView, top: 0, left: 0, right: 0)
-                        generateNewComponentConstraints(parent: viewMinhhoa, topComponent: (viewMinhhoa.subviews.last)!, component: imgView, top: 0, left: 0, right: 0, isInside: false)
-                    }else{
-//                        generateNewComponentConstraints(parent: viewMinhhoa, topComponent: previousImageView, bottomComponent: viewMinhhoa, component: imgView, top: 0, left: 0, right: 0, bottom: 0)
-                        generateNewComponentConstraints(parent: viewMinhhoa, topComponent: (viewMinhhoa.subviews.last)!, bottomComponent: viewMinhhoa, component: imgView, top: 0, left: 0, right: 0, bottom: 0, isInside: false)
-                    }
-                }
-//                previousImageView = imgView
-                order += 1
-                let tap = UITapGestureRecognizer(target: self, action: #selector(seeMore))
-                imgView.isUserInteractionEnabled = true
-                imgView.addGestureRecognizer(tap)
+                ImageView imgView = new ImageView(this);
+                ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+                imgView.setLayoutParams(layoutParams);
+
+                imgView.setImageBitmap(scaleImage(image,helper.getScreenWidth()));
+                minhhoaView.addView(imgView);
             }
         }
     }
 
     //TODO: Populate thamquyen
-//    func getThamquyenList() -> [Dieukhoan] {
-//        var thamquyen = [Dieukhoan]()
-//
-//        return thamquyen
-//    }
+    private ArrayList<Dieukhoan> getThamquyenList() {
+        ArrayList<Dieukhoan> thamquyen = new ArrayList<>();
 
-    func getTamgiuPhuongtienList() -> [Dieukhoan] {
-        var tamgiu = [Dieukhoan]()
-        let qry = "select distinct dk.id as dkId, dk.so as dkSo, tieude as dkTieude, dk.noidung as dkNoidung, minhhoa as dkMinhhoa, cha as dkCha, vb.loai as lvbID, lvb.ten as lvbTen, vb.so as vbSo, vanbanid as vbId, vb.ten as vbTen, nam as vbNam, ma as vbMa, vb.noidung as vbNoidung, coquanbanhanh as vbCoquanbanhanhId, cq.ten as cqTen, dk.forSearch as dkSearch from tblChitietvanban as dk join tblVanban as vb on dk.vanbanid=vb.id join tblLoaivanban as lvb on vb.loai=lvb.id join tblCoquanbanhanh as cq on vb.coquanbanhanh=cq.id join tblRelatedDieukhoan as rdk on dk.id = rdk.dieukhoanId where (dkCha = \(GeneralSettings.tamgiuPhuongtienParentID) or dkCha in (select id from tblchitietvanban where cha = \(GeneralSettings.tamgiuPhuongtienParentID)) or dkCha in (select id from tblchitietvanban where cha in (select id from tblchitietvanban where cha = \(GeneralSettings.tamgiuPhuongtienParentID)))) and rdk.relatedDieukhoanID = \(dieukhoan!.getId())"
-        tamgiu = Queries.searchDieukhoanByQuery(query: qry, vanbanid: specificVanbanId)
-        return tamgiu
+        return thamquyen;
     }
 
-    func getMucphat(id: String) -> String {
-        if DataConnection.database == nil {
-            DataConnection.databaseSetup()
-        }
-        return Queries.searchMucphatInfo(id: id)
+    private ArrayList<Dieukhoan> getTamgiuPhuongtienList() {
+        String qry = "select distinct dk.id as dkId, dk.so as dkSo, tieude as dkTieude, dk.noidung as dkNoidungString" +
+                 ", minhhoa as dkMinhhoa, cha as dkCha, vb.loai as lvbID, lvb.ten as lvbTen, vb.so as vbSo, vanbanid as vbId" +
+                 ", vb.ten as vbTen, nam as vbNam, ma as vbMa, vb.noidung as vbNoidung, coquanbanhanh as vbCoquanbanhanhId" +
+                 ", cq.ten as cqTen, dk.forSearch as dkSearch from tblChitietvanban as dk join tblVanban as vb on dk.vanbanid=vb.id " +
+                 "join tblLoaivanban as lvb on vb.loai=lvb.id join tblCoquanbanhanh as cq on vb.coquanbanhanh=cq.id " +
+                 "join tblRelatedDieukhoan as rdk on dk.id = rdk.dieukhoanId where (dkCha = " + GeneralSettings.tamgiuPhuongtienDieukhoanID +
+                 " or dkCha in (select id from tblchitietvanban where cha = " + GeneralSettings.tamgiuPhuongtienDieukhoanID + ") " +
+                 "or dkCha in (select id from tblchitietvanban where cha in (select id from tblchitietvanban where cha = " +
+                 GeneralSettings.tamgiuPhuongtienDieukhoanID + "))) and rdk.relatedDieukhoanID = " + dieukhoanId;
+        ArrayList<Dieukhoan> tamgiuList = queries.searchDieukhoanByQuery(qry, vanbanid);
+        return tamgiuList;
     }
 
-    func getPhuongtien(id: String) -> String {
-        if DataConnection.database == nil {
-            DataConnection.databaseSetup()
-        }
-        return Queries.searchPhuongtienInfo(id: id)
+    private String getMucphat(String id){
+        return queries.searchMucphatInfo(id);
     }
 
-    func getLinhvuc(id: String) -> String {
-        if DataConnection.database == nil {
-            DataConnection.databaseSetup()
-        }
-        return Queries.searchLinhvucInfo(id: id)
+    private String getPhuongtien(String id){
+        return queries.searchPhuongtienInfo(id);
     }
 
-    func getDoituong(id: String) -> String {
-        if DataConnection.database == nil {
-            DataConnection.databaseSetup()
-        }
-        return Queries.searchDoituongInfo(id: id)
+    private String getLinhvuc(String id){
+        return queries.searchLinhvucInfo(id);
+    }
+
+    private String getDoituong(String id){
+        return queries.searchDoituongInfo(id);
     }
 
     private ArrayList<Dieukhoan> getChildren(String keyword) {
         return queries.searchChildren(keyword.trim(),vanbanid);
     }
 
-    func getParent(keyword:String) -> [Dieukhoan] {
-        if DataConnection.database == nil {
-            DataConnection.databaseSetup()
-        }
-        return Queries.searchDieukhoanByID(keyword: "\(keyword)", vanbanid: specificVanbanId)
+    private ArrayList<Dieukhoan> getParent(String keyword){
+        return queries.searchDieukhoanByID(keyword, vanbanid);
     }
 }

@@ -1,6 +1,7 @@
 package com.vietlh.wethoong.utils;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.AssetManager;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
@@ -9,6 +10,9 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.RippleDrawable;
+import android.net.Uri;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 
 import java.io.IOException;
@@ -44,7 +48,7 @@ public class UtilsHelper {
                     Throws
                         IOException
             */
-            is = am.open("minhhoa/" + fileName);
+            is = am.open(fileName);
         }catch(IOException e){
             e.printStackTrace();
         }
@@ -100,5 +104,27 @@ public class UtilsHelper {
 
     public int getScreenHeight() {
         return Resources.getSystem().getDisplayMetrics().heightPixels;
+    }
+
+    public void hideSection(View view){
+//        ViewGroup.LayoutParams hiddenSection = view.getLayoutParams();
+//        hiddenSection.height = 0;
+//        view.setLayoutParams(hiddenSection);
+        view.setVisibility(View.GONE);
+    }
+    public void showSection(View view){
+        view.setVisibility(View.VISIBLE);
+        ViewGroup.LayoutParams hiddenSection = view.getLayoutParams();
+        hiddenSection.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+        view.setLayoutParams(hiddenSection);
+    }
+
+    public void openUrlInExternalBrowser(Context context, String url){
+        if (!url.startsWith("http://") && !url.startsWith("https://") && !url.startsWith("mailto:")) {
+            url = "http://" + url;
+        }
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setData(Uri.parse(url));
+        context.startActivity(i);
     }
 }

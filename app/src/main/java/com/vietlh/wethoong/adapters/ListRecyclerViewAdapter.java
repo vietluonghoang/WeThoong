@@ -1,6 +1,5 @@
 package com.vietlh.wethoong.adapters;
 
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -16,12 +15,10 @@ import android.widget.TextView;
 
 import com.vietlh.wethoong.DetailsActivity;
 import com.vietlh.wethoong.R;
-import com.vietlh.wethoong.SearchActivity;
 import com.vietlh.wethoong.entities.Dieukhoan;
 import com.vietlh.wethoong.utils.SearchFor;
 import com.vietlh.wethoong.utils.UtilsHelper;
 
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 
@@ -30,16 +27,23 @@ import java.util.ArrayList;
  */
 
 public class ListRecyclerViewAdapter extends RecyclerView.Adapter<ListRecyclerViewAdapter.ViewHolder> {
-    ArrayList<Dieukhoan> allDieukhoan = new ArrayList<>();
-    Context context;
-    UtilsHelper uHelper = new UtilsHelper();
-    SearchFor search;
+    private ArrayList<Dieukhoan> allDieukhoan = new ArrayList<>();
+    private Context context;
+    private UtilsHelper uHelper = new UtilsHelper();
+    private SearchFor search;
+    private int type = 0; //default value for normal view
 
     public ListRecyclerViewAdapter(Context context, ArrayList<Dieukhoan> allDieukhoan){
-
         this.allDieukhoan = allDieukhoan;
         this.context = context;
         this.search = new SearchFor(this.context);
+    }
+
+    public ListRecyclerViewAdapter(Context context, ArrayList<Dieukhoan> allDieukhoan, int type){
+        this.allDieukhoan = allDieukhoan;
+        this.context = context;
+        this.search = new SearchFor(this.context);
+        this.type = type;
     }
 
     public void updateView(ArrayList<Dieukhoan> allDieukhoan){
@@ -76,7 +80,7 @@ public class ListRecyclerViewAdapter extends RecyclerView.Adapter<ListRecyclerVi
         try {
             if(dk.getMinhhoa().size() > 0) {
                 vHolder.showMinhhoa();
-                Bitmap bitmap = uHelper.getBitmapFromAssets(context, dk.getMinhhoa().get(0));
+                Bitmap bitmap = uHelper.getBitmapFromAssets(context, "minhhoa/" + dk.getMinhhoa().get(0));
                 vHolder.setImgView(bitmap);
             }else{
                 vHolder.hideMinhhoa();
@@ -89,12 +93,28 @@ public class ListRecyclerViewAdapter extends RecyclerView.Adapter<ListRecyclerVi
         String noidung = "";
         if(dk.getTieude().length() < 1){
             noidung = dk.getNoidung();
-        }else {
+        }else if (dk.getNoidung().length() < 1){
+            noidung = dk.getTieude();
+        } else {
             noidung = dk.getTieude()+"\n"+dk.getNoidung();
         }
+
+        //in case recyclerView is showing children dieukhoan
+        if(type == 0){
+            vHolder.hideLblVanban(false);
+            vHolder.hideBtnBreadscrubs(false);
+            vHolder.setLblVanban(dk.getVanban().getMa());
+            if (noidung.length() > 250){
+                noidung = noidung.substring(0,249) + "...";
+            }
+        }else {
+            vHolder.hideLblVanban(true);
+            vHolder.hideBtnBreadscrubs(true);
+        }
+
         vHolder.setLblNoidung(noidung);
-        vHolder.setLblVanban(dk.getVanban().getMa());
-        vHolder.setVanbanId(String.valueOf(dk.getId()));
+        vHolder.setDieukhoanId(String.valueOf(dk.getId()));
+        vHolder.fitItemDetails();
     }
 
     @Override
@@ -105,16 +125,18 @@ public class ListRecyclerViewAdapter extends RecyclerView.Adapter<ListRecyclerVi
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         private ImageView imgView;
+        private LinearLayout itemDetails;
         private TextView lblVanban;
         private TextView lblDieukhoan;
         private TextView lblNoidung;
         private Button btnBreadscrubs;
-        private String vanbanId = "";
+        private String dieukhoanId = "";
 
         public ViewHolder(View v){
 
             super(v);
             imgView = v.findViewById(R.id.item).findViewById(R.id.imageView);
+            itemDetails = v.findViewById(R.id.itemDetails);
             lblVanban = v.findViewById(R.id.item).findViewById(R.id.itemDetails).findViewById(R.id.lblVanban);
             lblDieukhoan = v.findViewById(R.id.item).findViewById(R.id.itemDetails).findViewById(R.id.breadscrubsView).findViewById(R.id.lblDieukhoan);
             btnBreadscrubs = v.findViewById(R.id.item).findViewById(R.id.itemDetails).findViewById(R.id.breadscrubsView).findViewById(R.id.btnBreadscrubs);
@@ -125,15 +147,15 @@ public class ListRecyclerViewAdapter extends RecyclerView.Adapter<ListRecyclerVi
         public void hideMinhhoa(){
             ViewGroup.LayoutParams parms = imgView.getLayoutParams();
             parms.width = 0;
+            parms.height = 0;
             imgView.setLayoutParams(parms);
         }
 
         public void showMinhhoa(){
             ViewGroup.LayoutParams parms = imgView.getLayoutParams();
-            parms.height = 100;
-            parms.width = 100;
+            parms.width = (int)(uHelper.getScreenWidth() * 0.2);
+            parms.height = parms.width;
             imgView.setLayoutParams(parms);
-            imgView.setMinimumWidth(100);
         }
 
         public ImageView getImgView() {
@@ -150,6 +172,14 @@ public class ListRecyclerViewAdapter extends RecyclerView.Adapter<ListRecyclerVi
 
         public void setLblVanban(String vanbanCode) {
             this.lblVanban.setText(vanbanCode);
+        }
+
+        public void hideLblVanban(Boolean isHidden){
+            if (isHidden){
+                lblVanban.setVisibility(View.GONE);
+            }else {
+                lblVanban.setVisibility(View.VISIBLE);
+            }
         }
 
         public TextView getLblDieukhoan() {
@@ -179,16 +209,31 @@ public class ListRecyclerViewAdapter extends RecyclerView.Adapter<ListRecyclerVi
             this.btnBreadscrubs.setText(breadscrubs);
         }
 
-        public void setVanbanId(String id){
-            vanbanId = id.trim();
+        public void hideBtnBreadscrubs(Boolean isHidden){
+            if (isHidden){
+                btnBreadscrubs.setVisibility(View.GONE);
+            }else {
+                btnBreadscrubs.setVisibility(View.VISIBLE);
+            }
+        }
+
+        public void setDieukhoanId(String id){
+            dieukhoanId = id.trim();
+        }
+
+        //workaround for fitting itemDetail
+        public void fitItemDetails(){
+            ViewGroup.LayoutParams params = itemDetails.getLayoutParams();
+            params.width = uHelper.getScreenWidth() - imgView.getLayoutParams().width;
+            itemDetails.setLayoutParams(params);
         }
 
         @Override
         public void onClick(View v) {
-            Log.i("Message","tapping on: "+vanbanId);
+            Log.i("Message","tapping on: "+ dieukhoanId);
             Intent i = new Intent(context.getApplicationContext(), DetailsActivity.class);
-            //TODO: need to change the hardcode searchType to something that configurable.
-            i.putExtra("vanbanId",vanbanId);
+            //TODO: need to change the hardcode dieukhoanId to something that configurable.
+            i.putExtra("dieukhoanId", dieukhoanId);
             context.startActivity(i);
         }
     }

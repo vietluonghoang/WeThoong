@@ -142,58 +142,96 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>
+
         <LinearLayout
             android:id="@+id/phuongtienLines"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:weightSum="2"
             android:orientation="vertical">
+
             <LinearLayout
                 android:id="@+id/phuongtienLine1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_weight="1"
+                android:weightSum="3">
+
                 <Button
                     android:id="@+id/btnPhuongtienOto"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/oto"
-                    android:layout_weight="1"/>
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:paddingBottom="2px"
+                    android:paddingLeft="2px"
+                    android:paddingRight="2px"
+                    android:paddingTop="2px"
+                    android:text="@string/oto" />
+
                 <Button
                     android:id="@+id/btnPhuongtienXemay"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/xemay_moto"
-                    android:layout_weight="1"/>
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:paddingBottom="2px"
+                    android:paddingLeft="2px"
+                    android:paddingRight="2px"
+                    android:paddingTop="2px"
+                    android:text="@string/xemay_moto" />
+
                 <Button
                     android:id="@+id/btnPhuongtienXechuyendung"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/xechuyendung"
-                    android:layout_weight="1"/>
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:paddingBottom="2px"
+                    android:paddingLeft="2px"
+                    android:paddingRight="2px"
+                    android:paddingTop="2px"
+                    android:text="@string/xechuyendung" />
             </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/phuongtienLine2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_weight="1"
+                android:weightSum="6">
+
                 <Button
                     android:id="@+id/btnPhuongtienTauhoa"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/tauhoa"
-                    android:layout_weight="2"/>
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:paddingBottom="2px"
+                    android:paddingLeft="2px"
+                    android:paddingRight="2px"
+                    android:paddingTop="2px"
+                    android:text="@string/tauhoa" />
+
                 <Button
                     android:id="@+id/btnPhuongtienXedap"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/xedap_xethoso"
-                    android:layout_weight="2"/>
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:paddingBottom="2px"
+                    android:paddingLeft="2px"
+                    android:paddingRight="2px"
+                    android:paddingTop="2px"
+                    android:text="@string/xedap_xethoso" />
+
                 <Button
                     android:id="@+id/btnPhuongtienDibo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/dibo"
-                    android:layout_weight="2"/>
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:paddingBottom="2px"
+                    android:paddingLeft="2px"
+                    android:paddingRight="2px"
+                    android:paddingTop="2px"
+                    android:text="@string/dibo" />
             </LinearLayout>
 
         </LinearLayout>

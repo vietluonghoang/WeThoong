@@ -388,7 +388,7 @@ public class Queries{
 
     public ArrayList<Dieukhoan> getAllRelativeRelatedDieukhoan(int dieukhoanId) {
         connection.open();
-        String sql = getRawQuery() + " dkId in (select dieukhoanId from tblRelatedDieukhoan where relatedDieukhoanId = " +dieukhoanId;
+        String sql = getRawQuery() + " dkId in (select dieukhoanId from tblRelatedDieukhoan where relatedDieukhoanId = " + dieukhoanId + ")";
 
         ArrayList<Dieukhoan> allDieukhoan = new ArrayList<>();
         Cursor cursor = connection.executeQuery(sql);
@@ -401,7 +401,7 @@ public class Queries{
 
     public ArrayList<Dieukhoan> getAllDirectRelatedDieukhoan(int dieukhoanId) {
         connection.open();
-        String sql = getRawQuery() + " dkId in (select relatedDieukhoanId from tblRelatedDieukhoan where dieukhoanId = "+ dieukhoanId;
+        String sql = getRawQuery() + " dkId in (select relatedDieukhoanId from tblRelatedDieukhoan where dieukhoanId = "+ dieukhoanId + ")";
 
         ArrayList<Dieukhoan> allDieukhoan = new ArrayList<>();
         Cursor cursor = connection.executeQuery(sql);
@@ -501,8 +501,7 @@ public class Queries{
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
                 ArrayList<String> minhhoa = new ArrayList<>();
-                for (String mh :
-                        cursor.getString(4).split(";")) {
+                for (String mh : cursor.getString(4).split(";")) {
                     minhhoa.add(mh);
                 }
                 Loaivanban loaivanban = new Loaivanban(cursor.getInt(6),cursor.getString(7));
@@ -523,6 +522,7 @@ public class Queries{
                 BosungKhacphuc bosungkhacphuc = new BosungKhacphuc(dieukhoan, rdieukhoan, cursor.getString(34));
 
                 bosungKhacphucArray.add(bosungkhacphuc);
+                cursor.moveToNext();
             }
         }
     }
