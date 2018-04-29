@@ -21,6 +21,7 @@ public class AdsHelper {
             banner.setAdUnitId("ca-app-pub-3940256099942544/6300978111");
         }else {
             banner.setAdUnitId("ca-app-pub-1832172217205335/3658533168");
+            //                  ca-app-pub-1832172217205335/3658533168
         }
 
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);

@@ -26,6 +26,7 @@ public class HomeActivity extends AppCompatActivity {
         this.connection = DBConnection.getInstance(this);
         initComponents();
         MobileAds.initialize(this, "ca-app-pub-1832172217205335~8071107814");
+        //                                     ca-app-pub-1832172217205335~8071107814
         adsHelper = new AdsHelper();
         adsHelper.updateLastConnectionState();
     }
