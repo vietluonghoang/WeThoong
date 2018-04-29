@@ -115,7 +115,9 @@ public class SearchActivity extends AppCompatActivity {
         searchResultLayoutParams.width = helper.getScreenWidth();
         searchResultRecyclerView.setLayoutParams(searchResultLayoutParams);
 
-        initAds();
+        if(GeneralSettings.isAdsEnabled) {
+            initAds();
+        }
     }
 
     private void initAds(){

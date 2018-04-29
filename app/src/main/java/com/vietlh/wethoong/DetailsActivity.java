@@ -99,7 +99,9 @@ public class DetailsActivity extends AppCompatActivity {
 
         showDieukhoan();
 
-        initAds();
+        if(GeneralSettings.isAdsEnabled) {
+            initAds();
+        }
     }
 
     private void getPassingParameters(){
