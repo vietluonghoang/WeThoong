@@ -411,15 +411,26 @@ public class DetailsActivity extends AppCompatActivity {
     }
 
     private ArrayList<Dieukhoan> getTamgiuPhuongtienList() {
+//        String qry = "select distinct dk.id as dkId, dk.so as dkSo, tieude as dkTieude, dk.noidung as dkNoidungString" +
+//                 ", minhhoa as dkMinhhoa, cha as dkCha, vb.loai as lvbID, lvb.ten as lvbTen, vb.so as vbSo, vanbanid as vbId" +
+//                 ", vb.ten as vbTen, nam as vbNam, ma as vbMa, vb.noidung as vbNoidung, coquanbanhanh as vbCoquanbanhanhId" +
+//                 ", cq.ten as cqTen, dk.forSearch as dkSearch from tblChitietvanban as dk join tblVanban as vb on dk.vanbanid=vb.id " +
+//                 "join tblLoaivanban as lvb on vb.loai=lvb.id join tblCoquanbanhanh as cq on vb.coquanbanhanh=cq.id " +
+//                 "join tblRelatedDieukhoan as rdk on dk.id = rdk.dieukhoanId where (dkCha = " + GeneralSettings.tamgiuPhuongtienDieukhoanID +
+//                 " or dkCha in (select id from tblchitietvanban where cha = " + GeneralSettings.tamgiuPhuongtienDieukhoanID + ") " +
+//                 "or dkCha in (select id from tblchitietvanban where cha in (select id from tblchitietvanban where cha = " +
+//                 GeneralSettings.tamgiuPhuongtienDieukhoanID + "))) and rdk.relatedDieukhoanID = " + dieukhoanId;
         String qry = "select distinct dk.id as dkId, dk.so as dkSo, tieude as dkTieude, dk.noidung as dkNoidungString" +
-                 ", minhhoa as dkMinhhoa, cha as dkCha, vb.loai as lvbID, lvb.ten as lvbTen, vb.so as vbSo, vanbanid as vbId" +
-                 ", vb.ten as vbTen, nam as vbNam, ma as vbMa, vb.noidung as vbNoidung, coquanbanhanh as vbCoquanbanhanhId" +
-                 ", cq.ten as cqTen, dk.forSearch as dkSearch from tblChitietvanban as dk join tblVanban as vb on dk.vanbanid=vb.id " +
-                 "join tblLoaivanban as lvb on vb.loai=lvb.id join tblCoquanbanhanh as cq on vb.coquanbanhanh=cq.id " +
-                 "join tblRelatedDieukhoan as rdk on dk.id = rdk.dieukhoanId where (dkCha = " + GeneralSettings.tamgiuPhuongtienDieukhoanID +
-                 " or dkCha in (select id from tblchitietvanban where cha = " + GeneralSettings.tamgiuPhuongtienDieukhoanID + ") " +
-                 "or dkCha in (select id from tblchitietvanban where cha in (select id from tblchitietvanban where cha = " +
-                 GeneralSettings.tamgiuPhuongtienDieukhoanID + "))) and rdk.relatedDieukhoanID = " + dieukhoanId;
+                ", minhhoa as dkMinhhoa, cha as dkCha, vb.loai as lvbID, lvb.ten as lvbTen, vb.so as vbSo, vanbanid as vbId" +
+                ", vb.ten as vbTen, nam as vbNam, ma as vbMa, vb.noidung as vbNoidung, coquanbanhanh as vbCoquanbanhanhId" +
+                ", cq.ten as cqTen, dk.forSearch as dkSearch from tblChitietvanban as dk join tblVanban as vb on dk.vanbanid=vb.id " +
+                "join tblLoaivanban as lvb on vb.loai=lvb.id join tblCoquanbanhanh as cq on vb.coquanbanhanh=cq.id " +
+                "join tblRelatedDieukhoan as rdk on dk.id = rdk.dieukhoanId where (dkCha = " + GeneralSettings.tamgiuPhuongtienDieukhoanID +
+                " or dkCha in (select id from tblchitietvanban where cha = " + GeneralSettings.tamgiuPhuongtienDieukhoanID + ")" +
+                " or dkCha in (select id from tblchitietvanban where cha in (select id from tblchitietvanban where cha = " +
+                GeneralSettings.tamgiuPhuongtienDieukhoanID + "))) and (rdk.relatedDieukhoanID = " + dieukhoan.getId() +
+                " or rdk.relatedDieukhoanID = " + dieukhoan.getCha() + " or rdk.relatedDieukhoanID = (select cha from " +
+                "tblchitietvanban where id = " + dieukhoan.getCha() + "))";
         ArrayList<Dieukhoan> tamgiuList = queries.searchDieukhoanByQuery(qry, vanbanid);
         return tamgiuList;
     }

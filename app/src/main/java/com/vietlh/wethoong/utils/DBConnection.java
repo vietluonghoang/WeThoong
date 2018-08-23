@@ -48,12 +48,13 @@ public class DBConnection extends SQLiteOpenHelper{
      *            The target database in the application package context.
      */
     private void copyDatabaseFromAssets(SQLiteDatabase db) {
+        System.out.print("=============== here ===========");
         Log.i(TAG,"copyDatabase");
         InputStream myInput = null;
         OutputStream myOutput = null;
         try {
             // Open db packaged as asset as the input stream
-            System.out.print("==="+context.getAssets().list(assetPath));
+            Log.i(TAG, "==="+context.getAssets().list(assetPath).length + " - " + context.getAssets().list(assetPath)[0]);
             myInput = context.getAssets().open("database/Hieuluat.sqlite");
             // Open the db in the application package context:
             myOutput = new FileOutputStream(db.getPath());
@@ -74,6 +75,12 @@ public class DBConnection extends SQLiteOpenHelper{
             copiedDb.close();
 
         } catch (IOException e) {
+            Log.i(TAG,"ERROR: Failed on Copying Database: \n" + e.getMessage());
+            for (StackTraceElement trace:
+                 e.getStackTrace()) {
+                Log.i(TAG,trace.toString());
+            }
+
             e.printStackTrace();
             throw new Error(TAG + " Error copying database");
         } finally {
