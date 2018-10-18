@@ -20,7 +20,7 @@ public class DBConnection extends SQLiteOpenHelper{
 
     private final Context context;
     private static String assetPath = "database";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     private static final String DATABASE_NAME = "Hieuluat";
 
     private boolean createDb = false, upgradeDb = false;
@@ -48,7 +48,6 @@ public class DBConnection extends SQLiteOpenHelper{
      *            The target database in the application package context.
      */
     private void copyDatabaseFromAssets(SQLiteDatabase db) {
-        System.out.print("=============== here ===========");
         Log.i(TAG,"copyDatabase");
         InputStream myInput = null;
         OutputStream myOutput = null;
@@ -114,6 +113,8 @@ public class DBConnection extends SQLiteOpenHelper{
     @Override
     public void onOpen(SQLiteDatabase db) {
         Log.i(TAG, "onOpen db");
+        super.onOpen(db);
+        db.disableWriteAheadLogging();
         if (createDb) {// The db in the application package
             // context is being created.
             // So copy the contents from the db
@@ -126,6 +127,7 @@ public class DBConnection extends SQLiteOpenHelper{
         if (upgradeDb) {// The db in the application package
             // context is being upgraded from a lower to a higher version.
             upgradeDb = false;
+            copyDatabaseFromAssets(db);
             // Your db upgrade logic here:
         }
     }

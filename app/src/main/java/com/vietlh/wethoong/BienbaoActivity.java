@@ -1,0 +1,691 @@
+package com.vietlh.wethoong;
+
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.support.constraint.ConstraintLayout;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.util.TypedValue;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.HorizontalScrollView;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
+import android.widget.Switch;
+import android.widget.TextView;
+
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.vietlh.wethoong.adapters.ListRecyclerViewAdapter;
+import com.vietlh.wethoong.entities.Dieukhoan;
+import com.vietlh.wethoong.utils.AdsHelper;
+import com.vietlh.wethoong.utils.DBConnection;
+import com.vietlh.wethoong.utils.GeneralSettings;
+import com.vietlh.wethoong.utils.Queries;
+import com.vietlh.wethoong.utils.UtilsHelper;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+
+public class BienbaoActivity extends AppCompatActivity {
+
+    private static final String TAG = "SearchActivity";
+    private RecyclerView searchResultRecyclerView;
+    private ListRecyclerViewAdapter searchResultListRecyclerAdapter;
+    private RecyclerView.LayoutManager recyclerLayoutManager;
+    private ArrayList<Dieukhoan> allDieukhoan;
+    private HashMap<String, Boolean> selectedPlateShapeGroups = new HashMap<>();
+    private HashMap<String, Boolean> selectedPlateShapes = new HashMap<>();
+    private HashMap<String, Boolean> selectedPlateDetails = new HashMap<>();
+    private HashMap<String, String> shapeGroupNamePair = new HashMap() {{
+        put("Circle", "Hình tròn");
+        put("Rectangle", "Hình chữ nhật");
+        put("Arrow", "Hình mũi tên");
+        put("Octagon", "Hình bát giác");
+        put("Triangle", "Hình tam giác");
+        put("Square", "Hình vuông");
+        put("Rhombus", "Hình quả trám");
+        put("Xshape", "Hình chữ X");
+    }};
+    private Queries queries = new Queries(DBConnection.getInstance(this));
+    private Button btnLoctheo;
+    private TextView txtLoctheo;
+    private ConstraintLayout searchView;
+    private ConstraintLayout lineLoutPlateShapeSelect;
+    private ConstraintLayout lineLoutPlateDetailsSelect;
+    private LinearLayout lineLoutLoaivanban;
+    private LinearLayout lineLoutMucphat;
+    private HorizontalScrollView scvPlateShapes;
+    private LinearLayout lineLoutPlateShapeItems;
+    private ImageButton btnPlateDetailsArrow;
+    private ImageButton btnPlateDetailsCreatures;
+    private ImageButton btnPlateDetailsSigns;
+    private ImageButton btnPlateDetailsFigures;
+    private ImageButton btnPlateDetailsAlphanumerics;
+    private ImageButton btnPlateDetailsVehicles;
+    private ImageButton btnPlateDetailsStructures;
+    private ImageButton btnPlateDetailsExtras;
+    private LinearLayout adsView;
+    private ArrayList<String> vanbanid = new ArrayList<>();
+    private String searchType;
+    private UtilsHelper helper = new UtilsHelper();
+    private AdsHelper adsHelper = new AdsHelper();
+
+    //Filter popup elements
+    private AlertDialog.Builder builder;
+    AlertDialog alert = null;
+    private View customView;
+    private LinearLayout lineLoutPlateShapeGroupsSelection;
+    private CheckBox cbPlateShapeRectangle;
+    private CheckBox cbPlateShapeTriangle;
+    private CheckBox cbPlateShapeCircle;
+    private CheckBox cbPlateShapeSquare;
+    private CheckBox cbPlateShapeXshape;
+    private CheckBox cbPlateShapeOctagon;
+    private CheckBox cbPlateShapeRhombic;
+    private CheckBox cbPlateShapeArrow;
+    private int colorNormalBtnBg;
+    private int colorNormalBtnFg;
+    private int colorSelectedBtnBg;
+    private int colorSelectedBtnFg;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_bienbao);
+        getPassingParameters();
+        colorNormalBtnBg = getResources().getColor(R.color.normalBtnBG);
+        colorSelectedBtnBg = getResources().getColor(R.color.selectedBtnBG);
+        initComponents();
+        builder = new AlertDialog.Builder(this);
+
+        if (GeneralSettings.isAdsEnabled) {
+            initAds();
+        }
+    }
+
+    private void initAds() {
+        adsView = (LinearLayout) findViewById(R.id.adsView);
+        adsHelper.updateLastConnectionState();
+        if (GeneralSettings.wasConnectedToInternet) {
+            AdView googleAdView = new AdView(this);
+            adsHelper.addBannerViewtoView(googleAdView, adsView);
+            AdRequest adRequest = new AdRequest.Builder().build();
+            googleAdView.loadAd(adRequest);
+        } else {
+            Button btnFBBanner = new Button(this);
+            btnFBBanner.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    helper.openUrlInExternalBrowser(getApplicationContext(), getResources().getString(R.string.wethoongFB));
+                }
+            });
+            btnFBBanner.setBackgroundResource(R.drawable.facebook_banner_wethoong);
+            adsHelper.addButtonToView(btnFBBanner, adsView);
+        }
+    }
+
+    private void getPassingParameters() {
+        searchType = (String) getIntent().getStringExtra("searchType");
+    }
+
+    private void initComponents() {
+        searchView = (ConstraintLayout) findViewById(R.id.searchView);
+        lineLoutPlateShapeSelect = (ConstraintLayout) findViewById(R.id.filterView);
+        scvPlateShapes = (HorizontalScrollView) findViewById(R.id.scvFilters);
+        lineLoutPlateShapeItems = (LinearLayout) findViewById(R.id.filterItem);
+        btnLoctheo = (Button) ((ConstraintLayout) findViewById(R.id.locTheoView)).findViewById(R.id.btnLoctheo);
+        txtLoctheo = (TextView) ((ConstraintLayout) findViewById(R.id.locTheoView)).findViewById(R.id.lblLoctheo);
+
+        initPlateShapeGroups();
+        initPlateDetails();
+        initSelectedPlateShapes();
+
+        btnLoctheo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showFilterPopUp();
+                updateUIFromFilterData();
+            }
+        });
+
+        searchResultRecyclerView = (RecyclerView) findViewById(R.id.search_result);
+
+        // use this setting to improve performance if you know that changes
+        // in content do not change the layout size of the RecyclerView
+        searchResultRecyclerView.setHasFixedSize(false);
+
+        // use a linear layout manager
+        recyclerLayoutManager = new LinearLayoutManager(this);
+        searchResultRecyclerView.setLayoutManager(recyclerLayoutManager);
+
+        // specify an adapter (see also next example)
+        searchResultListRecyclerAdapter = new ListRecyclerViewAdapter(this, allDieukhoan, 0,50);
+        updateResultList("");
+
+        searchResultRecyclerView.setAdapter(searchResultListRecyclerAdapter);
+
+        //workaround to make searchResultRecyclerView to match parent width
+        ViewGroup.LayoutParams searchResultLayoutParams = searchResultRecyclerView.getLayoutParams();
+        searchResultLayoutParams.width = helper.getScreenWidth();
+        searchResultRecyclerView.setLayoutParams(searchResultLayoutParams);
+
+        switch (searchType) {
+            case GeneralSettings.SEARCH_TYPE_VANBAN:
+                break;
+            case GeneralSettings.SEARCH_TYPE_MUCPHAT:
+                addVanbanidToList(GeneralSettings.danhsachvanban[0]);
+                break;
+            case GeneralSettings.SEARCH_TYPE_BIENBAO:
+                addVanbanidToList(GeneralSettings.danhsachvanban[1]);
+            case GeneralSettings.SEARCH_TYPE_VACHKEDUONG:
+                addVanbanidToList(GeneralSettings.danhsachvanban[1]);
+            default:
+                for (String key : GeneralSettings.danhsachvanban) {
+                    addVanbanidToList(key);
+                }
+                break;
+        }
+    }
+
+    private void initPlateShapeGroups() {
+        ArrayList<String> groups = queries.getPlateGroups();
+        for (String group :
+                groups) {
+            selectedPlateShapeGroups.put(group, true);
+        }
+    }
+
+    private void initPlateDetails() {
+        lineLoutPlateDetailsSelect = (ConstraintLayout) findViewById(R.id.detailsSelectView);
+        btnPlateDetailsAlphanumerics = (ImageButton) findViewById(R.id.btnAlphanumerics);
+        btnPlateDetailsAlphanumerics.setTag("Alphanumerics");
+        setButtonBackgroundColor(btnPlateDetailsAlphanumerics, false);
+        btnPlateDetailsAlphanumerics.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updatePlateDetailsSelection(btnPlateDetailsAlphanumerics);
+            }
+        });
+        btnPlateDetailsArrow = (ImageButton) findViewById(R.id.btnArrow);
+        btnPlateDetailsArrow.setTag("Arrows");
+        setButtonBackgroundColor(btnPlateDetailsArrow, false);
+        btnPlateDetailsArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updatePlateDetailsSelection(btnPlateDetailsArrow);
+            }
+        });
+        btnPlateDetailsCreatures = (ImageButton) findViewById(R.id.btnCreatures);
+        btnPlateDetailsCreatures.setTag("Creatures");
+        setButtonBackgroundColor(btnPlateDetailsCreatures, false);
+        btnPlateDetailsCreatures.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updatePlateDetailsSelection(btnPlateDetailsCreatures);
+            }
+        });
+        btnPlateDetailsStructures = (ImageButton) findViewById(R.id.btnStructures);
+        btnPlateDetailsStructures.setTag("Structures");
+        setButtonBackgroundColor(btnPlateDetailsStructures, false);
+        btnPlateDetailsStructures.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updatePlateDetailsSelection(btnPlateDetailsStructures);
+            }
+        });
+        btnPlateDetailsFigures = (ImageButton) findViewById(R.id.btnFigures);
+        btnPlateDetailsFigures.setTag("Figures");
+        setButtonBackgroundColor(btnPlateDetailsFigures, false);
+        btnPlateDetailsFigures.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updatePlateDetailsSelection(btnPlateDetailsFigures);
+            }
+        });
+        btnPlateDetailsVehicles = (ImageButton) findViewById(R.id.btnVehicles);
+        btnPlateDetailsVehicles.setTag("Vehicles");
+        setButtonBackgroundColor(btnPlateDetailsVehicles, false);
+        btnPlateDetailsVehicles.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updatePlateDetailsSelection(btnPlateDetailsVehicles);
+            }
+        });
+        btnPlateDetailsSigns = (ImageButton) findViewById(R.id.btnSigns);
+        btnPlateDetailsSigns.setTag("Signs");
+        setButtonBackgroundColor(btnPlateDetailsSigns, false);
+        btnPlateDetailsSigns.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updatePlateDetailsSelection(btnPlateDetailsSigns);
+            }
+        });
+        btnPlateDetailsExtras = (ImageButton) findViewById(R.id.btnExtras);
+        btnPlateDetailsExtras.setTag("Extras");
+        //make it invisible
+//        setButtonBackgroundColor(btnPlateDetailsExtras,false);
+        btnPlateDetailsExtras.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //do nothing
+//                updatePlateDetailsSelection(btnPlateDetailsExtras);
+            }
+        });
+    }
+
+    private void initSelectedPlateShapes() {
+        String currentSelectedPlateShape = "";
+        boolean isSelectedPlateShapePersisted = false;
+        for (String shape :
+                selectedPlateShapes.keySet()) {
+            if (selectedPlateShapes.get(shape)) {
+                currentSelectedPlateShape = shape;
+                break;
+            }
+        }
+        lineLoutPlateShapeItems.removeAllViews();
+        int desirableHeight = (int) ((float) helper.getScreenHeight() * 0.1);
+        int desirablePadding = (int) ((float) desirableHeight * 0.05);
+
+        ((ImageButton)findViewById(R.id.btnLeftNav)).setBackground(helper.getDrawableFromAssets(this,"parts/navigate_left.png"));
+        ((ImageButton)findViewById(R.id.btnRightNav)).setBackground(helper.getDrawableFromAssets(this,"parts/navigate_right.png"));
+
+        ArrayList<String> groups = new ArrayList<>();
+        for (String group :
+                selectedPlateShapeGroups.keySet()) {
+            if (selectedPlateShapeGroups.get(group)) {
+                groups.add(group);
+            }
+        }
+        ArrayList<String> shapes = queries.getPlateShapeByGroup(groups);
+        for (String img : shapes) {
+            String imgName = img.replace("\n", "").trim();
+            if (imgName.length() < 1) {
+                //do nothing
+            } else {
+                Bitmap image = helper.getBitmapFromAssets(this, "parts/" + imgName + ".png");
+
+                final ImageView imgView = new ImageView(this);
+                ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                imgView.setLayoutParams(layoutParams);
+                imgView.setTag(imgName);
+                imgView.setImageBitmap(helper.scaleImageByHeight(image, desirableHeight));
+                imgView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        setImageBackgroundColor((ImageView) v);
+                        updateResultList("");
+                    }
+                });
+                LinearLayout imgWrapper = new LinearLayout(this);
+                imgWrapper.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, (desirableHeight + (2 * desirablePadding))));
+                imgWrapper.setOrientation(LinearLayout.HORIZONTAL);
+                imgWrapper.setPadding(desirablePadding, desirablePadding * 2, desirablePadding, desirablePadding * 2);
+                imgWrapper.addView(imgView);
+                if (imgName.equals(currentSelectedPlateShape)) {
+                    selectedPlateShapes.put(imgName, true);
+                    imgWrapper.setBackgroundColor(colorSelectedBtnBg);
+                    isSelectedPlateShapePersisted = true;
+                } else {
+                    imgWrapper.setBackgroundColor(colorNormalBtnBg);
+                }
+                lineLoutPlateShapeItems.addView(imgWrapper);
+            }
+        }
+
+        if (!isSelectedPlateShapePersisted && isPlateShapeSelected(currentSelectedPlateShape)){
+            selectedPlateShapes.put(currentSelectedPlateShape,false);
+        }
+    }
+
+    private void updateResultList(String keyword) {
+        allDieukhoan = search(keyword.trim());
+        searchResultListRecyclerAdapter.updateView(allDieukhoan);
+    }
+
+    private ArrayList<Dieukhoan> search(String keyword) {
+        if (keyword.length() > 0) {
+            switch (searchType) {
+                case GeneralSettings.SEARCH_TYPE_VANBAN:
+                    return null;
+                case GeneralSettings.SEARCH_TYPE_MUCPHAT:
+                    return null;
+                default:
+                    return null;
+            }
+        } else {
+            switch (searchType) {
+                case GeneralSettings.SEARCH_TYPE_BIENBAO:
+                    ArrayList<String> kw = populatePlateParams();
+                    ArrayList<String> groups = new ArrayList<>();
+                    for (String group : selectedPlateShapeGroups.keySet()) {
+                        if (selectedPlateShapeGroups.get(group)) {
+                            groups.add(group);
+                        }
+                    }
+                    return queries.getPlateByParams(kw, groups);
+                case GeneralSettings.SEARCH_TYPE_VACHKEDUONG:
+                    return null;
+                default:
+                    return queries.searchChildren(keyword, vanbanid);
+            }
+        }
+    }
+
+    private ArrayList<String> populatePlateParams() {
+        ArrayList<String> params = new ArrayList<>();
+        for (String shape : selectedPlateShapes.keySet()) {
+            if (selectedPlateShapes.get(shape)) {
+                params.add(("tblPlateShapes:" + shape).trim());
+            }
+        }
+        for (String detailsGroup : selectedPlateDetails.keySet()) {
+            //TO DO: in future, if we support advance search which allows user to select a (or many) figures/signs in each group, the value that appends to 'params' should has the same form of 'plateShape' above (with colon in the midlle of group and figure/sign name)
+            if (selectedPlateDetails.get(detailsGroup)) {
+                params.add(detailsGroup.trim());
+            }
+        }
+        return params;
+    }
+
+    private void showFilterPopUp() {
+        LayoutInflater layoutInflater = getLayoutInflater();
+
+        //this is custom dialog
+        customView = layoutInflater.inflate(R.layout.popup_filters, null);
+
+        lineLoutLoaivanban = (LinearLayout) customView.findViewById(R.id.Loaivanban);
+        lineLoutMucphat = (LinearLayout) customView.findViewById(R.id.mucphatSection);
+        lineLoutPlateShapeGroupsSelection = (LinearLayout) customView.findViewById(R.id.PlateShapeSelection);
+//        ViewGroup.LayoutParams hiddenSection;
+        switch (searchType) {
+            case GeneralSettings.SEARCH_TYPE_VANBAN:
+                break;
+            case GeneralSettings.SEARCH_TYPE_BIENBAO:
+                lineLoutMucphat.setVisibility(View.INVISIBLE);
+                lineLoutLoaivanban.setVisibility(View.INVISIBLE);
+                lineLoutPlateShapeGroupsSelection.setVisibility(View.VISIBLE);
+
+                helper.hideSection(lineLoutMucphat);
+                helper.hideSection(lineLoutLoaivanban);
+                initPlateShapeFilters();
+                updateUIFromFilterData();
+
+                break;
+            case GeneralSettings.SEARCH_TYPE_MUCPHAT:
+                break;
+            default:
+                break;
+        }
+
+        Button btnXong = (Button) customView.findViewById(R.id.btnXong);
+        btnXong.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alert.dismiss();
+                updateFilterLabel();
+                initSelectedPlateShapes();
+                updateResultList("");
+            }
+        });
+
+        builder.setView(customView);
+        builder.create();
+        alert = builder.show();
+    }
+
+    private void initPlateShapeFilters() {
+        cbPlateShapeArrow = (CheckBox) customView.findViewById(R.id.optionArrowCheckbox);
+        cbPlateShapeArrow.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (cbPlateShapeArrow.isChecked()) {
+                    selectedPlateShapeGroups.put("Arrow", true);
+                } else {
+                    selectedPlateShapeGroups.put("Arrow", false);
+                }
+            }
+        });
+        cbPlateShapeCircle = (CheckBox) customView.findViewById(R.id.optionCircleCheckbox);
+        cbPlateShapeCircle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (cbPlateShapeCircle.isChecked()) {
+                    selectedPlateShapeGroups.put("Circle", true);
+                } else {
+                    selectedPlateShapeGroups.put("Circle", false);
+                }
+            }
+        });
+        cbPlateShapeRectangle = (CheckBox) customView.findViewById(R.id.optionRectangleCheckbox);
+        cbPlateShapeRectangle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (cbPlateShapeRectangle.isChecked()) {
+                    selectedPlateShapeGroups.put("Rectangle", true);
+                } else {
+                    selectedPlateShapeGroups.put("Rectangle", false);
+                }
+            }
+        });
+        cbPlateShapeSquare = (CheckBox) customView.findViewById(R.id.optionSquareCheckbox);
+        cbPlateShapeSquare.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (cbPlateShapeSquare.isChecked()) {
+                    selectedPlateShapeGroups.put("Square", true);
+                } else {
+                    selectedPlateShapeGroups.put("Square", false);
+                }
+            }
+        });
+        cbPlateShapeXshape = (CheckBox) customView.findViewById(R.id.optionXshapeCheckbox);
+        cbPlateShapeXshape.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (cbPlateShapeXshape.isChecked()) {
+                    selectedPlateShapeGroups.put("Xshape", true);
+                } else {
+                    selectedPlateShapeGroups.put("Xshape", false);
+                }
+            }
+        });
+        cbPlateShapeTriangle = (CheckBox) customView.findViewById(R.id.optionTriangleCheckbox);
+        cbPlateShapeTriangle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (cbPlateShapeTriangle.isChecked()) {
+                    selectedPlateShapeGroups.put("Triangle", true);
+                } else {
+                    selectedPlateShapeGroups.put("Triangle", false);
+                }
+            }
+        });
+        cbPlateShapeOctagon = (CheckBox) customView.findViewById(R.id.optionOctagonCheckbox);
+        cbPlateShapeOctagon.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (cbPlateShapeOctagon.isChecked()) {
+                    selectedPlateShapeGroups.put("Octagon", true);
+                } else {
+                    selectedPlateShapeGroups.put("Octagon", false);
+                }
+            }
+        });
+        cbPlateShapeRhombic = (CheckBox) customView.findViewById(R.id.optionRhombicCheckbox);
+        cbPlateShapeRhombic.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (cbPlateShapeRhombic.isChecked()) {
+                    selectedPlateShapeGroups.put("Rhombus", true);
+                } else {
+                    selectedPlateShapeGroups.put("Rhombus", false);
+                }
+            }
+        });
+    }
+
+    private void addVanbanidToList(String vanbanKey) {
+        String vbID = GeneralSettings.getVanbanInfo(vanbanKey, "id");
+        for (String id : vanbanid) {
+            if (vbID.equals(id)) {
+                return;
+            }
+        }
+        vanbanid.add(vbID);
+        updateFilterLabel();
+    }
+
+    private void updateFilterLabel() {
+        String loctheo = "";
+        switch (searchType) {
+            case GeneralSettings.SEARCH_TYPE_VANBAN:
+                break;
+            case GeneralSettings.SEARCH_TYPE_MUCPHAT:
+                break;
+            case GeneralSettings.SEARCH_TYPE_BIENBAO:
+                for (String group : selectedPlateShapeGroups.keySet()) {
+                    if (selectedPlateShapeGroups.get(group)) {
+                        loctheo += shapeGroupNamePair.get(group) + ", ";
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+        txtLoctheo.setText(helper.removeLastCharacters(loctheo, 2));
+    }
+
+    private void updateUIFromFilterData() {
+        switch (searchType) {
+            case GeneralSettings.SEARCH_TYPE_VANBAN:
+
+                break;
+            case GeneralSettings.SEARCH_TYPE_MUCPHAT:
+
+                break;
+            case GeneralSettings.SEARCH_TYPE_BIENBAO:
+                if (selectedPlateShapeGroups.get("Circle") != null && selectedPlateShapeGroups.get("Circle")) {
+                    cbPlateShapeCircle.setChecked(true);
+                    ;
+                } else {
+                    cbPlateShapeCircle.setChecked(false);
+                }
+                if (selectedPlateShapeGroups.get("Rectangle") != null && selectedPlateShapeGroups.get("Rectangle")) {
+                    cbPlateShapeRectangle.setChecked(true);
+                } else {
+                    cbPlateShapeRectangle.setChecked(false);
+                }
+                if (selectedPlateShapeGroups.get("Octagon") != null && selectedPlateShapeGroups.get("Octagon")) {
+                    cbPlateShapeOctagon.setChecked(true);
+                } else {
+                    cbPlateShapeOctagon.setChecked(false);
+                }
+                if (selectedPlateShapeGroups.get("Triangle") != null && selectedPlateShapeGroups.get("Triangle")) {
+                    cbPlateShapeTriangle.setChecked(true);
+                } else {
+                    cbPlateShapeTriangle.setChecked(false);
+                }
+                if (selectedPlateShapeGroups.get("Xshape") != null && selectedPlateShapeGroups.get("Xshape")) {
+                    cbPlateShapeXshape.setChecked(true);
+                } else {
+                    cbPlateShapeXshape.setChecked(false);
+                }
+                if (selectedPlateShapeGroups.get("Square") != null && selectedPlateShapeGroups.get("Square")) {
+                    cbPlateShapeSquare.setChecked(true);
+                } else {
+                    cbPlateShapeSquare.setChecked(false);
+                }
+                if (selectedPlateShapeGroups.get("Arrow") != null && selectedPlateShapeGroups.get("Arrow")) {
+                    cbPlateShapeArrow.setChecked(true);
+                } else {
+                    cbPlateShapeArrow.setChecked(false);
+                }
+                if (selectedPlateShapeGroups.get("Rhombus") != null && selectedPlateShapeGroups.get("Rhombus")) {
+                    cbPlateShapeRhombic.setChecked(true);
+                } else {
+                    cbPlateShapeRhombic.setChecked(false);
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void updatePlateDetailsSelection(ImageButton button) {
+        String btnName = (String) button.getTag();
+        selectedPlateDetails.put(btnName, !isButtonOn(btnName));
+        setButtonBackgroundColor(button, isButtonOn(btnName));
+        updateResultList("");
+    }
+
+    private void setButtonBackgroundColor(ImageButton button, boolean isActive) {
+        if (isActive) {
+            ((ConstraintLayout) button.getParent()).setBackgroundColor(colorSelectedBtnBg);
+        } else {
+            ((ConstraintLayout) button.getParent()).setBackgroundColor(colorNormalBtnBg);
+        }
+    }
+
+    private boolean isButtonOn(String btnName) {
+        if (selectedPlateDetails.get(btnName) == null) {
+            return false;
+        }
+        return selectedPlateDetails.get(btnName);
+    }
+
+    private boolean isPlateShapeSelected(String imageName) {
+        if (selectedPlateShapes.get(imageName) == null) {
+            return false;
+        }
+        return selectedPlateShapes.get(imageName);
+    }
+
+    private void setImageBackgroundColor(ImageView imgView) {
+        boolean isAlreadyRemoved = false;
+        boolean isAlreadySet = false;
+        for (int i = 0; i < lineLoutPlateShapeItems.getChildCount(); i++) {
+            LinearLayout child = (LinearLayout) lineLoutPlateShapeItems.getChildAt(i);
+            if (child.getChildAt(0).equals(imgView)) {
+                if (isPlateShapeSelected((String) imgView.getTag())) {
+                    child.setBackgroundColor(colorNormalBtnBg);
+                    selectedPlateShapes.put((String) imgView.getTag(), false);
+                    isAlreadyRemoved = true;
+                } else {
+                    child.setBackgroundColor(colorSelectedBtnBg);
+                    selectedPlateShapes.put((String) imgView.getTag(), true);
+                }
+                isAlreadySet = true;
+            } else {
+                child.setBackgroundColor(colorNormalBtnBg);
+                if (imgView != null) {
+                    if (isPlateShapeSelected((String) ((ImageView)child.getChildAt(0)).getTag())) {
+                        isAlreadyRemoved = true;
+                    }
+                    selectedPlateShapes.put((String) ((ImageView)child.getChildAt(0)).getTag(), false);
+                }
+            }
+            if (isAlreadyRemoved && isAlreadySet) {
+                break;
+            }
+        }
+    }
+}

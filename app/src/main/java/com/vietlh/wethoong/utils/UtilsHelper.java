@@ -11,6 +11,8 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.RippleDrawable;
 import android.net.Uri;
+import android.os.Build;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -73,6 +75,39 @@ public class UtilsHelper {
         return bitmap;
     }
 
+    public Drawable getDrawableFromAssets(Context context, String fileName){
+        Drawable drawable = null;
+        InputStream inputStream = null;
+        try {
+            inputStream = context.getAssets().open(fileName);
+            drawable = Drawable.createFromStream(inputStream, null);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if(inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return drawable;
+    }
+
+    //TODO: Handle scaling images if needed (not sure why it works)
+    public Bitmap scaleImage(Bitmap image, int targetWidth) {
+        int nh = (int) ( image.getHeight() * ((float)targetWidth / (float)image.getWidth()) );
+        Bitmap scaled = Bitmap.createScaledBitmap(image, targetWidth, nh, true);
+        return scaled;
+    }
+
+    public Bitmap scaleImageByHeight(Bitmap image, int targetHeight) {
+        int nw = (int) ( image.getWidth() * ((float)targetHeight / (float)image.getHeight()) );
+        Bitmap scaled = Bitmap.createScaledBitmap(image, nw,targetHeight , true);
+        return scaled;
+    }
+
     public int getButtonBackgroundColor(Button button){
         int buttonColor = 0;
 
@@ -81,18 +116,20 @@ public class UtilsHelper {
             buttonColor = cd.getColor();
         }
 
-        if (button.getBackground() instanceof RippleDrawable) {
-            RippleDrawable rippleDrawable = (RippleDrawable) button.getBackground();
-            Drawable.ConstantState state = rippleDrawable.getConstantState();
-            try {
-                Field colorField = state.getClass().getDeclaredField("mColor");
-                colorField.setAccessible(true);
-                ColorStateList colorStateList = (ColorStateList) colorField.get(state);
-                buttonColor = colorStateList.getDefaultColor();
-            } catch (NoSuchFieldException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (button.getBackground() instanceof RippleDrawable) {
+                RippleDrawable rippleDrawable = (RippleDrawable) button.getBackground();
+                Drawable.ConstantState state = rippleDrawable.getConstantState();
+                try {
+                    Field colorField = state.getClass().getDeclaredField("mColor");
+                    colorField.setAccessible(true);
+                    ColorStateList colorStateList = (ColorStateList) colorField.get(state);
+                    buttonColor = colorStateList.getDefaultColor();
+                } catch (NoSuchFieldException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
             }
         }
         return buttonColor;
@@ -112,6 +149,7 @@ public class UtilsHelper {
 //        view.setLayoutParams(hiddenSection);
         view.setVisibility(View.GONE);
     }
+
     public void showSection(View view){
         view.setVisibility(View.VISIBLE);
         ViewGroup.LayoutParams hiddenSection = view.getLayoutParams();
@@ -127,4 +165,20 @@ public class UtilsHelper {
         i.setData(Uri.parse(url));
         context.startActivity(i);
     }
+
+    public  String removeLastCharacters(String string, int length){
+        if(string.length() >= length){
+            return  string.substring(0,string.length() - length);
+        }
+        return "";
+    }
+
+    public  String removeFirstCharacters(String string, int length){
+        if(string.length() >= length){
+            return  string.substring(length - 1 ,string.length() - 1);
+        }
+        return "";
+    }
+
+
 }

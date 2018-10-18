@@ -18,6 +18,7 @@ public class Dieukhoan {
     private int sortPoint = 0;
     private int matchCount = 0;
     private int firstAppearanceDistance = 0;
+    private int defaultMinhhoa = 0;
 
     public int getId() {
         return id;
@@ -111,6 +112,27 @@ public class Dieukhoan {
         return firstAppearanceDistance;
     }
 
+    public int getDefaultMinhhoa() {
+        return defaultMinhhoa;
+    }
+
+    public void setDefaultMinhhoa(int order) {
+        if (order >= 0 && order < minhhoa.size()) {
+            this.defaultMinhhoa = order;
+        }
+    }
+
+    public void setDefaultMinhhoa(String name) {
+        int order = 0;
+        for (String mh : minhhoa) {
+            if (mh.trim().toLowerCase().contains(name.trim().toLowerCase())) {
+                this.defaultMinhhoa = order;
+                break;
+            }
+            order += 1;
+        }
+    }
+
     public void setFirstAppearanceDistance(int firstAppearanceDistance) {
         this.firstAppearanceDistance = firstAppearanceDistance;
     }
@@ -150,5 +172,19 @@ public class Dieukhoan {
         if (minhhoa.length() > 0){
             this.minhhoa.add(minhhoa);
         }
+    }
+
+    public void cloneDieukhoan(Dieukhoan dk) {
+        this.id = dk.getId();
+        this.so = dk.getSo();
+        this.tieude = dk.getTieude();
+        this.noidung = dk.getNoidung();
+        this.minhhoa = dk.getMinhhoa();
+        this.cha = dk.getCha();
+        this.vanban = dk.getVanban();
+        this.hinhphatbosung = dk.getHinhphatbosung();
+        this.bienphapkhacphuc = dk.getBienphapkhacphuc();
+        this.sortPoint = dk.getSortPoint();
+        this.defaultMinhhoa = dk.getDefaultMinhhoa();
     }
 }

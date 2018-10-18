@@ -376,13 +376,6 @@ public class DetailsActivity extends AppCompatActivity {
         }
     }
 
-    //TODO: Handle scaling images if needed (not sure why it works)
-    private Bitmap scaleImage(Bitmap image, int targetWidth) {
-        int nh = (int) ( image.getHeight() * (targetWidth / image.getWidth()) );
-        Bitmap scaled = Bitmap.createScaledBitmap(image, targetWidth, nh, true);
-        return scaled;
-    }
-
     private void fillMinhhoaToViewMinhhoa(ArrayList<String> images) {
         hideMinhhoaView( false);
 
@@ -397,7 +390,7 @@ public class DetailsActivity extends AppCompatActivity {
                 ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
                 imgView.setLayoutParams(layoutParams);
 
-                imgView.setImageBitmap(scaleImage(image,helper.getScreenWidth()));
+                imgView.setImageBitmap(helper.scaleImage(image,helper.getScreenWidth()));
                 minhhoaView.addView(imgView);
             }
         }

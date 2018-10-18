@@ -10,6 +10,7 @@ import com.vietlh.wethoong.entities.Vanban;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by vietlh on 2/23/18.
@@ -19,6 +20,7 @@ public class Queries{
 
     public static String rawQuery = "select distinct dk.id as dkId, dk.so as dkSo, tieude as dkTieude, dk.noidung as dkNoidung, minhhoa as dkMinhhoa, cha as dkCha, vb.loai as lvbID, lvb.ten as lvbTen, vb.so as vbSo, vanbanid as vbId, vb.ten as vbTen, nam as vbNam, ma as vbMa, vb.noidung as vbNoidung, coquanbanhanh as vbCoquanbanhanhId, cq.ten as cqTen, dk.forSearch as dkSearch from tblChitietvanban as dk join tblVanban as vb on dk.vanbanid=vb.id join tblLoaivanban as lvb on vb.loai=lvb.id join tblCoquanbanhanh as cq on vb.coquanbanhanh=cq.id where ";
     private DBConnection connection;
+    private UtilsHelper utils = new UtilsHelper();
 
     public Queries(DBConnection connection) {
         this.connection = connection;
@@ -463,6 +465,30 @@ public class Queries{
         return allDieukhoan;
     }
 
+    public ArrayList<Dieukhoan> searchDieukhoanByIDs(ArrayList<String> keyword, ArrayList<String> vanbanid) {
+        connection.open();
+        String specificVanban = generateWhereClauseForVanbanid(vanbanid, "vbId");
+        String idGroup = "";
+        for(String id: keyword) {
+            idGroup += "dkId = " + id + " or ";
+        }
+
+        String sql = getRawQuery();
+
+        if (idGroup.length() > 3) {
+            sql += "(" + utils.removeLastCharacters(idGroup, 4) + ")" + specificVanban;
+        } else {
+            sql += utils.removeFirstCharacters(specificVanban, 4);
+        }
+
+        ArrayList<Dieukhoan> allDieukhoan = new ArrayList<>();
+        Cursor cursor = connection.executeQuery(sql);
+        generateDieukhoanList(cursor,allDieukhoan);
+
+        connection.close();
+
+        return allDieukhoan;
+    }
 
     public ArrayList<Dieukhoan> searchDieukhoanByQuery(String query, ArrayList<String> vanbanid) {
         connection.open();
@@ -494,6 +520,135 @@ public class Queries{
         connection.close();
 
         return allDieukhoan;
+    }
+
+    public ArrayList<String> getPlateGroups(){
+        connection.open();
+
+        String sql = "select ten from tblShapeGroups";
+
+        Cursor cursor = connection.executeQuery(sql);
+        ArrayList<String> result = new ArrayList<>();
+        if(cursor != null){
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                String name = cursor.getString(0);
+                if(name.length() > 0){
+                    result.add(name);
+                }
+                cursor.moveToNext();
+            }
+        }
+
+        connection.close();
+
+        return result;
+    }
+
+    public ArrayList<String> getPlateShapeByGroup(ArrayList<String> groups) {
+        connection.open();
+        String whereClause = "";
+        for(String group: groups) {
+            whereClause += "ten = '" + group + "' or ";
+        }
+
+        //workaround for no group selected
+        if(groups.size() < 1) {
+            whereClause = "ten = '' or ";
+        }
+        String sql = "select ten from tblPlateShapes where type in (select id from tblShapeGroups where (" + utils.removeLastCharacters(whereClause, 4) + "))";
+
+        Cursor cursor = connection.executeQuery(sql);
+        ArrayList<String> result = new ArrayList<>();
+        if(cursor != null){
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                String name = cursor.getString(0);
+                if(name.length() > 0){
+                    result.add(name);
+                }
+                cursor.moveToNext();
+            }
+        }
+
+        connection.close();
+
+        return result;
+    }
+
+    public ArrayList<Dieukhoan> getPlateByParams(ArrayList<String> params, ArrayList<String> groups) {
+        connection.open();
+        String sql = "";
+        int index = 0;
+        String inGroup = "";
+        for (String group : groups) {
+            inGroup += "'" + group + "', ";
+        }
+
+        // if no params or groups set, get all plates
+        if (params.size() == 0 && groups.size() < 1) {
+            sql = "select plateId as pid, name from tblPlateReferences";
+        } else if (params.size() == 0) { // if no params but groups set, select plates that has type of 'tblPlateShapes' and refID is one of the selected shapes
+            sql = "select plateId as pid, name from tblPlateReferences where type = 'tblPlateShapes' and refId in (select id from tblPlateShapes where type in (select id from tblShapeGroups where ten in (" + utils.removeLastCharacters(inGroup, 2) + ")))";
+        } else { //if at list 1 param set, select plate that matched that param
+            for (String type : params) {
+                String[] details = type.split(":");
+                if (index == 0) {
+                    sql = "select a0.plateId as pid, a0.name as name from (select * from tblPlateReferences where type = '" + details[0] + "'";
+                    if (details.length > 1) {
+                        sql +=  " and refId = (select id from '" + details[0] + "' where ten = '" + details[1] + "')";
+                    }
+                    sql += " and (plateId in (select plateID from tblPlateReferences where type = 'tblPlateShapes' and refid in (select id from tblPlateShapes where type in (select id from tblShapeGroups where ten in (" + utils.removeLastCharacters(inGroup, 2) + ")))))) as a0";
+                } else {
+                    sql += " JOIN (select * from tblPlateReferences where type = '" + details[0] + "'";
+                    if (details.length > 1) {
+                        sql +=  " and refId = (select id from '" + details[0] + "' where ten = '" + details[1] + "')";
+                    }
+
+                    sql += ") as a" + index +" on a0.name = a" + index + ".name";
+                }
+                index += 1;
+            }
+        }
+
+        Cursor cursor = connection.executeQuery(sql);
+        HashMap<String,String> result = new HashMap<>();
+        if(cursor != null){
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                String pid = String.valueOf(cursor.getInt(0));
+                String pname = cursor.getString(1);
+                if(pid != null){
+                    result.put(pname,pid);
+                }
+                cursor.moveToNext();
+            }
+        }
+
+        connection.close();
+
+        ArrayList<Dieukhoan> finalResult = new ArrayList<>();
+
+        if (result.size() < 1) {
+            return finalResult;
+        }
+
+        HashMap<String,Dieukhoan> dkList = new HashMap<>();
+        ArrayList<String> vbid = new ArrayList<String>();
+        vbid.add(GeneralSettings.getVanbanInfo("qc41","id"));
+        for (Dieukhoan dk : searchDieukhoanByIDs(new ArrayList<String>(result.values()), vbid)) {
+            dkList.put(String.valueOf(dk.getId()),dk);
+        }
+
+        for (String rs : result.keySet()) {
+            Dieukhoan dk = dkList.get(result.get(rs));
+            Dieukhoan fdk = new Dieukhoan(0,0,null);
+            fdk.cloneDieukhoan(dk);
+            fdk.setDefaultMinhhoa(rs);
+            finalResult.add(fdk);
+        }
+
+        return finalResult;
     }
 
     private void generateBosungKhacphucList(Cursor cursor,ArrayList<BosungKhacphuc> bosungKhacphucArray) {

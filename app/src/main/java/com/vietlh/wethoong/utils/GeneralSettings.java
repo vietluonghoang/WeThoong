@@ -11,6 +11,8 @@ public class GeneralSettings {
     public static String[] danhsachvanban = {"nd46","qc41","tt01","lgt","lxlvphc"};
     public static final String SEARCH_TYPE_VANBAN = "vanban";
     public static final String SEARCH_TYPE_MUCPHAT = "mucphat";
+    public static final String SEARCH_TYPE_BIENBAO = "bienbao";
+    public static final String SEARCH_TYPE_VACHKEDUONG = "vachkeduong";
     public static final String PHUONGTIEN_OTO = "Ô tô";
     public static final String PHUONGTIEN_XEMAY = "Xe máy";
     public static final String PHUONGTIEN_XEDAP = "Xe đạp";

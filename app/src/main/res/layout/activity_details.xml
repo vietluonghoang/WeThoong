@@ -44,6 +44,7 @@
                     android:paddingBottom="0px"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@id/btnBreadscrubs"
                     style="@style/smallBoldText"/>
 
                 <Button
@@ -357,7 +358,8 @@
         android:paddingRight="0px"
         android:paddingTop="0px"
         android:paddingBottom="0px"
-        app:layout_constraintTop_toBottomOf="@id/scrollView">
+        app:layout_constraintTop_toBottomOf="@id/scrollView"
+        app:layout_constraintBottom_toTopOf="@id/adsView">
 
         <Button
             android:id="@+id/btnXemthem"
