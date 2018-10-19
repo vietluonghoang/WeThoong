@@ -161,10 +161,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:paddingBottom="2px"
-                    android:paddingLeft="2px"
-                    android:paddingRight="2px"
-                    android:paddingTop="2px"
+                    android:layout_margin="2px"
                     android:text="@string/oto" />
 
                 <Button
@@ -172,10 +169,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:paddingBottom="2px"
-                    android:paddingLeft="2px"
-                    android:paddingRight="2px"
-                    android:paddingTop="2px"
+                    android:layout_margin="2px"
                     android:text="@string/xemay_moto" />
 
                 <Button
@@ -183,10 +177,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:paddingBottom="2px"
-                    android:paddingLeft="2px"
-                    android:paddingRight="2px"
-                    android:paddingTop="2px"
+                    android:layout_margin="2px"
                     android:text="@string/xechuyendung" />
             </LinearLayout>
 
@@ -203,10 +194,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="2"
-                    android:paddingBottom="2px"
-                    android:paddingLeft="2px"
-                    android:paddingRight="2px"
-                    android:paddingTop="2px"
+                    android:layout_margin="2px"
                     android:text="@string/tauhoa" />
 
                 <Button
@@ -214,10 +202,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="2"
-                    android:paddingBottom="2px"
-                    android:paddingLeft="2px"
-                    android:paddingRight="2px"
-                    android:paddingTop="2px"
+                    android:layout_margin="2px"
                     android:text="@string/xedap_xethoso" />
 
                 <Button
@@ -225,10 +210,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="2"
-                    android:paddingBottom="2px"
-                    android:paddingLeft="2px"
-                    android:paddingRight="2px"
-                    android:paddingTop="2px"
+                    android:layout_margin="2px"
                     android:text="@string/dibo" />
             </LinearLayout>
 

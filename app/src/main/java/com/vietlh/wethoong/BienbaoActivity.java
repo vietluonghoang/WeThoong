@@ -74,13 +74,21 @@ public class BienbaoActivity extends AppCompatActivity {
     private LinearLayout lineLoutMucphat;
     private HorizontalScrollView scvPlateShapes;
     private LinearLayout lineLoutPlateShapeItems;
+    private ConstraintLayout cloutArrowView;
     private ImageButton btnPlateDetailsArrow;
+    private ConstraintLayout cloutCreaturesView;
     private ImageButton btnPlateDetailsCreatures;
+    private ConstraintLayout cloutSignsView;
     private ImageButton btnPlateDetailsSigns;
+    private ConstraintLayout cloutFiguresView;
     private ImageButton btnPlateDetailsFigures;
+    private ConstraintLayout cloutAlphanumericsView;
     private ImageButton btnPlateDetailsAlphanumerics;
+    private ConstraintLayout cloutVehiclesView;
     private ImageButton btnPlateDetailsVehicles;
+    private ConstraintLayout cloutStructuresView;
     private ImageButton btnPlateDetailsStructures;
+    private ConstraintLayout cloutExtrasView;
     private ImageButton btnPlateDetailsExtras;
     private LinearLayout adsView;
     private ArrayList<String> vanbanid = new ArrayList<>();
@@ -224,10 +232,24 @@ public class BienbaoActivity extends AppCompatActivity {
                 updatePlateDetailsSelection(btnPlateDetailsAlphanumerics);
             }
         });
+        cloutAlphanumericsView = (ConstraintLayout)findViewById(R.id.alphanumericsView);
+        cloutAlphanumericsView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updatePlateDetailsSelection(btnPlateDetailsAlphanumerics);
+            }
+        });
         btnPlateDetailsArrow = (ImageButton) findViewById(R.id.btnArrow);
         btnPlateDetailsArrow.setTag("Arrows");
         setButtonBackgroundColor(btnPlateDetailsArrow, false);
         btnPlateDetailsArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updatePlateDetailsSelection(btnPlateDetailsArrow);
+            }
+        });
+        cloutArrowView = (ConstraintLayout)findViewById(R.id.arrowView);
+        cloutArrowView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 updatePlateDetailsSelection(btnPlateDetailsArrow);
@@ -242,10 +264,24 @@ public class BienbaoActivity extends AppCompatActivity {
                 updatePlateDetailsSelection(btnPlateDetailsCreatures);
             }
         });
+        cloutCreaturesView = (ConstraintLayout)findViewById(R.id.creaturesView);
+        cloutCreaturesView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updatePlateDetailsSelection(btnPlateDetailsCreatures);
+            }
+        });
         btnPlateDetailsStructures = (ImageButton) findViewById(R.id.btnStructures);
         btnPlateDetailsStructures.setTag("Structures");
         setButtonBackgroundColor(btnPlateDetailsStructures, false);
         btnPlateDetailsStructures.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updatePlateDetailsSelection(btnPlateDetailsStructures);
+            }
+        });
+        cloutStructuresView = (ConstraintLayout)findViewById(R.id.structuresView);
+        cloutStructuresView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 updatePlateDetailsSelection(btnPlateDetailsStructures);
@@ -260,10 +296,24 @@ public class BienbaoActivity extends AppCompatActivity {
                 updatePlateDetailsSelection(btnPlateDetailsFigures);
             }
         });
+        cloutFiguresView = (ConstraintLayout)findViewById(R.id.figuresView);
+        cloutFiguresView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updatePlateDetailsSelection(btnPlateDetailsFigures);
+            }
+        });
         btnPlateDetailsVehicles = (ImageButton) findViewById(R.id.btnVehicles);
         btnPlateDetailsVehicles.setTag("Vehicles");
         setButtonBackgroundColor(btnPlateDetailsVehicles, false);
         btnPlateDetailsVehicles.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updatePlateDetailsSelection(btnPlateDetailsVehicles);
+            }
+        });
+        cloutVehiclesView = (ConstraintLayout)findViewById(R.id.vehiclesView);
+        cloutVehiclesView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 updatePlateDetailsSelection(btnPlateDetailsVehicles);
@@ -278,6 +328,13 @@ public class BienbaoActivity extends AppCompatActivity {
                 updatePlateDetailsSelection(btnPlateDetailsSigns);
             }
         });
+        cloutSignsView = (ConstraintLayout)findViewById(R.id.signsView);
+        cloutSignsView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updatePlateDetailsSelection(btnPlateDetailsSigns);
+            }
+        });
         btnPlateDetailsExtras = (ImageButton) findViewById(R.id.btnExtras);
         btnPlateDetailsExtras.setTag("Extras");
         //make it invisible
@@ -286,6 +343,13 @@ public class BienbaoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //do nothing
+//                updatePlateDetailsSelection(btnPlateDetailsExtras);
+            }
+        });
+        cloutExtrasView = (ConstraintLayout)findViewById(R.id.extrasView);
+        cloutExtrasView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 //                updatePlateDetailsSelection(btnPlateDetailsExtras);
             }
         });

@@ -63,6 +63,7 @@ public class SearchActivity extends AppCompatActivity {
     private View customView;
     private LinearLayout lineLoutLoaivanban;
     private LinearLayout lineLoutMucphat;
+    private LinearLayout lineLoutPlateShapeGroupsSelection;
     private CheckBox cbQC41;
     private CheckBox cbND46;
     private CheckBox cbTT01;
@@ -82,12 +83,15 @@ public class SearchActivity extends AppCompatActivity {
     private Spinner spMucphatDen;
     private int colorNormalBtnBg;
     private int colorNormalBtnFg;
+    private int colorSelectedBtnBg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         getPassingParameters();
+        colorNormalBtnBg = getResources().getColor(R.color.normalBtnBG);
+        colorSelectedBtnBg = getResources().getColor(R.color.selectedBtnBG);
         initComponents();
         builder = new AlertDialog.Builder(this);
 
@@ -321,12 +325,15 @@ public class SearchActivity extends AppCompatActivity {
 
         lineLoutLoaivanban = (LinearLayout)customView.findViewById(R.id.Loaivanban);
         lineLoutMucphat = (LinearLayout)customView.findViewById(R.id.mucphatSection);
+        lineLoutPlateShapeGroupsSelection = (LinearLayout) customView.findViewById(R.id.PlateShapeSelection);
 //        ViewGroup.LayoutParams hiddenSection;
         switch (searchType){
             case GeneralSettings.SEARCH_TYPE_VANBAN:
                 lineLoutMucphat.setVisibility(View.INVISIBLE);
                 lineLoutLoaivanban.setVisibility(View.VISIBLE);
+                lineLoutPlateShapeGroupsSelection.setVisibility(View.INVISIBLE);
                 helper.hideSection(lineLoutMucphat);
+                helper.hideSection(lineLoutPlateShapeGroupsSelection);
 
                 initVanbanFilters();
 
@@ -334,25 +341,27 @@ public class SearchActivity extends AppCompatActivity {
             case GeneralSettings.SEARCH_TYPE_MUCPHAT:
                 lineLoutMucphat.setVisibility(View.VISIBLE);
                 lineLoutLoaivanban.setVisibility(View.INVISIBLE);
+                lineLoutPlateShapeGroupsSelection.setVisibility(View.INVISIBLE);
                 helper.hideSection(lineLoutLoaivanban);
+                helper.hideSection(lineLoutPlateShapeGroupsSelection);
 
                 lineLoutPhuongtien = (LinearLayout)customView.findViewById(R.id.phuongtienLines);
                 swtPhuongtien = (Switch)customView.findViewById(R.id.phuongtienSectionToggleSwitch);
                 swtPhuongtien.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        //reset all phuongtien buttons
+                        setButtonBackgroundColor(btnPhuongtienOto,false);
+                        setButtonBackgroundColor(btnPhuongtienTauhoa,false);
+                        setButtonBackgroundColor(btnPhuongtienXemay,false);
+                        setButtonBackgroundColor(btnPhuongtienXedap,false);
+                        setButtonBackgroundColor(btnPhuongtienXechuyendung,false);
+                        setButtonBackgroundColor(btnPhuongtienDibo,false);
+
                         if (swtPhuongtien.isChecked()){
                             lineLoutPhuongtien.setVisibility(View.VISIBLE);
                         }else {
                             lineLoutPhuongtien.setVisibility(View.GONE);
-
-                            //reset all phuongtien buttons
-                            setButtonBackgroundColor(btnPhuongtienOto,false);
-                            setButtonBackgroundColor(btnPhuongtienTauhoa,false);
-                            setButtonBackgroundColor(btnPhuongtienXemay,false);
-                            setButtonBackgroundColor(btnPhuongtienXedap,false);
-                            setButtonBackgroundColor(btnPhuongtienXechuyendung,false);
-                            setButtonBackgroundColor(btnPhuongtienDibo,false);
                             phuongtien.clear();
                         }
                         updateFilterLabel();
@@ -410,7 +419,6 @@ public class SearchActivity extends AppCompatActivity {
                 updateResultList(tfSearch.getText().toString());
             }
         });
-        colorNormalBtnBg = helper.getButtonBackgroundColor(btnXong);
         colorNormalBtnFg = btnXong.getCurrentTextColor();
 
         builder.setView(customView);
@@ -855,7 +863,7 @@ public class SearchActivity extends AppCompatActivity {
 
     private void setButtonBackgroundColor(Button button, boolean isActive){
         if (isActive){
-            button.setBackgroundColor(getResources().getColor(R.color.blue));
+            button.setBackgroundColor(colorSelectedBtnBg);
             button.setTextColor(getResources().getColor(R.color.white));
         }else {
             button.setBackgroundColor(colorNormalBtnBg);
