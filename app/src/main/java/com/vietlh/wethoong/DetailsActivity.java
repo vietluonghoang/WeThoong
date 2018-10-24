@@ -307,7 +307,7 @@ public class DetailsActivity extends AppCompatActivity {
             helper.showSection(hinhphatbosung);
             String bosungDetails = "";
             for (BosungKhacphuc bosung: hinhphatbosungList) {
-                bosungDetails += bosung.getNoidung() + "\n";
+                bosungDetails += "- " + bosung.getNoidung() + "\n";
             }
             hinhphatbosungDetails.setText(bosungDetails);
         } else {
@@ -318,7 +318,7 @@ public class DetailsActivity extends AppCompatActivity {
             helper.showSection(bienphapkhacphuc);
             String khacphucDetails = "";
             for (BosungKhacphuc khacphuc: bienphapkhacphucList) {
-                khacphucDetails += khacphuc.getNoidung() + "\n";
+                khacphucDetails += "- " + khacphuc.getNoidung() + "\n";
             }
             bienphapkhacphucDetails.setText(khacphucDetails);
         } else {
