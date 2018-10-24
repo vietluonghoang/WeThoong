@@ -20,7 +20,7 @@ public class DBConnection extends SQLiteOpenHelper{
 
     private final Context context;
     private static String assetPath = "database";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
     private static final String DATABASE_NAME = "Hieuluat";
 
     private boolean createDb = false, upgradeDb = false;
