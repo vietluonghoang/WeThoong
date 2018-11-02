@@ -25,7 +25,8 @@
         <activity android:name=".DetailsActivity" />
         <activity android:name=".UnderconstructionActivity" />
         <activity android:name=".ChungtoiActivity" />
-        <activity android:name=".BienbaoActivity"></activity>
+        <activity android:name=".BienbaoActivity" />
+        <activity android:name=".VachkeduongActivity"></activity>
     </application>
 
 </manifest>

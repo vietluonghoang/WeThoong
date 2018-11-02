@@ -64,6 +64,7 @@ public class SearchActivity extends AppCompatActivity {
     private LinearLayout lineLoutLoaivanban;
     private LinearLayout lineLoutMucphat;
     private LinearLayout lineLoutPlateShapeGroupsSelection;
+    private LinearLayout lineLoutVachShapeGroupsSelection;
     private CheckBox cbQC41;
     private CheckBox cbND46;
     private CheckBox cbTT01;
@@ -326,12 +327,14 @@ public class SearchActivity extends AppCompatActivity {
         lineLoutLoaivanban = (LinearLayout)customView.findViewById(R.id.Loaivanban);
         lineLoutMucphat = (LinearLayout)customView.findViewById(R.id.mucphatSection);
         lineLoutPlateShapeGroupsSelection = (LinearLayout) customView.findViewById(R.id.PlateShapeSelection);
+        lineLoutVachShapeGroupsSelection = (LinearLayout) customView.findViewById(R.id.vachShapeSelection);
 //        ViewGroup.LayoutParams hiddenSection;
         switch (searchType){
             case GeneralSettings.SEARCH_TYPE_VANBAN:
                 lineLoutMucphat.setVisibility(View.INVISIBLE);
                 lineLoutLoaivanban.setVisibility(View.VISIBLE);
                 lineLoutPlateShapeGroupsSelection.setVisibility(View.INVISIBLE);
+                lineLoutVachShapeGroupsSelection.setVisibility(View.INVISIBLE);
                 helper.hideSection(lineLoutMucphat);
                 helper.hideSection(lineLoutPlateShapeGroupsSelection);
 
@@ -342,6 +345,7 @@ public class SearchActivity extends AppCompatActivity {
                 lineLoutMucphat.setVisibility(View.VISIBLE);
                 lineLoutLoaivanban.setVisibility(View.INVISIBLE);
                 lineLoutPlateShapeGroupsSelection.setVisibility(View.INVISIBLE);
+                lineLoutVachShapeGroupsSelection.setVisibility(View.INVISIBLE);
                 helper.hideSection(lineLoutLoaivanban);
                 helper.hideSection(lineLoutPlateShapeGroupsSelection);
 

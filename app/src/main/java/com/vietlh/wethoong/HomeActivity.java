@@ -68,7 +68,7 @@ public class HomeActivity extends AppCompatActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        openUnderconstructionScreen();
+                        openTracuuVachkeduongScreen();
                     }
                 }
         );
@@ -116,6 +116,13 @@ public class HomeActivity extends AppCompatActivity {
         Intent i = new Intent(getApplicationContext(), BienbaoActivity.class);
         //TODO: need to change the hardcode searchType to something that configurable.
         i.putExtra("searchType", "bienbao");
+        startActivity(i);
+    }
+
+    private void openTracuuVachkeduongScreen() {
+        Intent i = new Intent(getApplicationContext(), VachkeduongActivity.class);
+        //TODO: need to change the hardcode searchType to something that configurable.
+        i.putExtra("searchType", "vachkeduong");
         startActivity(i);
     }
 

@@ -454,6 +454,214 @@
                 app:layout_constraintRight_toRightOf="parent" />
         </LinearLayout>
     </LinearLayout>
+    <LinearLayout
+        android:id="@+id/vachShapeSelection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/optionYellowSelection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/optionYellowTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Màu vàng"
+                android:layout_weight="4"/>
+
+            <CheckBox
+                android:id="@+id/optionYellowCheckbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintRight_toRightOf="parent" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/optionWhiteSection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/optionWhiteTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Màu trắng"
+                android:layout_weight="4" />
+
+            <CheckBox
+                android:id="@+id/optionWhiteCheckbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintRight_toRightOf="parent" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/optionRedSection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/optionRedTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Màu đỏ"
+                android:layout_weight="4" />
+
+            <CheckBox
+                android:id="@+id/optionRedCheckbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintRight_toRightOf="parent" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/optionBlackSection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/optionBlackTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Màu đen"
+                android:layout_weight="4"/>
+
+            <CheckBox
+                android:id="@+id/optionBlackCheckbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintRight_toRightOf="parent" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/optionAlphanumericSection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintRight_toRightOf="parent">
+
+            <TextView
+                android:id="@+id/optionAlphanumericTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Vạch chữ viết"
+                android:layout_weight="4"/>
+
+            <CheckBox
+                android:id="@+id/optionAlphanumericCheckbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintRight_toRightOf="parent" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/optionShapeSection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintRight_toRightOf="parent">
+
+            <TextView
+                android:id="@+id/optionShapeTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Vạch theo hình"
+                android:layout_weight="4"/>
+
+            <CheckBox
+                android:id="@+id/optionShapeCheckbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintRight_toRightOf="parent" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/optionParallelSection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintRight_toRightOf="parent">
+
+            <TextView
+                android:id="@+id/optionParallelTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Vạch song song"
+                android:layout_weight="4"/>
+
+            <CheckBox
+                android:id="@+id/optionParallelCheckbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintRight_toRightOf="parent" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/optionDuoSection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintRight_toRightOf="parent">
+
+            <TextView
+                android:id="@+id/optionDuoTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Vạch đôi"
+                android:layout_weight="4"/>
+
+            <CheckBox
+                android:id="@+id/optionDuoCheckbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintRight_toRightOf="parent" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/optionSingleSection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintRight_toRightOf="parent">
+
+            <TextView
+                android:id="@+id/optionSingleTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Vạch đơn"
+                android:layout_weight="4"/>
+
+            <CheckBox
+                android:id="@+id/optionSingleCheckbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintRight_toRightOf="parent" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/optionSignSection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintRight_toRightOf="parent">
+
+            <TextView
+                android:id="@+id/optionSignTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Vạch biểu tượng"
+                android:layout_weight="4"/>
+
+            <CheckBox
+                android:id="@+id/optionSignCheckbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintRight_toRightOf="parent"/>
+        </LinearLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/btnXongSection"

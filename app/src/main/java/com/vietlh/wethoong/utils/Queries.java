@@ -16,7 +16,7 @@ import java.util.HashMap;
  * Created by vietlh on 2/23/18.
  */
 
-public class Queries{
+public class Queries {
 
     public static String rawQuery = "select distinct dk.id as dkId, dk.so as dkSo, tieude as dkTieude, dk.noidung as dkNoidung, minhhoa as dkMinhhoa, cha as dkCha, vb.loai as lvbID, lvb.ten as lvbTen, vb.so as vbSo, vanbanid as vbId, vb.ten as vbTen, nam as vbNam, ma as vbMa, vb.noidung as vbNoidung, coquanbanhanh as vbCoquanbanhanhId, cq.ten as cqTen, dk.forSearch as dkSearch from tblChitietvanban as dk join tblVanban as vb on dk.vanbanid=vb.id join tblLoaivanban as lvb on vb.loai=lvb.id join tblCoquanbanhanh as cq on vb.coquanbanhanh=cq.id where ";
     private DBConnection connection;
@@ -40,11 +40,11 @@ public class Queries{
         return dkArr;
     }
 
-    public ArrayList<Dieukhoan> getAllDieukhoan(){
+    public ArrayList<Dieukhoan> getAllDieukhoan() {
         connection.open();
         ArrayList<Dieukhoan> allDieukhoan = new ArrayList<>();
         Cursor cursor = connection.executeQuery(rawQuery + "vbId = 2");
-        generateDieukhoanList(cursor,allDieukhoan);
+        generateDieukhoanList(cursor, allDieukhoan);
         connection.close();
 
         return allDieukhoan;
@@ -52,7 +52,7 @@ public class Queries{
 
     public ArrayList<BosungKhacphuc> getAllBienphapkhacphuc(int dieukhoanId) {
         connection.open();
-        String sql = "select distinct dk.id as dkId, dk.so as dkSo, dk.tieude as dkTieude, dk.noidung as dkNoidung, dk.minhhoa as dkMinhhoa, dk.cha as dkCha, vb.loai as lvbID, lvb.ten as lvbTen, vb.so as vbSo, dk.vanbanid as vbId, vb.ten as vbTen, vb.nam as vbNam, vb.ma as vbMa, vb.noidung as vbNoidung, vb.coquanbanhanh as vbCoquanbanhanhId, cq.ten as cqTen, dk.forSearch as dkSearch, rdk.id as rdkId, rdk.so as rdkSo, rdk.tieude as rdkTieude, rdk.noidung as rdkNoidung, rdk.minhhoa as rdkMinhhoa, rdk.cha as rdkCha, rvb.loai as rlvbID, rlvb.ten as rlvbTen, rvb.so as rvbSo, rdk.vanbanid as rvbId, rvb.ten as rvbTen, rvb.nam as rvbNam, rvb.ma as rvbMa, rvb.noidung as rvbNoidung, rvb.coquanbanhanh as rvbCoquanbanhanhId, rcq.ten as rcqTen, rdk.forSearch as rdkSearch, kp.noidung as noidung from tblChitietvanban as dk join tblVanban as vb on dk.vanbanid=vb.id join tblLoaivanban as lvb on vb.loai=lvb.id join tblCoquanbanhanh as cq on vb.coquanbanhanh=cq.id join tblBienphapkhacphuc as kp on dk.id = kp.dieukhoanId join tblChitietvanban as rdk on kp.dieukhoanQuydinhId = rdk.id join tblVanban as rvb on rdk.vanbanid=rvb.id join tblLoaivanban as rlvb on rvb.loai=rlvb.id join tblCoquanbanhanh as rcq on rvb.coquanbanhanh=rcq.id where kp.dieukhoanId = "+ dieukhoanId;
+        String sql = "select distinct dk.id as dkId, dk.so as dkSo, dk.tieude as dkTieude, dk.noidung as dkNoidung, dk.minhhoa as dkMinhhoa, dk.cha as dkCha, vb.loai as lvbID, lvb.ten as lvbTen, vb.so as vbSo, dk.vanbanid as vbId, vb.ten as vbTen, vb.nam as vbNam, vb.ma as vbMa, vb.noidung as vbNoidung, vb.coquanbanhanh as vbCoquanbanhanhId, cq.ten as cqTen, dk.forSearch as dkSearch, rdk.id as rdkId, rdk.so as rdkSo, rdk.tieude as rdkTieude, rdk.noidung as rdkNoidung, rdk.minhhoa as rdkMinhhoa, rdk.cha as rdkCha, rvb.loai as rlvbID, rlvb.ten as rlvbTen, rvb.so as rvbSo, rdk.vanbanid as rvbId, rvb.ten as rvbTen, rvb.nam as rvbNam, rvb.ma as rvbMa, rvb.noidung as rvbNoidung, rvb.coquanbanhanh as rvbCoquanbanhanhId, rcq.ten as rcqTen, rdk.forSearch as rdkSearch, kp.noidung as noidung from tblChitietvanban as dk join tblVanban as vb on dk.vanbanid=vb.id join tblLoaivanban as lvb on vb.loai=lvb.id join tblCoquanbanhanh as cq on vb.coquanbanhanh=cq.id join tblBienphapkhacphuc as kp on dk.id = kp.dieukhoanId join tblChitietvanban as rdk on kp.dieukhoanQuydinhId = rdk.id join tblVanban as rvb on rdk.vanbanid=rvb.id join tblLoaivanban as rlvb on rvb.loai=rlvb.id join tblCoquanbanhanh as rcq on rvb.coquanbanhanh=rcq.id where kp.dieukhoanId = " + dieukhoanId;
 
         ArrayList<BosungKhacphuc> bosungKhacphucArray = new ArrayList<>();
         Cursor cursor = connection.executeQuery(sql);
@@ -64,7 +64,7 @@ public class Queries{
 
     public ArrayList<BosungKhacphuc> getAllHinhphatbosung(int dieukhoanId) {
         connection.open();
-        String sql = "select distinct dk.id as dkId, dk.so as dkSo, dk.tieude as dkTieude, dk.noidung as dkNoidung, dk.minhhoa as dkMinhhoa, dk.cha as dkCha, vb.loai as lvbID, lvb.ten as lvbTen, vb.so as vbSo, dk.vanbanid as vbId, vb.ten as vbTen, vb.nam as vbNam, vb.ma as vbMa, vb.noidung as vbNoidung, vb.coquanbanhanh as vbCoquanbanhanhId, cq.ten as cqTen, dk.forSearch as dkSearch, rdk.id as rdkId, rdk.so as rdkSo, rdk.tieude as rdkTieude, rdk.noidung as rdkNoidung, rdk.minhhoa as rdkMinhhoa, rdk.cha as rdkCha, rvb.loai as rlvbID, rlvb.ten as rlvbTen, rvb.so as rvbSo, rdk.vanbanid as rvbId, rvb.ten as rvbTen, rvb.nam as rvbNam, rvb.ma as rvbMa, rvb.noidung as rvbNoidung, rvb.coquanbanhanh as rvbCoquanbanhanhId, rcq.ten as rcqTen, rdk.forSearch as rdkSearch, hp.noidung as noidung from tblChitietvanban as dk join tblVanban as vb on dk.vanbanid=vb.id join tblLoaivanban as lvb on vb.loai=lvb.id join tblCoquanbanhanh as cq on vb.coquanbanhanh=cq.id join tblHinhphatbosung as hp on dk.id = hp.dieukhoanId join tblChitietvanban as rdk on hp.dieukhoanQuydinhId = rdk.id join tblVanban as rvb on rdk.vanbanid=rvb.id join tblLoaivanban as rlvb on rvb.loai=rlvb.id join tblCoquanbanhanh as rcq on rvb.coquanbanhanh=rcq.id where hp.dieukhoanId = "+ dieukhoanId;
+        String sql = "select distinct dk.id as dkId, dk.so as dkSo, dk.tieude as dkTieude, dk.noidung as dkNoidung, dk.minhhoa as dkMinhhoa, dk.cha as dkCha, vb.loai as lvbID, lvb.ten as lvbTen, vb.so as vbSo, dk.vanbanid as vbId, vb.ten as vbTen, vb.nam as vbNam, vb.ma as vbMa, vb.noidung as vbNoidung, vb.coquanbanhanh as vbCoquanbanhanhId, cq.ten as cqTen, dk.forSearch as dkSearch, rdk.id as rdkId, rdk.so as rdkSo, rdk.tieude as rdkTieude, rdk.noidung as rdkNoidung, rdk.minhhoa as rdkMinhhoa, rdk.cha as rdkCha, rvb.loai as rlvbID, rlvb.ten as rlvbTen, rvb.so as rvbSo, rdk.vanbanid as rvbId, rvb.ten as rvbTen, rvb.nam as rvbNam, rvb.ma as rvbMa, rvb.noidung as rvbNoidung, rvb.coquanbanhanh as rvbCoquanbanhanhId, rcq.ten as rcqTen, rdk.forSearch as rdkSearch, hp.noidung as noidung from tblChitietvanban as dk join tblVanban as vb on dk.vanbanid=vb.id join tblLoaivanban as lvb on vb.loai=lvb.id join tblCoquanbanhanh as cq on vb.coquanbanhanh=cq.id join tblHinhphatbosung as hp on dk.id = hp.dieukhoanId join tblChitietvanban as rdk on hp.dieukhoanQuydinhId = rdk.id join tblVanban as rvb on rdk.vanbanid=rvb.id join tblLoaivanban as rlvb on rvb.loai=rlvb.id join tblCoquanbanhanh as rcq on rvb.coquanbanhanh=rcq.id where hp.dieukhoanId = " + dieukhoanId;
 
         ArrayList<BosungKhacphuc> bosungKhacphucArray = new ArrayList<>();
         Cursor cursor = connection.executeQuery(sql);
@@ -87,7 +87,7 @@ public class Queries{
         Cursor cursor = connection.executeQuery(sql);
         String result = "";
 
-        if(cursor != null) {
+        if (cursor != null) {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
                 String canhan = cursor.getString(0);
@@ -174,7 +174,7 @@ public class Queries{
                 if (!"0".equals(nhanvien) && !"0".equals(trungtam) && !"0".equals(dangkiem)) {
                     result += "Nhân viên nghiệp vụ của Trung tâm Đăng kiểm, ";
                 }
-                if (!"0".equals(laitau)){
+                if (!"0".equals(laitau)) {
                     result += "Lái tàu (Phụ Lái tàu), ";
                 }
                 if (!"0".equals(truongdon)) {
@@ -210,7 +210,7 @@ public class Queries{
                 if (!"0".equals(nguoiduoctro) || !"0".equals(nguoingoitrenxe)) {
                     result += "Người được chở (người ngồi trên xe), ";
                 }
-                if (!"0".equals(doanhnghiep) && !"0".equals(kinhdoanh) && !"0".equals(ketcau) && !"0".equals(hatang)){
+                if (!"0".equals(doanhnghiep) && !"0".equals(kinhdoanh) && !"0".equals(ketcau) && !"0".equals(hatang)) {
                     result += "Doanh nghiệp kinh doanh kết cấu hạ tầng đường sắt (đường bộ), ";
                 }
                 if (!"0".equals(doanhnghiep) && (!"0".equals(luukho) || !"0".equals(baoquan)) && !"0".equals(kinhdoanh)
@@ -254,7 +254,7 @@ public class Queries{
         }
 
         if (result.length() >= 2) {
-            result = result.substring(0,result.length() - 2);
+            result = result.substring(0, result.length() - 2);
         }
         connection.close();
 
@@ -269,14 +269,14 @@ public class Queries{
         Cursor cursor = connection.executeQuery(sql);
         String result = "";
 
-        if(cursor != null) {
+        if (cursor != null) {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
                 String duongbo = cursor.getString(0);
                 String duongsat = cursor.getString(1);
-                if (!"0".equals(duongbo)  && !"0".equals(duongsat)){
+                if (!"0".equals(duongbo) && !"0".equals(duongsat)) {
                     result = "Đường bộ, Đường sắt";
-                }else{
+                } else {
                     if (!"0".equals(duongsat)) {
                         result = "Đường sắt";
                     }
@@ -301,7 +301,7 @@ public class Queries{
         Cursor cursor = connection.executeQuery(sql);
         String result = "";
 
-        if(cursor != null) {
+        if (cursor != null) {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
                 String oto = cursor.getString(0);
@@ -345,7 +345,7 @@ public class Queries{
         }
 
         if (result.length() >= 2) {
-            result = result.substring(0,result.length() - 2);
+            result = result.substring(0, result.length() - 2);
         }
         connection.close();
 
@@ -359,7 +359,7 @@ public class Queries{
 
         Cursor cursor = connection.executeQuery(sql);
         String result = "";
-        if(cursor != null) {
+        if (cursor != null) {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
                 String cnTu = cursor.getString(0);
@@ -394,7 +394,7 @@ public class Queries{
 
         ArrayList<Dieukhoan> allDieukhoan = new ArrayList<>();
         Cursor cursor = connection.executeQuery(sql);
-        generateDieukhoanList(cursor,allDieukhoan);
+        generateDieukhoanList(cursor, allDieukhoan);
 
         connection.close();
 
@@ -403,26 +403,26 @@ public class Queries{
 
     public ArrayList<Dieukhoan> getAllDirectRelatedDieukhoan(int dieukhoanId) {
         connection.open();
-        String sql = getRawQuery() + " dkId in (select relatedDieukhoanId from tblRelatedDieukhoan where dieukhoanId = "+ dieukhoanId + ")";
+        String sql = getRawQuery() + " dkId in (select relatedDieukhoanId from tblRelatedDieukhoan where dieukhoanId = " + dieukhoanId + ")";
 
         ArrayList<Dieukhoan> allDieukhoan = new ArrayList<>();
         Cursor cursor = connection.executeQuery(sql);
-        generateDieukhoanList(cursor,allDieukhoan);
+        generateDieukhoanList(cursor, allDieukhoan);
 
         connection.close();
 
         return allDieukhoan;
     }
 
-    public ArrayList<Dieukhoan> searchChildren(String keyword,ArrayList<String> vanbanid) {
+    public ArrayList<Dieukhoan> searchChildren(String keyword, ArrayList<String> vanbanid) {
         connection.open();
         String specificVanban = generateWhereClauseForVanbanid(vanbanid, "vbId");
         String searchArgurment = "";
         String searchKeyword = keyword.trim();
 
-        if(searchKeyword.length() == 0){
+        if (searchKeyword.length() == 0) {
             searchArgurment = "is null";
-        }else{
+        } else {
             searchArgurment = "= " + searchKeyword;
         }
 
@@ -430,7 +430,7 @@ public class Queries{
 
         ArrayList<Dieukhoan> allDieukhoan = new ArrayList<>();
         Cursor cursor = connection.executeQuery(sql);
-        generateDieukhoanList(cursor,allDieukhoan);
+        generateDieukhoanList(cursor, allDieukhoan);
 
         connection.close();
 
@@ -444,7 +444,7 @@ public class Queries{
 
         ArrayList<Dieukhoan> allDieukhoan = new ArrayList<>();
         Cursor cursor = connection.executeQuery(sql);
-        generateDieukhoanList(cursor,allDieukhoan);
+        generateDieukhoanList(cursor, allDieukhoan);
 
         connection.close();
 
@@ -458,7 +458,7 @@ public class Queries{
 
         ArrayList<Dieukhoan> allDieukhoan = new ArrayList<>();
         Cursor cursor = connection.executeQuery(sql);
-        generateDieukhoanList(cursor,allDieukhoan);
+        generateDieukhoanList(cursor, allDieukhoan);
 
         connection.close();
 
@@ -469,7 +469,7 @@ public class Queries{
         connection.open();
         String specificVanban = generateWhereClauseForVanbanid(vanbanid, "vbId");
         String idGroup = "";
-        for(String id: keyword) {
+        for (String id : keyword) {
             idGroup += "dkId = " + id + " or ";
         }
 
@@ -483,7 +483,7 @@ public class Queries{
 
         ArrayList<Dieukhoan> allDieukhoan = new ArrayList<>();
         Cursor cursor = connection.executeQuery(sql);
-        generateDieukhoanList(cursor,allDieukhoan);
+        generateDieukhoanList(cursor, allDieukhoan);
 
         connection.close();
 
@@ -498,7 +498,7 @@ public class Queries{
 
         ArrayList<Dieukhoan> allDieukhoan = new ArrayList<>();
         Cursor cursor = connection.executeQuery(sql);
-        generateDieukhoanList(cursor,allDieukhoan);
+        generateDieukhoanList(cursor, allDieukhoan);
 
         connection.close();
 
@@ -511,30 +511,54 @@ public class Queries{
         String specificVanban = generateWhereClauseForVanbanid(vanbanid, "vbId");
         String appendString = generateWhereClauseForKeywordsWithDifferentAccentType(keyword, "dkSearch");
 
-        String sql = getRawQuery()+ " (" + appendString + ") " + specificVanban;
+        String sql = getRawQuery() + " (" + appendString + ") " + specificVanban;
 
         ArrayList<Dieukhoan> allDieukhoan = new ArrayList<>();
         Cursor cursor = connection.executeQuery(sql);
-        generateDieukhoanList(cursor,allDieukhoan);
+        generateDieukhoanList(cursor, allDieukhoan);
 
         connection.close();
 
         return allDieukhoan;
     }
 
-    public ArrayList<String> getPlateGroups(){
+    public ArrayList<String> getPlateGroups() {
         connection.open();
 
         String sql = "select ten from tblShapeGroups";
 
         Cursor cursor = connection.executeQuery(sql);
         ArrayList<String> result = new ArrayList<>();
-        if(cursor != null){
+        if (cursor != null) {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
                 String name = cursor.getString(0);
-                if(name.length() > 0){
+                if (name.length() > 0) {
                     result.add(name);
+                }
+                cursor.moveToNext();
+            }
+        }
+
+        connection.close();
+
+        return result;
+    }
+
+    public HashMap<String, String> getVachGroups() {
+        connection.open();
+
+        String sql = "select ten, displayName from tblVachGroups";
+
+        Cursor cursor = connection.executeQuery(sql);
+        HashMap<String, String> result = new HashMap<>();
+        if (cursor != null) {
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                String name = cursor.getString(0);
+                String dname = cursor.getString(1);
+                if (name.length() > 0) {
+                    result.put(name, dname);
                 }
                 cursor.moveToNext();
             }
@@ -548,23 +572,54 @@ public class Queries{
     public ArrayList<String> getPlateShapeByGroup(ArrayList<String> groups) {
         connection.open();
         String whereClause = "";
-        for(String group: groups) {
+        for (String group : groups) {
             whereClause += "ten = '" + group + "' or ";
         }
 
         //workaround for no group selected
-        if(groups.size() < 1) {
+        if (groups.size() < 1) {
             whereClause = "ten = '' or ";
         }
         String sql = "select ten from tblPlateShapes where type in (select id from tblShapeGroups where (" + utils.removeLastCharacters(whereClause, 4) + "))";
 
         Cursor cursor = connection.executeQuery(sql);
         ArrayList<String> result = new ArrayList<>();
-        if(cursor != null){
+        if (cursor != null) {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
                 String name = cursor.getString(0);
-                if(name.length() > 0){
+                if (name.length() > 0) {
+                    result.add(name);
+                }
+                cursor.moveToNext();
+            }
+        }
+
+        connection.close();
+
+        return result;
+    }
+
+    public ArrayList<String> getVachShapeByGroup(ArrayList<String> groups) {
+        connection.open();
+        String whereClause = "";
+        for (String group : groups) {
+            whereClause += "ten = '" + group + "' or ";
+        }
+
+        //workaround for no group selected
+        if (groups.size() < 1) {
+            whereClause = "ten = '' or ";
+        }
+        String sql = "select distinct ten from tblVachShapes where type in (select id from tblVachGroups where (" + utils.removeLastCharacters(whereClause, 4) + "))";
+
+        Cursor cursor = connection.executeQuery(sql);
+        ArrayList<String> result = new ArrayList<>();
+        if (cursor != null) {
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                String name = cursor.getString(0);
+                if (name.length() > 0) {
                     result.add(name);
                 }
                 cursor.moveToNext();
@@ -596,30 +651,30 @@ public class Queries{
                 if (index == 0) {
                     sql = "select a0.plateId as pid, a0.name as name from (select * from tblPlateReferences where type = '" + details[0] + "'";
                     if (details.length > 1) {
-                        sql +=  " and refId in (select id from '" + details[0] + "' where ten = '" + details[1] + "' or ten = '" + details[1] + "-diagonal')";
+                        sql += " and refId in (select id from '" + details[0] + "' where ten = '" + details[1] + "' or ten = '" + details[1] + "-diagonal')";
                     }
                     sql += " and (plateId in (select plateID from tblPlateReferences where type = 'tblPlateShapes' and refid in (select id from tblPlateShapes where type in (select id from tblShapeGroups where ten in (" + utils.removeLastCharacters(inGroup, 2) + ")))))) as a0";
                 } else {
                     sql += " JOIN (select * from tblPlateReferences where type = '" + details[0] + "'";
                     if (details.length > 1) {
-                        sql +=  " and refId in (select id from '" + details[0] + "' where ten = '" + details[1] + "' or ten = '" + details[1] + "-diagonal')";
+                        sql += " and refId in (select id from '" + details[0] + "' where ten = '" + details[1] + "' or ten = '" + details[1] + "-diagonal')";
                     }
 
-                    sql += ") as a" + index +" on a0.name = a" + index + ".name";
+                    sql += ") as a" + index + " on a0.name = a" + index + ".name";
                 }
                 index += 1;
             }
         }
 
         Cursor cursor = connection.executeQuery(sql);
-        HashMap<String,String> result = new HashMap<>();
-        if(cursor != null){
+        HashMap<String, String> result = new HashMap<>();
+        if (cursor != null) {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
                 String pid = String.valueOf(cursor.getInt(0));
                 String pname = cursor.getString(1);
-                if(pid != null){
-                    result.put(pname,pid);
+                if (pid != null) {
+                    result.put(pname, pid);
                 }
                 cursor.moveToNext();
             }
@@ -633,16 +688,16 @@ public class Queries{
             return finalResult;
         }
 
-        HashMap<String,Dieukhoan> dkList = new HashMap<>();
+        HashMap<String, Dieukhoan> dkList = new HashMap<>();
         ArrayList<String> vbid = new ArrayList<String>();
-        vbid.add(GeneralSettings.getVanbanInfo("qc41","id"));
+        vbid.add(GeneralSettings.getVanbanInfo("qc41", "id"));
         for (Dieukhoan dk : searchDieukhoanByIDs(new ArrayList<String>(result.values()), vbid)) {
-            dkList.put(String.valueOf(dk.getId()),dk);
+            dkList.put(String.valueOf(dk.getId()), dk);
         }
 
         for (String rs : result.keySet()) {
             Dieukhoan dk = dkList.get(result.get(rs));
-            Dieukhoan fdk = new Dieukhoan(0,0,null);
+            Dieukhoan fdk = new Dieukhoan(0, 0, null);
             fdk.cloneDieukhoan(dk);
             fdk.setDefaultMinhhoa(rs);
             finalResult.add(fdk);
@@ -651,28 +706,103 @@ public class Queries{
         return finalResult;
     }
 
-    private void generateBosungKhacphucList(Cursor cursor,ArrayList<BosungKhacphuc> bosungKhacphucArray) {
-        if(cursor != null){
+    public ArrayList<Dieukhoan> getVachByParams(ArrayList<String> params, ArrayList<String> groups) {
+        connection.open();
+        String sql = "";
+        int index = 0;
+        String inGroup = "";
+        for (String group : groups) {
+            inGroup += "'" + group + "', ";
+        }
+
+        // if no params or groups set, get all plates
+        if (params.size() == 0 && groups.size() < 1) {
+            sql = "select plateId as pid, name from tblVachReferences";
+        } else if (params.size() == 0) { // if no params but groups set, select plates that has type of 'tblPlateShapes' and refID is one of the selected shapes
+            sql = "select plateId as pid, name from tblVachReferences where type = 'tblVachShapes' and refId in (select id from tblVachShapes where type in (select id from tblVachGroups where ten in (" + utils.removeLastCharacters(inGroup, 2) + ")))";
+        } else { //if at list 1 param set, select plate that matched that param
+            for (String type : params) {
+                String[] details = type.split(":");
+                if (index == 0) {
+                    sql = "select a0.plateId as pid, a0.name as name from (select * from tblVachReferences where type = '" + details[0] + "'";
+                    if (details.length > 1) {
+                        sql += " and refId in (select id from '" + details[0] + "' where ten = '" + details[1] + "')";
+                    }
+                    sql += " and (plateId in (select plateID from tblVachReferences where type = 'tblVachShapes' and refid in (select id from tblVachShapes where type in (select id from tblVachGroups where ten in (" + utils.removeLastCharacters(inGroup, 2) + ")))))) as a0";
+                } else {
+                    sql += " JOIN (select * from tblVachReferences where type = '" + details[0] + "'";
+                    if (details.length > 1) {
+                        sql += " and refId in (select id from '" + details[0] + "' where ten = '" + details[1] + "')";
+                    }
+
+                    sql += ") as a" + index + " on a0.name = a" + index + ".name";
+                }
+                index += 1;
+            }
+        }
+
+        Cursor cursor = connection.executeQuery(sql);
+        HashMap<String, String> result = new HashMap<>();
+        if (cursor != null) {
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                String pid = String.valueOf(cursor.getInt(0));
+                String pname = cursor.getString(1);
+                if (pid != null) {
+                    result.put(pname, pid);
+                }
+                cursor.moveToNext();
+            }
+        }
+
+        connection.close();
+
+        ArrayList<Dieukhoan> finalResult = new ArrayList<>();
+
+        if (result.size() < 1) {
+            return finalResult;
+        }
+
+        HashMap<String, Dieukhoan> dkList = new HashMap<>();
+        ArrayList<String> vbid = new ArrayList<String>();
+        vbid.add(GeneralSettings.getVanbanInfo("qc41", "id"));
+        for (Dieukhoan dk : searchDieukhoanByIDs(new ArrayList<String>(result.values()), vbid)) {
+            dkList.put(String.valueOf(dk.getId()), dk);
+        }
+
+        for (String rs : result.keySet()) {
+            Dieukhoan dk = dkList.get(result.get(rs));
+            Dieukhoan fdk = new Dieukhoan(0, 0, null);
+            fdk.cloneDieukhoan(dk);
+            fdk.setDefaultMinhhoa(rs);
+            finalResult.add(fdk);
+        }
+
+        return finalResult;
+    }
+
+    private void generateBosungKhacphucList(Cursor cursor, ArrayList<BosungKhacphuc> bosungKhacphucArray) {
+        if (cursor != null) {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
                 ArrayList<String> minhhoa = new ArrayList<>();
                 for (String mh : cursor.getString(4).split(";")) {
                     minhhoa.add(mh);
                 }
-                Loaivanban loaivanban = new Loaivanban(cursor.getInt(6),cursor.getString(7));
-                Coquanbanhanh coquanbanhanh = new Coquanbanhanh(cursor.getInt(14),cursor.getString(15));
-                Vanban vanban = new Vanban(cursor.getInt(9),cursor.getString(10),loaivanban,cursor.getString(8),cursor.getString(11),cursor.getString(12),coquanbanhanh,cursor.getString(13));
-                Dieukhoan dieukhoan = new Dieukhoan(cursor.getInt(0),cursor.getString(1),cursor.getString(2),cursor.getString(3),minhhoa,cursor.getInt(5),vanban);
+                Loaivanban loaivanban = new Loaivanban(cursor.getInt(6), cursor.getString(7));
+                Coquanbanhanh coquanbanhanh = new Coquanbanhanh(cursor.getInt(14), cursor.getString(15));
+                Vanban vanban = new Vanban(cursor.getInt(9), cursor.getString(10), loaivanban, cursor.getString(8), cursor.getString(11), cursor.getString(12), coquanbanhanh, cursor.getString(13));
+                Dieukhoan dieukhoan = new Dieukhoan(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), minhhoa, cursor.getInt(5), vanban);
 
                 minhhoa = new ArrayList<>();
                 for (String mh :
                         cursor.getString(21).split(";")) {
                     minhhoa.add(mh);
                 }
-                Loaivanban rloaivanban = new Loaivanban(cursor.getInt(23),cursor.getString(24));
-                Coquanbanhanh rcoquanbanhanh = new Coquanbanhanh(cursor.getInt(31),cursor.getString(32));
-                Vanban rvanban = new Vanban(cursor.getInt(26),cursor.getString(27),loaivanban,cursor.getString(25),cursor.getString(28),cursor.getString(29),coquanbanhanh,cursor.getString(30));
-                Dieukhoan rdieukhoan = new Dieukhoan(cursor.getInt(17),cursor.getString(18),cursor.getString(19),cursor.getString(20),minhhoa,cursor.getInt(22),vanban);
+                Loaivanban rloaivanban = new Loaivanban(cursor.getInt(23), cursor.getString(24));
+                Coquanbanhanh rcoquanbanhanh = new Coquanbanhanh(cursor.getInt(31), cursor.getString(32));
+                Vanban rvanban = new Vanban(cursor.getInt(26), cursor.getString(27), loaivanban, cursor.getString(25), cursor.getString(28), cursor.getString(29), coquanbanhanh, cursor.getString(30));
+                Dieukhoan rdieukhoan = new Dieukhoan(cursor.getInt(17), cursor.getString(18), cursor.getString(19), cursor.getString(20), minhhoa, cursor.getInt(22), vanban);
 
                 BosungKhacphuc bosungkhacphuc = new BosungKhacphuc(dieukhoan, rdieukhoan, cursor.getString(34));
 
@@ -682,20 +812,20 @@ public class Queries{
         }
     }
 
-    private String generateWhereClauseForVanbanid(ArrayList<String> vanbanIdList, String vanbanIdColumnName){
-        if(vanbanIdList.size() == 0){
+    private String generateWhereClauseForVanbanid(ArrayList<String> vanbanIdList, String vanbanIdColumnName) {
+        if (vanbanIdList.size() == 0) {
             return "";
         }
 
         String clause = " and (";
-        for(String id: vanbanIdList){
-            clause = clause + vanbanIdColumnName + " = "+id.trim() + " or ";
+        for (String id : vanbanIdList) {
+            clause = clause + vanbanIdColumnName + " = " + id.trim() + " or ";
         }
-        return clause.substring(0,clause.length() - 4) + ")";
+        return clause.substring(0, clause.length() - 4) + ")";
     }
 
-    private void generateDieukhoanList(Cursor cursor,ArrayList<Dieukhoan> allDieukhoan){
-        if(cursor != null){
+    private void generateDieukhoanList(Cursor cursor, ArrayList<Dieukhoan> allDieukhoan) {
+        if (cursor != null) {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
                 ArrayList<String> minhhoa = new ArrayList<>();
@@ -705,10 +835,10 @@ public class Queries{
                         minhhoa.add(mh);
                     }
                 }
-                Loaivanban loaivanban = new Loaivanban(cursor.getInt(6),cursor.getString(7));
-                Coquanbanhanh coquanbanhanh = new Coquanbanhanh(cursor.getInt(14),cursor.getString(15));
-                Vanban vanban = new Vanban(cursor.getInt(9),cursor.getString(10),loaivanban,cursor.getString(8),cursor.getString(11),cursor.getString(12),coquanbanhanh,cursor.getString(13));
-                Dieukhoan dieukhoan = new Dieukhoan(cursor.getInt(0),cursor.getString(1),cursor.getString(2),cursor.getString(3),minhhoa,cursor.getInt(5),vanban);
+                Loaivanban loaivanban = new Loaivanban(cursor.getInt(6), cursor.getString(7));
+                Coquanbanhanh coquanbanhanh = new Coquanbanhanh(cursor.getInt(14), cursor.getString(15));
+                Vanban vanban = new Vanban(cursor.getInt(9), cursor.getString(10), loaivanban, cursor.getString(8), cursor.getString(11), cursor.getString(12), coquanbanhanh, cursor.getString(13));
+                Dieukhoan dieukhoan = new Dieukhoan(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), minhhoa, cursor.getInt(5), vanban);
                 allDieukhoan.add(dieukhoan);
                 cursor.moveToNext();
             }
@@ -723,15 +853,15 @@ public class Queries{
 
         String[] splittedStr = keyword.split(" ");
 
-        for (String sStr: splittedStr) {
+        for (String sStr : splittedStr) {
             ArrayList<Integer> matchChars = new ArrayList<>();
             ArrayList<Integer> matchAccents = new ArrayList<>();
             for (String chr : sStr.split(".")) {
                 int count = 0;
-                for(String vnC : vnChars) {
+                for (String vnC : vnChars) {
                     if (chr.equals(vnC)) {
-                        matchChars.add(count/6);
-                        matchAccents.add(count%6);
+                        matchChars.add(count / 6);
+                        matchAccents.add(count % 6);
                     }
                     count += 1;
                 }
@@ -739,7 +869,7 @@ public class Queries{
             int index = 0;
             String newKeyword = sStr;
             for (Integer mChr : matchChars) {
-                newKeyword = newKeyword.replace(vnChars[(mChr*6)+matchAccents.get(index)], vnChars[(mChr*6)+(matchAccents.get(matchAccents.size() - (index + 1)))]);
+                newKeyword = newKeyword.replace(vnChars[(mChr * 6) + matchAccents.get(index)], vnChars[(mChr * 6) + (matchAccents.get(matchAccents.size() - (index + 1)))]);
                 index += 1;
             }
             convertedKeyword += newKeyword + " ";
@@ -753,15 +883,15 @@ public class Queries{
     private String generateWhereClauseForKeywordsWithDifferentAccentType(String keyword, String targetColumn) {
         String appendString = "";
         ArrayList<String> kw = convertKeywordsForDifferentAccentType(keyword.toLowerCase());
-        for(String k : kw) {
+        for (String k : kw) {
             String str = "";
-            for(String key : k.split(" ")) {
-                str += targetColumn +" like '%"+key+"%' and ";
+            for (String key : k.split(" ")) {
+                str += targetColumn + " like '%" + key + "%' and ";
             }
-            str = str.substring(0,str.length() - 5);
-            appendString += "("+str+") or ";
+            str = str.substring(0, str.length() - 5);
+            appendString += "(" + str + ") or ";
         }
-        appendString = appendString.substring(0,appendString.length() - 4);
+        appendString = appendString.substring(0, appendString.length() - 4);
         return appendString;
     }
 }

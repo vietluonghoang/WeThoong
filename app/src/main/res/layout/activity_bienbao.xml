@@ -262,8 +262,7 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toRightOf="@id/creaturesView"
                         app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintWidth_percent=".25">
+                        app:layout_constraintTop_toTopOf="parent">
 
                         <ImageButton
                             android:id="@+id/btnVehicles"
@@ -406,8 +405,7 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toRightOf="@id/figuresView"
                         app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintWidth_percent=".25">
+                        app:layout_constraintTop_toTopOf="parent">
 
                         <ImageButton
                             android:id="@+id/btnExtras"

@@ -46,7 +46,7 @@ import java.util.HashMap;
 
 public class BienbaoActivity extends AppCompatActivity {
 
-    private static final String TAG = "SearchActivity";
+    private static final String TAG = "BienbaoActivity";
     private RecyclerView searchResultRecyclerView;
     private ListRecyclerViewAdapter searchResultListRecyclerAdapter;
     private RecyclerView.LayoutManager recyclerLayoutManager;
@@ -101,6 +101,7 @@ public class BienbaoActivity extends AppCompatActivity {
     AlertDialog alert = null;
     private View customView;
     private LinearLayout lineLoutPlateShapeGroupsSelection;
+    private LinearLayout lineLoutVachShapeGroupsSelection;
     private CheckBox cbPlateShapeRectangle;
     private CheckBox cbPlateShapeTriangle;
     private CheckBox cbPlateShapeCircle;
@@ -479,6 +480,7 @@ public class BienbaoActivity extends AppCompatActivity {
         lineLoutLoaivanban = (LinearLayout) customView.findViewById(R.id.Loaivanban);
         lineLoutMucphat = (LinearLayout) customView.findViewById(R.id.mucphatSection);
         lineLoutPlateShapeGroupsSelection = (LinearLayout) customView.findViewById(R.id.PlateShapeSelection);
+        lineLoutVachShapeGroupsSelection = (LinearLayout) customView.findViewById(R.id.vachShapeSelection);
 //        ViewGroup.LayoutParams hiddenSection;
         switch (searchType) {
             case GeneralSettings.SEARCH_TYPE_VANBAN:
@@ -487,6 +489,7 @@ public class BienbaoActivity extends AppCompatActivity {
                 lineLoutMucphat.setVisibility(View.INVISIBLE);
                 lineLoutLoaivanban.setVisibility(View.INVISIBLE);
                 lineLoutPlateShapeGroupsSelection.setVisibility(View.VISIBLE);
+                lineLoutVachShapeGroupsSelection.setVisibility(View.INVISIBLE);
 
                 helper.hideSection(lineLoutMucphat);
                 helper.hideSection(lineLoutLoaivanban);
