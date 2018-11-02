@@ -47,10 +47,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/chung_toi_la_ai"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/versionInfo"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintVertical_bias="0.075" />
 
-
+    <TextView
+        android:id="@+id/versionInfo"
+        android:text="version"
+        android:textAlignment="center"
+        android:textStyle="normal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
 </android.support.constraint.ConstraintLayout>

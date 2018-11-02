@@ -1,14 +1,18 @@
 package com.vietlh.wethoong;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.android.gms.ads.MobileAds;
 import com.vietlh.wethoong.utils.AdsHelper;
 import com.vietlh.wethoong.utils.DBConnection;
+import com.vietlh.wethoong.utils.GeneralSettings;
 
 public class HomeActivity extends AppCompatActivity {
     private DBConnection connection;
@@ -17,6 +21,7 @@ public class HomeActivity extends AppCompatActivity {
     private Button btnTracuubienbao;
     private Button btnTracuuvachkeduong;
     private Button btnChungtoilaai;
+    private TextView versionInfo;
     private AdsHelper adsHelper;
 
     @Override
@@ -30,7 +35,7 @@ public class HomeActivity extends AppCompatActivity {
         adsHelper.updateLastConnectionState();
     }
 
-    private void initComponents(){
+    private void initComponents() {
         btnTracuuvanban = (Button) findViewById(R.id.btnTracuuvanbanphapluat);
         btnTracuuvanban.setOnClickListener(
                 new View.OnClickListener() {
@@ -76,26 +81,41 @@ public class HomeActivity extends AppCompatActivity {
                     }
                 }
         );
+        versionInfo = (TextView) findViewById(R.id.versionInfo);
+        versionInfo.setText(getVersionInfo());
     }
-    
+
+    private String getVersionInfo() {
+        String versionName = "";
+        long versionCode = 0;
+        try {
+            PackageInfo pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
+            versionName = pInfo.versionName;
+            versionCode = pInfo.versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return "v." + versionName + "(" + versionCode + ") db." + GeneralSettings.dbVersion;
+    }
+
     private void openTracuuvanbanScreen() {
         Intent i = new Intent(getApplicationContext(), SearchActivity.class);
         //TODO: need to change the hardcode searchType to something that configurable.
-        i.putExtra("searchType","vanban");
+        i.putExtra("searchType", "vanban");
         startActivity(i);
     }
 
     private void openTracuumucphatScreen() {
         Intent i = new Intent(getApplicationContext(), SearchActivity.class);
         //TODO: need to change the hardcode searchType to something that configurable.
-        i.putExtra("searchType","mucphat");
+        i.putExtra("searchType", "mucphat");
         startActivity(i);
     }
 
     private void openTracuuBienbaoScreen() {
         Intent i = new Intent(getApplicationContext(), BienbaoActivity.class);
         //TODO: need to change the hardcode searchType to something that configurable.
-        i.putExtra("searchType","bienbao");
+        i.putExtra("searchType", "bienbao");
         startActivity(i);
     }
 
