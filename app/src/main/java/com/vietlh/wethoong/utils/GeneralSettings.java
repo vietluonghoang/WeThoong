@@ -21,8 +21,8 @@ public class GeneralSettings {
     public static final String PHUONGTIEN_DIBO = "Đi bộ";
     public static String tamgiuPhuongtienDieukhoanID = "2820";
     public static boolean isAdsEnabled = true;
-    public static boolean isDevMode = true;
-    public static int dbVersion = 4;
+    public static boolean isDevMode = false;
+    public static int dbVersion = 6;
     public static int resultCountLimit = 100;
     public static boolean wasConnectedToInternet = false;
 
