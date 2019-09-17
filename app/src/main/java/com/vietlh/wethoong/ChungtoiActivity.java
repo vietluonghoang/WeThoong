@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import com.vietlh.wethoong.utils.UtilsHelper;
 
+import java.util.HashMap;
+
 public class ChungtoiActivity extends AppCompatActivity {
     private ImageView imgFounder;
     private TextView lblFounderFB;
@@ -24,27 +26,30 @@ public class ChungtoiActivity extends AppCompatActivity {
         initFounderInfo();
     }
 
-    private void initFounderInfo(){
-        imgFounder = (ImageView)findViewById(R.id.founderImage);
-        lblFounderFB = (TextView)findViewById(R.id.founderFBDetails);
+    private void initFounderInfo() {
+        imgFounder = (ImageView) findViewById(R.id.founderImage);
+        lblFounderFB = (TextView) findViewById(R.id.founderFBDetails);
         lblFounderFB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                helper.openUrlInExternalBrowser(getApplicationContext(),lblFounderFB.getText().toString());
+                HashMap<String, HashMap<String, String>> urlSets = new HashMap<>();
+                helper.initFBUrlSets(urlSets, 0, getResources().getString(R.string.wethoongFB), getResources().getString(R.string.wethoongFBApp));
+                helper.initFBUrlSets(urlSets, 1, getResources().getString(R.string.condonghieuluatFB), getResources().getString(R.string.condonghieuluatFBApp));
+                helper.openFacebook(getApplicationContext(), urlSets);
             }
         });
-        lblFounderEmail = (TextView)findViewById(R.id.founderEDetails);
+        lblFounderEmail = (TextView) findViewById(R.id.founderEDetails);
         lblFounderEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                helper.openUrlInExternalBrowser(getApplicationContext(),"mailto:" + lblFounderFB.getText().toString());
+                helper.openUrlInExternalBrowser(getApplicationContext(), "mailto:" + lblFounderFB.getText().toString());
             }
         });
 
         Bitmap bitmap = helper.getBitmapFromAssets(this, "partners/vietcat_crop.jpg");
         imgFounder.setImageBitmap(bitmap);
         ViewGroup.LayoutParams parms = imgFounder.getLayoutParams();
-        parms.width = (int)(helper.getScreenWidth() * 0.25);
+        parms.width = (int) (helper.getScreenWidth() * 0.25);
         parms.height = parms.width;
         imgFounder.setLayoutParams(parms);
     }

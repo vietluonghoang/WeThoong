@@ -143,7 +143,10 @@ public class BienbaoActivity extends AppCompatActivity {
             btnFBBanner.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    helper.openUrlInExternalBrowser(getApplicationContext(), getResources().getString(R.string.wethoongFB));
+                    HashMap<String, HashMap<String, String>> urlSets = new HashMap<>();
+                    helper.initFBUrlSets(urlSets, 0, getResources().getString(R.string.wethoongFB), getResources().getString(R.string.wethoongFBApp));
+                    helper.initFBUrlSets(urlSets, 1, getResources().getString(R.string.condonghieuluatFB), getResources().getString(R.string.condonghieuluatFBApp));
+                    helper.openFacebook(getApplicationContext(), urlSets);
                 }
             });
             btnFBBanner.setBackgroundResource(R.drawable.facebook_banner_wethoong);
