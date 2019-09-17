@@ -177,6 +177,7 @@ public class DetailsActivity extends AppCompatActivity {
             btnFBBanner.setBackgroundResource(R.drawable.facebook_banner_wethoong);
             adsHelper.addButtonToView(btnFBBanner,adsView);
         }
+        adsHelper.initTJAds(this, getApplicationContext());
     }
 
     private void updateDetails() {

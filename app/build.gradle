@@ -34,4 +34,6 @@ dependencies {
     implementation "com.android.support:customtabs:28.0.+"
     implementation "com.android.support:support-media-compat:28.0.+"
     implementation "com.android.support:support-v4:28.0.+"
+    implementation files("libs/tapjoyconnectlibrary.jar")
+    implementation "com.google.android.gms:play-services-basement:8.3.0"
 }

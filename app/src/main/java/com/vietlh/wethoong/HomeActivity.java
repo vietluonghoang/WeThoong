@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.gms.ads.MobileAds;
+import com.vietlh.wethoong.entities.TapjoyAdsListener;
 import com.vietlh.wethoong.utils.AdsHelper;
 import com.vietlh.wethoong.utils.DBConnection;
 import com.vietlh.wethoong.utils.GeneralSettings;
@@ -23,6 +24,7 @@ public class HomeActivity extends AppCompatActivity {
     private Button btnChungtoilaai;
     private TextView versionInfo;
     private AdsHelper adsHelper;
+    private TapjoyAdsListener tjAdsListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

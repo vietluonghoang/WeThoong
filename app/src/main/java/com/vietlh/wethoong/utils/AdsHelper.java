@@ -1,5 +1,6 @@
 package com.vietlh.wethoong.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.view.ViewGroup;
@@ -7,8 +8,12 @@ import android.widget.Button;
 
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
+import com.tapjoy.Tapjoy;
+import com.tapjoy.TapjoyConnectFlag;
+import com.vietlh.wethoong.entities.TapjoyAdsListener;
 
 import java.net.InetAddress;
+import java.util.Hashtable;
 
 /**
  * Created by vietlh on 4/29/18.
@@ -47,5 +52,22 @@ public class AdsHelper {
                 }
             }
         }).start();
+    }
+
+    public void initTJAds(Activity activity, Context context) {
+        String tapjoySDKKey = "zdZi7DfORiyEmKDuQL6cRQECeRpfBk1g76VPDUAEvi9CZxvoMwS3SZ0eDcMe";
+        String placementName = "WeThoongPlacement";
+        Hashtable<String, Object> connectFlags = new Hashtable<String, Object>();
+
+        if (GeneralSettings.isDevMode) {
+            Tapjoy.setDebugEnabled(true);
+            connectFlags.put(TapjoyConnectFlag.ENABLE_LOGGING, "true");      // remember to turn this off for your production builds!
+        } else {
+            Tapjoy.setDebugEnabled(false);
+            connectFlags.put(TapjoyConnectFlag.ENABLE_LOGGING, "false");
+        }
+
+        TapjoyAdsListener tjAdsListener = new TapjoyAdsListener(activity, placementName);
+        Tapjoy.connect(context, tapjoySDKKey, connectFlags, tjAdsListener);
     }
 }
