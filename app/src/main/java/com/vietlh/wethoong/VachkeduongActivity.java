@@ -27,6 +27,7 @@ import com.vietlh.wethoong.utils.AdsHelper;
 import com.vietlh.wethoong.utils.DBConnection;
 import com.vietlh.wethoong.utils.GeneralSettings;
 import com.vietlh.wethoong.utils.Queries;
+import com.vietlh.wethoong.utils.RedirectionHelper;
 import com.vietlh.wethoong.utils.UtilsHelper;
 
 import java.util.ArrayList;
@@ -64,6 +65,7 @@ public class VachkeduongActivity extends AppCompatActivity {
     private String searchType;
     private UtilsHelper helper = new UtilsHelper();
     private AdsHelper adsHelper = new AdsHelper();
+    private RedirectionHelper redirectionHelper = new RedirectionHelper();
 
     //Filter popup elements
     private AlertDialog.Builder builder;
@@ -117,9 +119,9 @@ public class VachkeduongActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     HashMap<String, HashMap<String, String>> urlSets = new HashMap<>();
-                    helper.initFBUrlSets(urlSets, 0, getResources().getString(R.string.wethoongFB), getResources().getString(R.string.wethoongFBApp));
-                    helper.initFBUrlSets(urlSets, 1, getResources().getString(R.string.condonghieuluatFB), getResources().getString(R.string.condonghieuluatFBApp));
-                    helper.openFacebook(getApplicationContext(), urlSets);
+                    redirectionHelper.initFBUrlSets(urlSets, 0, getResources().getString(R.string.wethoongFB), getResources().getString(R.string.wethoongFBApp));
+                    redirectionHelper.initFBUrlSets(urlSets, 1, getResources().getString(R.string.condonghieuluatFB), getResources().getString(R.string.condonghieuluatFBApp));
+                    redirectionHelper.openFacebook(getApplicationContext(), urlSets);
                 }
             });
             btnFBBanner.setBackgroundResource(R.drawable.facebook_banner_wethoong);

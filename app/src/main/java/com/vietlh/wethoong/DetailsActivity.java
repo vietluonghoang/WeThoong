@@ -28,6 +28,7 @@ import com.vietlh.wethoong.utils.AdsHelper;
 import com.vietlh.wethoong.utils.DBConnection;
 import com.vietlh.wethoong.utils.GeneralSettings;
 import com.vietlh.wethoong.utils.Queries;
+import com.vietlh.wethoong.utils.RedirectionHelper;
 import com.vietlh.wethoong.utils.SearchFor;
 import com.vietlh.wethoong.utils.UtilsHelper;
 
@@ -41,6 +42,7 @@ public class DetailsActivity extends AppCompatActivity {
 
     private Queries queries = new Queries(DBConnection.getInstance(this));
     private UtilsHelper helper = new UtilsHelper();
+    private RedirectionHelper redirectionHelper = new RedirectionHelper();
     private AdsHelper adsHelper = new AdsHelper();
     private SearchFor search = new SearchFor(this);
     private Dieukhoan dieukhoan;
@@ -173,9 +175,9 @@ public class DetailsActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     HashMap<String, HashMap<String, String>> urlSets = new HashMap<>();
-                    helper.initFBUrlSets(urlSets, 0, getResources().getString(R.string.wethoongFB), getResources().getString(R.string.wethoongFBApp));
-                    helper.initFBUrlSets(urlSets, 1, getResources().getString(R.string.condonghieuluatFB), getResources().getString(R.string.condonghieuluatFBApp));
-                    helper.openFacebook(getApplicationContext(), urlSets);
+                    redirectionHelper.initFBUrlSets(urlSets, 0, getResources().getString(R.string.wethoongFB), getResources().getString(R.string.wethoongFBApp));
+                    redirectionHelper.initFBUrlSets(urlSets, 1, getResources().getString(R.string.condonghieuluatFB), getResources().getString(R.string.condonghieuluatFBApp));
+                    redirectionHelper.openFacebook(getApplicationContext(), urlSets);
 
                 }
             });

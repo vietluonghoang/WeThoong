@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.vietlh.wethoong.utils.RedirectionHelper;
 import com.vietlh.wethoong.utils.UtilsHelper;
 
 import java.util.HashMap;
@@ -17,12 +18,14 @@ public class ChungtoiActivity extends AppCompatActivity {
     private TextView lblFounderFB;
     private TextView lblFounderEmail;
     private UtilsHelper helper;
+    private RedirectionHelper redirectionHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chungtoi);
         helper = new UtilsHelper();
+        redirectionHelper = new RedirectionHelper();
         initFounderInfo();
     }
 
@@ -33,16 +36,16 @@ public class ChungtoiActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 HashMap<String, HashMap<String, String>> urlSets = new HashMap<>();
-                helper.initFBUrlSets(urlSets, 0, getResources().getString(R.string.wethoongFB), getResources().getString(R.string.wethoongFBApp));
-                helper.initFBUrlSets(urlSets, 1, getResources().getString(R.string.condonghieuluatFB), getResources().getString(R.string.condonghieuluatFBApp));
-                helper.openFacebook(getApplicationContext(), urlSets);
+                redirectionHelper.initFBUrlSets(urlSets, 0, getResources().getString(R.string.wethoongFB), getResources().getString(R.string.wethoongFBApp));
+                redirectionHelper.initFBUrlSets(urlSets, 1, getResources().getString(R.string.condonghieuluatFB), getResources().getString(R.string.condonghieuluatFBApp));
+                redirectionHelper.openFacebook(getApplicationContext(), urlSets);
             }
         });
         lblFounderEmail = (TextView) findViewById(R.id.founderEDetails);
         lblFounderEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                helper.openUrlInExternalBrowser(getApplicationContext(), "mailto:" + lblFounderFB.getText().toString());
+                redirectionHelper.openUrlInExternalBrowser(getApplicationContext(), "mailto:" + lblFounderFB.getText().toString());
             }
         });
 
