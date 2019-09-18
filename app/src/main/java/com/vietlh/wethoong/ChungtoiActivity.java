@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.vietlh.wethoong.utils.GeneralSettings;
 import com.vietlh.wethoong.utils.RedirectionHelper;
 import com.vietlh.wethoong.utils.UtilsHelper;
 
@@ -27,6 +28,16 @@ public class ChungtoiActivity extends AppCompatActivity {
         helper = new UtilsHelper();
         redirectionHelper = new RedirectionHelper();
         initFounderInfo();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        boolean isInForeground = new RedirectionHelper().isAppInForeground(getApplicationContext());
+        System.out.println("############ In Onstop - " + isInForeground);
+        if (!isInForeground) {
+            GeneralSettings.isAppClosed = true;
+        }
     }
 
     private void initFounderInfo() {

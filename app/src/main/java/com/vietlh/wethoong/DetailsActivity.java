@@ -96,49 +96,59 @@ public class DetailsActivity extends AppCompatActivity {
 
         getPassingParameters();
         initComponents();
-        dieukhoan = queries.searchDieukhoanByID(dieukhoanId,vanbanid).get(0);
+        dieukhoan = queries.searchDieukhoanByID(dieukhoanId, vanbanid).get(0);
         vanbanid.add(String.valueOf(dieukhoan.getVanban().getId()));
         updateDetails();
 
         showDieukhoan();
 
-        if(GeneralSettings.isAdsEnabled) {
+        if (GeneralSettings.isAdsEnabled) {
             initAds();
         }
     }
 
-    private void getPassingParameters(){
+    @Override
+    protected void onStop() {
+        super.onStop();
+        boolean isInForeground = new RedirectionHelper().isAppInForeground(getApplicationContext());
+        System.out.println("############ In Onstop - " + isInForeground);
+        if (!isInForeground) {
+            GeneralSettings.isAppClosed = true;
+        }
+    }
+
+    private void getPassingParameters() {
         dieukhoanId = (String) getIntent().getStringExtra("dieukhoanId");
     }
 
-    private void initComponents(){
-        scrollView = (ScrollView)findViewById(R.id.scrollView);
-        btnXemthemView = (ConstraintLayout)findViewById(R.id.btnXemthemView);
+    private void initComponents() {
+        scrollView = (ScrollView) findViewById(R.id.scrollView);
+        btnXemthemView = (ConstraintLayout) findViewById(R.id.btnXemthemView);
 
-        lblVanban = (TextView)findViewById(R.id.lblVanban);
-        lblDieukhoan = (TextView)findViewById(R.id.lblDieukhoan);
-        lblNoidung = (TextView)findViewById(R.id.lblNoidung);
-        mucphatDetails = (TextView)findViewById(R.id.mucphatDetails);
-        phuongtienDetails = (TextView)findViewById(R.id.phuongtienDetails);
-        linhvucDetails = (TextView)findViewById(R.id.linhvucDetails);
-        doituongDetails = (TextView)findViewById(R.id.doituongDetails);
-        hinhphatbosungDetails = (TextView)findViewById(R.id.hinhphatbosungDetails);
-        bienphapkhacphucDetails = (TextView)findViewById(R.id.bienphapkhacphucDetails);
-        tamgiuDetails = (TextView)findViewById(R.id.tamgiuDetails);
-        thamquyenDetails = (TextView)findViewById(R.id.thamquyenDetails);
+        lblVanban = (TextView) findViewById(R.id.lblVanban);
+        lblDieukhoan = (TextView) findViewById(R.id.lblDieukhoan);
+        lblNoidung = (TextView) findViewById(R.id.lblNoidung);
+        mucphatDetails = (TextView) findViewById(R.id.mucphatDetails);
+        phuongtienDetails = (TextView) findViewById(R.id.phuongtienDetails);
+        linhvucDetails = (TextView) findViewById(R.id.linhvucDetails);
+        doituongDetails = (TextView) findViewById(R.id.doituongDetails);
+        hinhphatbosungDetails = (TextView) findViewById(R.id.hinhphatbosungDetails);
+        bienphapkhacphucDetails = (TextView) findViewById(R.id.bienphapkhacphucDetails);
+        tamgiuDetails = (TextView) findViewById(R.id.tamgiuDetails);
+        thamquyenDetails = (TextView) findViewById(R.id.thamquyenDetails);
 
-        btnXemthem = (Button)findViewById(R.id.btnXemthem);
+        btnXemthem = (Button) findViewById(R.id.btnXemthem);
         btnXemthem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showRelatedDieukhoan();
             }
         });
-        btnBreadscrubs = (Button)findViewById(R.id.btnBreadscrubs);
+        btnBreadscrubs = (Button) findViewById(R.id.btnBreadscrubs);
         btnBreadscrubs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("Message","tapping on: "+ parentDieukhoan.getId());
+                Log.i("Message", "tapping on: " + parentDieukhoan.getId());
                 Intent i = new Intent(getApplicationContext(), DetailsActivity.class);
                 //TODO: need to change the hardcode dieukhoanId to something that configurable.
                 i.putExtra("dieukhoanId", String.valueOf(parentDieukhoan.getId()));
@@ -146,22 +156,22 @@ public class DetailsActivity extends AppCompatActivity {
             }
         });
 
-        extraView = (LinearLayout)findViewById(R.id.extraView);
-        mucphatView = (LinearLayout)findViewById(R.id.mucphatView);
-        phuongtienView = (LinearLayout)findViewById(R.id.phuongtienView);
-        linhvucView = (LinearLayout)findViewById(R.id.linhvucView);
-        doituongView = (LinearLayout)findViewById(R.id.doituongView);
-        hinhphatbosung = (LinearLayout)findViewById(R.id.hinhphatbosung);
-        bienphapkhacphuc = (LinearLayout)findViewById(R.id.bienphapkhacphuc);
-        tamgiu = (LinearLayout)findViewById(R.id.tamgiu);
-        thamquyen = (LinearLayout)findViewById(R.id.thamquyen);
-        minhhoaView = (LinearLayout)findViewById(R.id.minhhoaView);
-        childrenDieukhoan = (RelativeLayout)findViewById(R.id.childrenDieukhoan);
+        extraView = (LinearLayout) findViewById(R.id.extraView);
+        mucphatView = (LinearLayout) findViewById(R.id.mucphatView);
+        phuongtienView = (LinearLayout) findViewById(R.id.phuongtienView);
+        linhvucView = (LinearLayout) findViewById(R.id.linhvucView);
+        doituongView = (LinearLayout) findViewById(R.id.doituongView);
+        hinhphatbosung = (LinearLayout) findViewById(R.id.hinhphatbosung);
+        bienphapkhacphuc = (LinearLayout) findViewById(R.id.bienphapkhacphuc);
+        tamgiu = (LinearLayout) findViewById(R.id.tamgiu);
+        thamquyen = (LinearLayout) findViewById(R.id.thamquyen);
+        minhhoaView = (LinearLayout) findViewById(R.id.minhhoaView);
+        childrenDieukhoan = (RelativeLayout) findViewById(R.id.childrenDieukhoan);
 
         rclChildrenDieukhoan = (RecyclerView) findViewById(R.id.rclChildrenDieukhoan);
     }
 
-    private void initAds(){
+    private void initAds() {
         adsView = (LinearLayout) findViewById(R.id.adsView);
         adsHelper.updateLastConnectionState();
         if (GeneralSettings.wasConnectedToInternet) {
@@ -169,7 +179,7 @@ public class DetailsActivity extends AppCompatActivity {
             adsHelper.addBannerViewtoView(googleAdView, adsView);
             AdRequest adRequest = new AdRequest.Builder().build();
             googleAdView.loadAd(adRequest);
-        }else {
+        } else {
             Button btnFBBanner = new Button(this);
             btnFBBanner.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -182,7 +192,7 @@ public class DetailsActivity extends AppCompatActivity {
                 }
             });
             btnFBBanner.setBackgroundResource(R.drawable.facebook_banner_wethoong);
-            adsHelper.addButtonToView(btnFBBanner,adsView);
+            adsHelper.addButtonToView(btnFBBanner, adsView);
         }
         adsHelper.initTJAds(this, getApplicationContext());
     }
@@ -211,27 +221,27 @@ public class DetailsActivity extends AppCompatActivity {
         }
     }
 
-    private void showRelatedDieukhoan(){
+    private void showRelatedDieukhoan() {
         Intent i = new Intent(getApplicationContext(), SearchActivity.class);
         //TODO: need to change the hardcode searchType to something that configurable.
-        i.putExtra("searchType","lienquan");
-        i.putExtra("dieukhoanId",dieukhoanId);
+        i.putExtra("searchType", "lienquan");
+        i.putExtra("dieukhoanId", dieukhoanId);
         startActivity(i);
     }
 
     private void hideMinhhoaView(Boolean isHidden) {
-        if(isHidden){
+        if (isHidden) {
             helper.hideSection(minhhoaView);
-        }else{
+        } else {
             helper.showSection(minhhoaView);
         }
     }
 
-    private void hideExtraInfoView(Boolean isHidden)  {
-        if(isHidden){
+    private void hideExtraInfoView(Boolean isHidden) {
+        if (isHidden) {
             helper.hideSection(extraView);
             populateExtraInfoView();
-        }else{
+        } else {
             helper.showSection(extraView);
         }
     }
@@ -243,33 +253,33 @@ public class DetailsActivity extends AppCompatActivity {
         if (breadscrubText.length() > 0) {
             btnBreadscrubs.setText(breadscrubText);
             btnBreadscrubs.setEnabled(true);
-        }else {
+        } else {
             btnBreadscrubs.setVisibility(View.GONE);
         }
 
         String noidung = "";
-        if(dieukhoan.getTieude().length() < 1){
+        if (dieukhoan.getTieude().length() < 1) {
             noidung = dieukhoan.getNoidung();
-        }else if (dieukhoan.getNoidung().length() < 1){
+        } else if (dieukhoan.getNoidung().length() < 1) {
             noidung = dieukhoan.getTieude();
-        }else {
+        } else {
             noidung = dieukhoan.getTieude() + "\n" + dieukhoan.getNoidung();
         }
         lblNoidung.setText(noidung);
 
         ArrayList<String> images = dieukhoan.getMinhhoa();
 
-        if(images.size() > 0){
+        if (images.size() > 0) {
             fillMinhhoaToViewMinhhoa(images);
-        }else{
+        } else {
             hideMinhhoaView(true);
         }
 
         // Enable extra section for details of ND46
-        if (String.valueOf(dieukhoan.getVanban().getId()).equals(GeneralSettings.getVanbanInfo(GeneralSettings.danhsachvanban[0],"id"))) {
+        if (String.valueOf(dieukhoan.getVanban().getId()).equals(GeneralSettings.getVanbanInfo(GeneralSettings.danhsachvanban[0], "id"))) {
             hideExtraInfoView(false);
             populateExtraInfoView();
-        }else{
+        } else {
             hideExtraInfoView(true);
         }
         if (hinhphatbosungList.size() < 1 && bienphapkhacphucList.size() < 1 && thamquyenList.size() < 1
@@ -282,12 +292,12 @@ public class DetailsActivity extends AppCompatActivity {
             populateBosungKhacphucView();
         }
 
-        if(relatedChildren.size() < 1){
+        if (relatedChildren.size() < 1) {
             btnXemthem.setVisibility(View.GONE);
             helper.hideSection(btnXemthemView);
         }
 
-        if(children.size() > 0) {
+        if (children.size() > 0) {
             helper.showSection(childrenDieukhoan);
             // use this setting to improve performance if you know that changes
             // in content do not change the layout size of the RecyclerView
@@ -305,16 +315,16 @@ public class DetailsActivity extends AppCompatActivity {
             ViewGroup.LayoutParams searchResultLayoutParams = rclChildrenDieukhoan.getLayoutParams();
             searchResultLayoutParams.width = helper.getScreenWidth();
             rclChildrenDieukhoan.setLayoutParams(searchResultLayoutParams);
-        }else {
+        } else {
             helper.hideSection(childrenDieukhoan);
         }
     }
 
-    private void populateBosungKhacphucView(){
+    private void populateBosungKhacphucView() {
         if (hinhphatbosungList.size() > 0) {
             helper.showSection(hinhphatbosung);
             String bosungDetails = "";
-            for (BosungKhacphuc bosung: hinhphatbosungList) {
+            for (BosungKhacphuc bosung : hinhphatbosungList) {
                 bosungDetails += "- " + bosung.getNoidung() + "\n";
             }
             hinhphatbosungDetails.setText(bosungDetails);
@@ -325,7 +335,7 @@ public class DetailsActivity extends AppCompatActivity {
         if (bienphapkhacphucList.size() > 0) {
             helper.showSection(bienphapkhacphuc);
             String khacphucDetails = "";
-            for (BosungKhacphuc khacphuc: bienphapkhacphucList) {
+            for (BosungKhacphuc khacphuc : bienphapkhacphucList) {
                 khacphucDetails += "- " + khacphuc.getNoidung() + "\n";
             }
             bienphapkhacphucDetails.setText(khacphucDetails);
@@ -343,7 +353,7 @@ public class DetailsActivity extends AppCompatActivity {
         if (thamquyenList.size() > 0) {
             helper.showSection(thamquyen);
             String tqDetails = "";
-            for (Dieukhoan tq: thamquyenList) {
+            for (Dieukhoan tq : thamquyenList) {
                 tqDetails += tq.getNoidung() + "\n";
             }
             thamquyenDetails.setText(tqDetails);
@@ -352,7 +362,7 @@ public class DetailsActivity extends AppCompatActivity {
         }
     }
 
-    private void populateExtraInfoView(){
+    private void populateExtraInfoView() {
         String mpText = getMucphat(String.valueOf(dieukhoan.getId()));
         String ptText = getPhuongtien(String.valueOf(dieukhoan.getId()));
         String lvText = getLinhvuc(String.valueOf(dieukhoan.getId()));
@@ -361,44 +371,44 @@ public class DetailsActivity extends AppCompatActivity {
         if (mpText.length() > 0) {
             helper.showSection(mucphatView);
             mucphatDetails.setText(mpText);
-        }else{
+        } else {
             helper.hideSection(mucphatView);
         }
         if (ptText.length() > 0) {
             helper.showSection(phuongtienView);
             phuongtienDetails.setText(ptText);
-        }else{
+        } else {
             helper.hideSection(phuongtienView);
         }
         if (lvText.length() > 0) {
             helper.showSection(linhvucView);
             linhvucDetails.setText(lvText);
-        }else{
+        } else {
             helper.hideSection(linhvucView);
         }
         if (dtText.length() > 0) {
             helper.showSection(doituongView);
             doituongDetails.setText(dtText);
-        }else{
+        } else {
             helper.hideSection(doituongView);
         }
     }
 
     private void fillMinhhoaToViewMinhhoa(ArrayList<String> images) {
-        hideMinhhoaView( false);
+        hideMinhhoaView(false);
 
         for (String img : images) {
-            String imgName = img.replace("\n","").trim();
-            if (imgName.length() < 1){
+            String imgName = img.replace("\n", "").trim();
+            if (imgName.length() < 1) {
 
-            }else{
-                Bitmap image = helper.getBitmapFromAssets(this,"minhhoa/" + imgName);
+            } else {
+                Bitmap image = helper.getBitmapFromAssets(this, "minhhoa/" + imgName);
 
                 ImageView imgView = new ImageView(this);
-                ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+                ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 imgView.setLayoutParams(layoutParams);
 
-                imgView.setImageBitmap(helper.scaleImage(image,helper.getScreenWidth()));
+                imgView.setImageBitmap(helper.scaleImage(image, helper.getScreenWidth()));
                 minhhoaView.addView(imgView);
             }
         }
@@ -436,27 +446,27 @@ public class DetailsActivity extends AppCompatActivity {
         return tamgiuList;
     }
 
-    private String getMucphat(String id){
+    private String getMucphat(String id) {
         return queries.searchMucphatInfo(id);
     }
 
-    private String getPhuongtien(String id){
+    private String getPhuongtien(String id) {
         return queries.searchPhuongtienInfo(id);
     }
 
-    private String getLinhvuc(String id){
+    private String getLinhvuc(String id) {
         return queries.searchLinhvucInfo(id);
     }
 
-    private String getDoituong(String id){
+    private String getDoituong(String id) {
         return queries.searchDoituongInfo(id);
     }
 
     private ArrayList<Dieukhoan> getChildren(String keyword) {
-        return queries.searchChildren(keyword.trim(),vanbanid);
+        return queries.searchChildren(keyword.trim(), vanbanid);
     }
 
-    private ArrayList<Dieukhoan> getParent(String keyword){
+    private ArrayList<Dieukhoan> getParent(String keyword) {
         return queries.searchDieukhoanByID(keyword, vanbanid);
     }
 }

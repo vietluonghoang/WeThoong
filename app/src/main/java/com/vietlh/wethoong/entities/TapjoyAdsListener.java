@@ -12,12 +12,14 @@ import com.tapjoy.TJPlacementListener;
 import com.tapjoy.TJPlacementVideoListener;
 import com.tapjoy.Tapjoy;
 import com.tapjoy.TapjoyLog;
+import com.vietlh.wethoong.utils.AdsHelper;
 
 import static android.support.constraint.Constraints.TAG;
 
-public class TapjoyAdsListener extends Activity implements TJPlacementListener, TJPlacementVideoListener,TJConnectListener {
+public class TapjoyAdsListener extends Activity implements TJPlacementListener, TJPlacementVideoListener, TJConnectListener {
     private TJPlacement placement;
-    public TapjoyAdsListener(Activity activity, String placementName){
+
+    public TapjoyAdsListener(Activity activity, String placementName) {
         Tapjoy.setActivity(activity);
         placement = Tapjoy.getPlacement(placementName, this);
     }
@@ -39,8 +41,9 @@ public class TapjoyAdsListener extends Activity implements TJPlacementListener, 
     @Override
     public void onContentReady(TJPlacement tjPlacement) {
         TapjoyLog.i(TAG, "onContentReady for placement " + tjPlacement.getName());
-
-        tjPlacement.showContent();
+        if (AdsHelper.isValidToShowIntestitialAds()) {
+            tjPlacement.showContent();
+        }
     }
 
     @Override
@@ -75,7 +78,7 @@ public class TapjoyAdsListener extends Activity implements TJPlacementListener, 
 
     @Override
     public void onVideoError(TJPlacement tjPlacement, String s) {
-        Log.i(TAG, "Video error: " + s +  " for " + tjPlacement.getName());
+        Log.i(TAG, "Video error: " + s + " for " + tjPlacement.getName());
     }
 
     @Override

@@ -53,7 +53,7 @@ public class SearchActivity extends AppCompatActivity {
     private LinearLayout adsView;
     private ArrayList<String> vanbanid = new ArrayList<>();
     private ArrayList<String> phuongtien = new ArrayList<>();
-    private HashMap<String,String> mucphat = new HashMap<>();
+    private HashMap<String, String> mucphat = new HashMap<>();
     private String searchType;
     private UtilsHelper helper = new UtilsHelper();
     private AdsHelper adsHelper = new AdsHelper();
@@ -109,10 +109,10 @@ public class SearchActivity extends AppCompatActivity {
         searchResultRecyclerView.setLayoutManager(recyclerLayoutManager);
 
         // specify an adapter (see also next example)
-        searchResultListRecyclerAdapter = new ListRecyclerViewAdapter(this,allDieukhoan);
+        searchResultListRecyclerAdapter = new ListRecyclerViewAdapter(this, allDieukhoan);
         if (!searchType.equals("lienquan")) {
             updateResultList("");
-        }else {
+        } else {
             updateResultListWithRelatedDieukhoan();
         }
         searchResultRecyclerView.setAdapter(searchResultListRecyclerAdapter);
@@ -122,12 +122,22 @@ public class SearchActivity extends AppCompatActivity {
         searchResultLayoutParams.width = helper.getScreenWidth();
         searchResultRecyclerView.setLayoutParams(searchResultLayoutParams);
 
-        if(GeneralSettings.isAdsEnabled) {
+        if (GeneralSettings.isAdsEnabled) {
             initAds();
         }
     }
 
-    private void initAds(){
+    @Override
+    protected void onStop() {
+        super.onStop();
+        boolean isInForeground = new RedirectionHelper().isAppInForeground(getApplicationContext());
+        System.out.println("############ In Onstop - " + isInForeground);
+        if (!isInForeground) {
+            GeneralSettings.isAppClosed = true;
+        }
+    }
+
+    private void initAds() {
         adsView = (LinearLayout) findViewById(R.id.adsView);
         adsHelper.updateLastConnectionState();
         if (GeneralSettings.wasConnectedToInternet) {
@@ -135,7 +145,7 @@ public class SearchActivity extends AppCompatActivity {
             adsHelper.addBannerViewtoView(googleAdView, adsView);
             AdRequest adRequest = new AdRequest.Builder().build();
             googleAdView.loadAd(adRequest);
-        }else {
+        } else {
             Button btnFBBanner = new Button(this);
             btnFBBanner.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -147,19 +157,19 @@ public class SearchActivity extends AppCompatActivity {
                 }
             });
             btnFBBanner.setBackgroundResource(R.drawable.facebook_banner_wethoong);
-            adsHelper.addButtonToView(btnFBBanner,adsView);
+            adsHelper.addButtonToView(btnFBBanner, adsView);
         }
     }
 
-    private void getPassingParameters(){
+    private void getPassingParameters() {
         searchType = (String) getIntent().getStringExtra("searchType");
     }
 
-    private void initComponents(){
+    private void initComponents() {
         searchView = (LinearLayout) findViewById(R.id.searchView);
-        tfSearch = (EditText)findViewById(R.id.txtSearch);
-        btnLoctheo = (Button)((LinearLayout)findViewById(R.id.locTheoView)).findViewById(R.id.btnLoctheo);
-        txtLoctheo = (TextView)((LinearLayout)findViewById(R.id.locTheoView)).findViewById(R.id.lblLoctheo);
+        tfSearch = (EditText) findViewById(R.id.txtSearch);
+        btnLoctheo = (Button) ((LinearLayout) findViewById(R.id.locTheoView)).findViewById(R.id.btnLoctheo);
+        txtLoctheo = (TextView) ((LinearLayout) findViewById(R.id.locTheoView)).findViewById(R.id.lblLoctheo);
         btnLoctheo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -168,7 +178,7 @@ public class SearchActivity extends AppCompatActivity {
                 updateFilterLabel();
             }
         });
-        switch (searchType){
+        switch (searchType) {
             case GeneralSettings.SEARCH_TYPE_VANBAN:
                 for (String key : GeneralSettings.danhsachvanban) {
                     addVanbanidToList(key);
@@ -201,12 +211,12 @@ public class SearchActivity extends AppCompatActivity {
         });
     }
 
-    private void updateResultList(String keyword){
+    private void updateResultList(String keyword) {
         allDieukhoan = search(keyword.trim());
         searchResultListRecyclerAdapter.updateView(allDieukhoan);
     }
 
-    private void updateResultListWithRelatedDieukhoan(){
+    private void updateResultListWithRelatedDieukhoan() {
         searchView.removeAllViews();
         helper.hideSection(searchView);
         String dieukhoanId = (String) getIntent().getStringExtra("dieukhoanId");
@@ -221,13 +231,13 @@ public class SearchActivity extends AppCompatActivity {
         searchResultListRecyclerAdapter.updateView(allDieukhoan);
     }
 
-    private ArrayList<Dieukhoan> search(String keyword){
+    private ArrayList<Dieukhoan> search(String keyword) {
         if (keyword.length() > 0) {
-            switch (searchType){
+            switch (searchType) {
                 case GeneralSettings.SEARCH_TYPE_VANBAN:
                     return queries.searchDieukhoan(keyword, vanbanid);
                 case GeneralSettings.SEARCH_TYPE_MUCPHAT:
-                    return queries.searchDieukhoanByQuery(getBuiltQuery(keyword),vanbanid);
+                    return queries.searchDieukhoanByQuery(getBuiltQuery(keyword), vanbanid);
                 default:
                     return null;
             }
@@ -249,10 +259,10 @@ public class SearchActivity extends AppCompatActivity {
             str = str.substring(0, str.length() - 5);
             appendString += "(" + str + ") or ";
         }
-        appendString = "(" + appendString.substring(0,appendString.length() - 4) + ")";
+        appendString = "(" + appendString.substring(0, appendString.length() - 4) + ")";
 
         if (mucphat.get("tu") != null || mucphat.get("den") != null) {
-            appendString += getWhereClauseForMucphat(mucphat.get("tu"),mucphat.get("den"));
+            appendString += getWhereClauseForMucphat(mucphat.get("tu"), mucphat.get("den"));
         }
 
         if (phuongtien.size() > 0) {
@@ -266,19 +276,19 @@ public class SearchActivity extends AppCompatActivity {
         int denInt;
         try {
             tuInt = Integer.parseInt(tu.replace(".", ""));
-        }catch (Exception ex){
+        } catch (Exception ex) {
             tuInt = Integer.parseInt(GeneralSettings.mucphatRange[0].replace(".", ""));
         }
-        try{
+        try {
             denInt = Integer.parseInt(den.replace(".", ""));
-        }catch (Exception ex){
+        } catch (Exception ex) {
             denInt = Integer.parseInt(GeneralSettings.mucphatRange[GeneralSettings.mucphatRange.length - 1].replace(".", ""));
         }
         String inClause = "";
         for (String item : GeneralSettings.mucphatRange) {
             int itemInt = Integer.parseInt(item.replace(".", ""));
             if (itemInt >= tuInt && itemInt <= denInt) {
-                    inClause += "\"" + item + "\",";
+                inClause += "\"" + item + "\",";
             }
         }
         inClause = inClause.substring(0, inClause.length() - 1);
@@ -293,23 +303,19 @@ public class SearchActivity extends AppCompatActivity {
                 inClause += "oto = 1 or otoTai = 1 or ";
             }
 
-            if (pt.equals(GeneralSettings.PHUONGTIEN_XEMAY))
-            {
+            if (pt.equals(GeneralSettings.PHUONGTIEN_XEMAY)) {
                 inClause += "moto = 1 or xemaydien = 1 or xeganmay = 1 or ";
             }
 
-            if (pt.equals(GeneralSettings.PHUONGTIEN_XECHUYENDUNG))
-            {
+            if (pt.equals(GeneralSettings.PHUONGTIEN_XECHUYENDUNG)) {
                 inClause += "maykeo = 1 or xechuyendung = 1 or ";
             }
 
-            if (pt.equals(GeneralSettings.PHUONGTIEN_TAUHOA))
-            {
+            if (pt.equals(GeneralSettings.PHUONGTIEN_TAUHOA)) {
                 inClause += "tau = 1 or ";
             }
 
-            if (pt.equals(GeneralSettings.PHUONGTIEN_XEDAP))
-            {
+            if (pt.equals(GeneralSettings.PHUONGTIEN_XEDAP)) {
                 inClause += "xedapmay = 1 or xedapdien = 1 or xethoso = 1 or sucvat = 1 or xichlo = 1 or ";
             }
 
@@ -329,12 +335,12 @@ public class SearchActivity extends AppCompatActivity {
         //this is custom dialog
         customView = layoutInflater.inflate(R.layout.popup_filters, null);
 
-        lineLoutLoaivanban = (LinearLayout)customView.findViewById(R.id.Loaivanban);
-        lineLoutMucphat = (LinearLayout)customView.findViewById(R.id.mucphatSection);
+        lineLoutLoaivanban = (LinearLayout) customView.findViewById(R.id.Loaivanban);
+        lineLoutMucphat = (LinearLayout) customView.findViewById(R.id.mucphatSection);
         lineLoutPlateShapeGroupsSelection = (LinearLayout) customView.findViewById(R.id.PlateShapeSelection);
         lineLoutVachShapeGroupsSelection = (LinearLayout) customView.findViewById(R.id.vachShapeSelection);
 //        ViewGroup.LayoutParams hiddenSection;
-        switch (searchType){
+        switch (searchType) {
             case GeneralSettings.SEARCH_TYPE_VANBAN:
                 lineLoutMucphat.setVisibility(View.INVISIBLE);
                 lineLoutLoaivanban.setVisibility(View.VISIBLE);
@@ -354,22 +360,22 @@ public class SearchActivity extends AppCompatActivity {
                 helper.hideSection(lineLoutLoaivanban);
                 helper.hideSection(lineLoutPlateShapeGroupsSelection);
 
-                lineLoutPhuongtien = (LinearLayout)customView.findViewById(R.id.phuongtienLines);
-                swtPhuongtien = (Switch)customView.findViewById(R.id.phuongtienSectionToggleSwitch);
+                lineLoutPhuongtien = (LinearLayout) customView.findViewById(R.id.phuongtienLines);
+                swtPhuongtien = (Switch) customView.findViewById(R.id.phuongtienSectionToggleSwitch);
                 swtPhuongtien.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         //reset all phuongtien buttons
-                        setButtonBackgroundColor(btnPhuongtienOto,false);
-                        setButtonBackgroundColor(btnPhuongtienTauhoa,false);
-                        setButtonBackgroundColor(btnPhuongtienXemay,false);
-                        setButtonBackgroundColor(btnPhuongtienXedap,false);
-                        setButtonBackgroundColor(btnPhuongtienXechuyendung,false);
-                        setButtonBackgroundColor(btnPhuongtienDibo,false);
+                        setButtonBackgroundColor(btnPhuongtienOto, false);
+                        setButtonBackgroundColor(btnPhuongtienTauhoa, false);
+                        setButtonBackgroundColor(btnPhuongtienXemay, false);
+                        setButtonBackgroundColor(btnPhuongtienXedap, false);
+                        setButtonBackgroundColor(btnPhuongtienXechuyendung, false);
+                        setButtonBackgroundColor(btnPhuongtienDibo, false);
 
-                        if (swtPhuongtien.isChecked()){
+                        if (swtPhuongtien.isChecked()) {
                             lineLoutPhuongtien.setVisibility(View.VISIBLE);
-                        }else {
+                        } else {
                             lineLoutPhuongtien.setVisibility(View.GONE);
                             phuongtien.clear();
                         }
@@ -380,22 +386,22 @@ public class SearchActivity extends AppCompatActivity {
                 initPhuongtienFilters();
                 initMucphatFilter();
 
-                if (phuongtien.size() > 0){
+                if (phuongtien.size() > 0) {
                     swtPhuongtien.setChecked(true);
                     lineLoutPhuongtien.setVisibility(View.VISIBLE);
-                }else {
+                } else {
                     swtPhuongtien.setChecked(false);
                     lineLoutPhuongtien.setVisibility(View.GONE);
                 }
 
-                lineLoutMucphatSelection = (LinearLayout)customView.findViewById(R.id.mucphatSelectionTuDen);
-                swtMucphat = (Switch)customView.findViewById(R.id.mucphatSectionToggleSwitch);
+                lineLoutMucphatSelection = (LinearLayout) customView.findViewById(R.id.mucphatSelectionTuDen);
+                swtMucphat = (Switch) customView.findViewById(R.id.mucphatSectionToggleSwitch);
                 swtMucphat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        if (swtMucphat.isChecked()){
+                        if (swtMucphat.isChecked()) {
                             lineLoutMucphatSelection.setVisibility(View.VISIBLE);
-                        }else {
+                        } else {
                             lineLoutMucphatSelection.setVisibility(View.GONE);
                             mucphat.remove("tu");
                             mucphat.remove("den");
@@ -406,10 +412,10 @@ public class SearchActivity extends AppCompatActivity {
                     }
                 });
 
-                if (mucphat.isEmpty()){
+                if (mucphat.isEmpty()) {
                     lineLoutMucphatSelection.setVisibility(View.GONE);
                     swtMucphat.setChecked(false);
-                }else {
+                } else {
                     lineLoutMucphatSelection.setVisibility(View.VISIBLE);
                     swtMucphat.setChecked(true);
                 }
@@ -420,7 +426,7 @@ public class SearchActivity extends AppCompatActivity {
                 break;
         }
 
-        Button btnXong = (Button)customView.findViewById(R.id.btnXong);
+        Button btnXong = (Button) customView.findViewById(R.id.btnXong);
         btnXong.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -435,101 +441,101 @@ public class SearchActivity extends AppCompatActivity {
         alert = builder.show();
     }
 
-    private void initVanbanFilters(){
-        cbQC41 = (CheckBox)customView.findViewById(R.id.optionQC41Checkbox);
+    private void initVanbanFilters() {
+        cbQC41 = (CheckBox) customView.findViewById(R.id.optionQC41Checkbox);
         cbQC41.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (cbQC41.isChecked()){
+                if (cbQC41.isChecked()) {
                     addVanbanidToList(GeneralSettings.danhsachvanban[1]);
-                }else {
+                } else {
                     removeVanbanidFromList(GeneralSettings.danhsachvanban[1]);
                 }
             }
         });
-        cbND46 = (CheckBox)customView.findViewById(R.id.optionND46Checkbox);
+        cbND46 = (CheckBox) customView.findViewById(R.id.optionND46Checkbox);
         cbND46.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (cbND46.isChecked()){
+                if (cbND46.isChecked()) {
                     addVanbanidToList(GeneralSettings.danhsachvanban[0]);
-                }else {
+                } else {
                     removeVanbanidFromList(GeneralSettings.danhsachvanban[0]);
                 }
             }
         });
-        cbTT01 = (CheckBox)customView.findViewById(R.id.optionTT01Checkbox);
+        cbTT01 = (CheckBox) customView.findViewById(R.id.optionTT01Checkbox);
         cbTT01.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (cbTT01.isChecked()){
+                if (cbTT01.isChecked()) {
                     addVanbanidToList(GeneralSettings.danhsachvanban[2]);
-                }else {
+                } else {
                     removeVanbanidFromList(GeneralSettings.danhsachvanban[2]);
                 }
             }
         });
-        cbLGTDB = (CheckBox)customView.findViewById(R.id.optionLGTCheckbox);
+        cbLGTDB = (CheckBox) customView.findViewById(R.id.optionLGTCheckbox);
         cbLGTDB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (cbLGTDB.isChecked()){
+                if (cbLGTDB.isChecked()) {
                     addVanbanidToList(GeneralSettings.danhsachvanban[3]);
-                }else {
+                } else {
                     removeVanbanidFromList(GeneralSettings.danhsachvanban[3]);
                 }
             }
         });
-        cbLXLVPHC = (CheckBox)customView.findViewById(R.id.optionLXLVPHCCheckbox);
+        cbLXLVPHC = (CheckBox) customView.findViewById(R.id.optionLXLVPHCCheckbox);
         cbLXLVPHC.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (cbLXLVPHC.isChecked()){
+                if (cbLXLVPHC.isChecked()) {
                     addVanbanidToList(GeneralSettings.danhsachvanban[4]);
-                }else {
+                } else {
                     removeVanbanidFromList(GeneralSettings.danhsachvanban[4]);
                 }
             }
         });
     }
 
-    private void initPhuongtienFilters(){
-        btnPhuongtienOto = (Button)customView.findViewById(R.id.btnPhuongtienOto);
+    private void initPhuongtienFilters() {
+        btnPhuongtienOto = (Button) customView.findViewById(R.id.btnPhuongtienOto);
         btnPhuongtienOto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 updatePhuongtienFilters(btnPhuongtienOto);
             }
         });
-        btnPhuongtienXemay = (Button)customView.findViewById(R.id.btnPhuongtienXemay);
+        btnPhuongtienXemay = (Button) customView.findViewById(R.id.btnPhuongtienXemay);
         btnPhuongtienXemay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 updatePhuongtienFilters(btnPhuongtienXemay);
             }
         });
-        btnPhuongtienXedap = (Button)customView.findViewById(R.id.btnPhuongtienXedap);
+        btnPhuongtienXedap = (Button) customView.findViewById(R.id.btnPhuongtienXedap);
         btnPhuongtienXedap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 updatePhuongtienFilters(btnPhuongtienXedap);
             }
         });
-        btnPhuongtienXechuyendung = (Button)customView.findViewById(R.id.btnPhuongtienXechuyendung);
+        btnPhuongtienXechuyendung = (Button) customView.findViewById(R.id.btnPhuongtienXechuyendung);
         btnPhuongtienXechuyendung.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 updatePhuongtienFilters(btnPhuongtienXechuyendung);
             }
         });
-        btnPhuongtienTauhoa = (Button)customView.findViewById(R.id.btnPhuongtienTauhoa);
+        btnPhuongtienTauhoa = (Button) customView.findViewById(R.id.btnPhuongtienTauhoa);
         btnPhuongtienTauhoa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 updatePhuongtienFilters(btnPhuongtienTauhoa);
             }
         });
-        btnPhuongtienDibo = (Button)customView.findViewById(R.id.btnPhuongtienDibo);
+        btnPhuongtienDibo = (Button) customView.findViewById(R.id.btnPhuongtienDibo);
         btnPhuongtienDibo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -538,16 +544,16 @@ public class SearchActivity extends AppCompatActivity {
         });
     }
 
-    private void initMucphatFilter(){
+    private void initMucphatFilter() {
         String[] initMucphatRange = {"-----"};
         // Initialize an empty list
         ArrayList<String> both = new ArrayList<>();
 
         // Add first array elements to list
-        Collections.addAll(both,initMucphatRange);
+        Collections.addAll(both, initMucphatRange);
 
         // Add another array elements to list
-        Collections.addAll(both,GeneralSettings.mucphatRange);
+        Collections.addAll(both, GeneralSettings.mucphatRange);
 
         // Convert list to array
         String[] result = both.toArray(new String[both.size()]);
@@ -555,7 +561,7 @@ public class SearchActivity extends AppCompatActivity {
         spMucphatTu = (Spinner) customView.findViewById(R.id.mucphatTuPicker);
         spMucphatDen = (Spinner) customView.findViewById(R.id.mucphatDenPicker);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,result);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, result);
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
@@ -565,6 +571,7 @@ public class SearchActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 updateMucphatFilters();
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 updateMucphatFilters();
@@ -576,6 +583,7 @@ public class SearchActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 updateMucphatFilters();
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 updateMucphatFilters();
@@ -583,62 +591,62 @@ public class SearchActivity extends AppCompatActivity {
         });
     }
 
-    private void updatePhuongtienFilters(Button button){
-        if (helper.getButtonBackgroundColor(button) == colorNormalBtnBg){
-            setButtonBackgroundColor(button,true);
+    private void updatePhuongtienFilters(Button button) {
+        if (helper.getButtonBackgroundColor(button) == colorNormalBtnBg) {
+            setButtonBackgroundColor(button, true);
             addPhuongtienToList(button);
-        }else {
-            setButtonBackgroundColor(button,false);
+        } else {
+            setButtonBackgroundColor(button, false);
             removePhuongtienFromList(button);
         }
     }
 
-    private void addPhuongtienToList(Button button){
+    private void addPhuongtienToList(Button button) {
         String buttonText = button.getText().toString();
 
-        if(buttonText.equals(getResources().getString(R.string.oto))){
+        if (buttonText.equals(getResources().getString(R.string.oto))) {
             for (String pt : phuongtien) {
-                if (GeneralSettings.PHUONGTIEN_OTO.equals(pt)){
+                if (GeneralSettings.PHUONGTIEN_OTO.equals(pt)) {
                     return;
                 }
             }
             phuongtien.add(GeneralSettings.PHUONGTIEN_OTO);
         }
-        if(buttonText.equals(getResources().getString(R.string.xemay_moto))){
+        if (buttonText.equals(getResources().getString(R.string.xemay_moto))) {
             for (String pt : phuongtien) {
-                if (GeneralSettings.PHUONGTIEN_XEMAY.equals(pt)){
+                if (GeneralSettings.PHUONGTIEN_XEMAY.equals(pt)) {
                     return;
                 }
             }
             phuongtien.add(GeneralSettings.PHUONGTIEN_XEMAY);
         }
-        if(buttonText.equals(getResources().getString(R.string.xedap_xethoso))){
+        if (buttonText.equals(getResources().getString(R.string.xedap_xethoso))) {
             for (String pt : phuongtien) {
-                if (GeneralSettings.PHUONGTIEN_XEDAP.equals(pt)){
+                if (GeneralSettings.PHUONGTIEN_XEDAP.equals(pt)) {
                     return;
                 }
             }
             phuongtien.add(GeneralSettings.PHUONGTIEN_XEDAP);
         }
-        if(buttonText.equals(getResources().getString(R.string.xechuyendung))){
+        if (buttonText.equals(getResources().getString(R.string.xechuyendung))) {
             for (String pt : phuongtien) {
-                if (GeneralSettings.PHUONGTIEN_XECHUYENDUNG.equals(pt)){
+                if (GeneralSettings.PHUONGTIEN_XECHUYENDUNG.equals(pt)) {
                     return;
                 }
             }
             phuongtien.add(GeneralSettings.PHUONGTIEN_XECHUYENDUNG);
         }
-        if(buttonText.equals(getResources().getString(R.string.tauhoa))){
+        if (buttonText.equals(getResources().getString(R.string.tauhoa))) {
             for (String pt : phuongtien) {
-                if (GeneralSettings.PHUONGTIEN_TAUHOA.equals(pt)){
+                if (GeneralSettings.PHUONGTIEN_TAUHOA.equals(pt)) {
                     return;
                 }
             }
             phuongtien.add(GeneralSettings.PHUONGTIEN_TAUHOA);
         }
-        if(buttonText.equals(getResources().getString(R.string.dibo))){
+        if (buttonText.equals(getResources().getString(R.string.dibo))) {
             for (String pt : phuongtien) {
-                if (GeneralSettings.PHUONGTIEN_DIBO.equals(pt)){
+                if (GeneralSettings.PHUONGTIEN_DIBO.equals(pt)) {
                     return;
                 }
             }
@@ -650,22 +658,22 @@ public class SearchActivity extends AppCompatActivity {
     private void removePhuongtienFromList(Button button) {
         String buttonText = button.getText().toString();
 
-        if(buttonText.equals(getResources().getString(R.string.oto))){
+        if (buttonText.equals(getResources().getString(R.string.oto))) {
             buttonText = GeneralSettings.PHUONGTIEN_OTO;
         }
-        if(buttonText.equals(getResources().getString(R.string.xemay_moto))){
+        if (buttonText.equals(getResources().getString(R.string.xemay_moto))) {
             buttonText = GeneralSettings.PHUONGTIEN_XEMAY;
         }
-        if(buttonText.equals(getResources().getString(R.string.xedap_xethoso))){
+        if (buttonText.equals(getResources().getString(R.string.xedap_xethoso))) {
             buttonText = GeneralSettings.PHUONGTIEN_XEDAP;
         }
-        if(buttonText.equals(getResources().getString(R.string.xechuyendung))){
+        if (buttonText.equals(getResources().getString(R.string.xechuyendung))) {
             buttonText = GeneralSettings.PHUONGTIEN_XECHUYENDUNG;
         }
-        if(buttonText.equals(getResources().getString(R.string.tauhoa))){
+        if (buttonText.equals(getResources().getString(R.string.tauhoa))) {
             buttonText = GeneralSettings.PHUONGTIEN_TAUHOA;
         }
-        if(buttonText.equals(getResources().getString(R.string.dibo))){
+        if (buttonText.equals(getResources().getString(R.string.dibo))) {
             buttonText = GeneralSettings.PHUONGTIEN_DIBO;
         }
 
@@ -686,27 +694,27 @@ public class SearchActivity extends AppCompatActivity {
         updateFilterLabel();
     }
 
-    private void updateMucphatFilters(){
+    private void updateMucphatFilters() {
         int tu = -1;
         int den = -1;
         try {
-            mucphat.put("tu",GeneralSettings.mucphatRange[spMucphatTu.getSelectedItemPosition() - 1]);
+            mucphat.put("tu", GeneralSettings.mucphatRange[spMucphatTu.getSelectedItemPosition() - 1]);
             tu = Integer.parseInt(mucphat.get("tu").replace(".", ""));
-        }catch (Exception ex){
-            Log.i(TAG,"mucphat.get('tu') is not valid");
+        } catch (Exception ex) {
+            Log.i(TAG, "mucphat.get('tu') is not valid");
         }
-        try{
-            mucphat.put("den",GeneralSettings.mucphatRange[spMucphatDen.getSelectedItemPosition() - 1]);
+        try {
+            mucphat.put("den", GeneralSettings.mucphatRange[spMucphatDen.getSelectedItemPosition() - 1]);
             den = Integer.parseInt(mucphat.get("den").replace(".", ""));
-        }catch (Exception ex){
-            Log.i(TAG,"mucphat.get('den') is not valid");
+        } catch (Exception ex) {
+            Log.i(TAG, "mucphat.get('den') is not valid");
         }
 
-        if (tu >= 0 && den >= 0){
-            if (tu > den){
+        if (tu >= 0 && den >= 0) {
+            if (tu > den) {
                 String temp = mucphat.get("tu");
-                mucphat.put("tu",mucphat.get("den"));
-                mucphat.put("den",temp);
+                mucphat.put("tu", mucphat.get("den"));
+                mucphat.put("den", temp);
                 int tuPos = spMucphatTu.getSelectedItemPosition();
                 spMucphatTu.setSelection(spMucphatDen.getSelectedItemPosition());
                 spMucphatDen.setSelection(tuPos);
@@ -715,10 +723,10 @@ public class SearchActivity extends AppCompatActivity {
         updateFilterLabel();
     }
 
-    private void addVanbanidToList(String vanbanKey){
-        String vbID = GeneralSettings.getVanbanInfo(vanbanKey,"id");
+    private void addVanbanidToList(String vanbanKey) {
+        String vbID = GeneralSettings.getVanbanInfo(vanbanKey, "id");
         for (String id : vanbanid) {
-            if (vbID.equals(id)){
+            if (vbID.equals(id)) {
                 return;
             }
         }
@@ -726,7 +734,7 @@ public class SearchActivity extends AppCompatActivity {
         updateFilterLabel();
     }
 
-    private void removeVanbanidFromList(String vanbanKey){
+    private void removeVanbanidFromList(String vanbanKey) {
         if (vanbanid.size() > 0) {
             String vbID = GeneralSettings.getVanbanInfo(vanbanKey, "id");
             int idx = 0;
@@ -745,15 +753,15 @@ public class SearchActivity extends AppCompatActivity {
         updateFilterLabel();
     }
 
-    private void updateFilterLabel(){
+    private void updateFilterLabel() {
         String loctheo = "";
-        switch (searchType){
+        switch (searchType) {
             case GeneralSettings.SEARCH_TYPE_VANBAN:
                 for (String vbID : vanbanid) {
                     for (String vbKey :
                             GeneralSettings.danhsachvanban) {
-                        if (vbID.equals(GeneralSettings.getVanbanInfo(vbKey,"id"))){
-                            loctheo += GeneralSettings.getVanbanInfo(vbKey,"fullName") + ", ";
+                        if (vbID.equals(GeneralSettings.getVanbanInfo(vbKey, "id"))) {
+                            loctheo += GeneralSettings.getVanbanInfo(vbKey, "fullName") + ", ";
                         }
                     }
                 }
@@ -762,13 +770,13 @@ public class SearchActivity extends AppCompatActivity {
                 for (String pt : phuongtien) {
                     loctheo += pt + ", ";
                 }
-                if (mucphat.get("tu") != null && mucphat.get("den") != null){
+                if (mucphat.get("tu") != null && mucphat.get("den") != null) {
                     loctheo += "từ " + mucphat.get("tu") + " đến " + mucphat.get("den") + ", ";
-                }else {
-                    if (mucphat.get("tu") != null){
+                } else {
+                    if (mucphat.get("tu") != null) {
                         loctheo += "trên " + mucphat.get("tu") + ", ";
                     }
-                    if (mucphat.get("den") != null){
+                    if (mucphat.get("den") != null) {
                         loctheo += "dưới " + mucphat.get("den") + ", ";
                     }
                 }
@@ -780,46 +788,46 @@ public class SearchActivity extends AppCompatActivity {
 
         if (loctheo.length() > 2) {
             txtLoctheo.setText(loctheo.substring(0, loctheo.length() - 2));
-        }else {
+        } else {
             txtLoctheo.setText(loctheo);
         }
     }
 
-    private void updateUIFromFilterData(){
-        switch (searchType){
+    private void updateUIFromFilterData() {
+        switch (searchType) {
             case GeneralSettings.SEARCH_TYPE_VANBAN:
                 ArrayList<String> notListedVanban = new ArrayList<>();
                 for (String vbk : GeneralSettings.danhsachvanban) {
                     if (vanbanid.contains(GeneralSettings.getVanbanInfo(vbk, "id"))) {
-                        if (vbk.equals(GeneralSettings.danhsachvanban[0])){
+                        if (vbk.equals(GeneralSettings.danhsachvanban[0])) {
                             cbND46.setChecked(true);
                         }
-                        if (vbk.equals(GeneralSettings.danhsachvanban[1])){
+                        if (vbk.equals(GeneralSettings.danhsachvanban[1])) {
                             cbQC41.setChecked(true);
                         }
-                        if (vbk.equals(GeneralSettings.danhsachvanban[2])){
+                        if (vbk.equals(GeneralSettings.danhsachvanban[2])) {
                             cbTT01.setChecked(true);
                         }
-                        if (vbk.equals(GeneralSettings.danhsachvanban[3])){
+                        if (vbk.equals(GeneralSettings.danhsachvanban[3])) {
                             cbLGTDB.setChecked(true);
                         }
-                        if (vbk.equals(GeneralSettings.danhsachvanban[4])){
+                        if (vbk.equals(GeneralSettings.danhsachvanban[4])) {
                             cbLXLVPHC.setChecked(true);
                         }
-                    }else {
-                        if (vbk.equals(GeneralSettings.danhsachvanban[0])){
+                    } else {
+                        if (vbk.equals(GeneralSettings.danhsachvanban[0])) {
                             cbND46.setChecked(false);
                         }
-                        if (vbk.equals(GeneralSettings.danhsachvanban[1])){
+                        if (vbk.equals(GeneralSettings.danhsachvanban[1])) {
                             cbQC41.setChecked(false);
                         }
-                        if (vbk.equals(GeneralSettings.danhsachvanban[2])){
+                        if (vbk.equals(GeneralSettings.danhsachvanban[2])) {
                             cbTT01.setChecked(false);
                         }
-                        if (vbk.equals(GeneralSettings.danhsachvanban[3])){
+                        if (vbk.equals(GeneralSettings.danhsachvanban[3])) {
                             cbLGTDB.setChecked(false);
                         }
-                        if (vbk.equals(GeneralSettings.danhsachvanban[4])){
+                        if (vbk.equals(GeneralSettings.danhsachvanban[4])) {
                             cbLXLVPHC.setChecked(false);
                         }
                     }
@@ -827,39 +835,39 @@ public class SearchActivity extends AppCompatActivity {
                 break;
             case GeneralSettings.SEARCH_TYPE_MUCPHAT:
                 for (String pt : phuongtien) {
-                    switch (pt){
+                    switch (pt) {
                         case GeneralSettings.PHUONGTIEN_DIBO:
-                            setButtonBackgroundColor(btnPhuongtienDibo,true);
+                            setButtonBackgroundColor(btnPhuongtienDibo, true);
                             break;
                         case GeneralSettings.PHUONGTIEN_XECHUYENDUNG:
-                            setButtonBackgroundColor(btnPhuongtienXechuyendung,true);
+                            setButtonBackgroundColor(btnPhuongtienXechuyendung, true);
                             break;
                         case GeneralSettings.PHUONGTIEN_XEDAP:
-                            setButtonBackgroundColor(btnPhuongtienXedap,true);
+                            setButtonBackgroundColor(btnPhuongtienXedap, true);
                             break;
                         case GeneralSettings.PHUONGTIEN_XEMAY:
-                            setButtonBackgroundColor(btnPhuongtienXemay,true);
+                            setButtonBackgroundColor(btnPhuongtienXemay, true);
                             break;
                         case GeneralSettings.PHUONGTIEN_TAUHOA:
-                            setButtonBackgroundColor(btnPhuongtienTauhoa,true);
+                            setButtonBackgroundColor(btnPhuongtienTauhoa, true);
                             break;
                         case GeneralSettings.PHUONGTIEN_OTO:
-                            setButtonBackgroundColor(btnPhuongtienOto,true);
+                            setButtonBackgroundColor(btnPhuongtienOto, true);
                             break;
                         default:
                             break;
                     }
                 }
-                if (mucphat.get("tu") != null){
-                    for (int i = 0;i < GeneralSettings.mucphatRange.length;i++){
-                        if (mucphat.get("tu").equals(GeneralSettings.mucphatRange[i])){
+                if (mucphat.get("tu") != null) {
+                    for (int i = 0; i < GeneralSettings.mucphatRange.length; i++) {
+                        if (mucphat.get("tu").equals(GeneralSettings.mucphatRange[i])) {
                             spMucphatTu.setSelection(i + 1);
                         }
                     }
                 }
-                if (mucphat.get("den") != null){
-                    for (int i = 0;i < GeneralSettings.mucphatRange.length;i++){
-                        if (mucphat.get("den").equals(GeneralSettings.mucphatRange[i])){
+                if (mucphat.get("den") != null) {
+                    for (int i = 0; i < GeneralSettings.mucphatRange.length; i++) {
+                        if (mucphat.get("den").equals(GeneralSettings.mucphatRange[i])) {
                             spMucphatDen.setSelection(i + 1);
                         }
                     }
@@ -870,11 +878,11 @@ public class SearchActivity extends AppCompatActivity {
         }
     }
 
-    private void setButtonBackgroundColor(Button button, boolean isActive){
-        if (isActive){
+    private void setButtonBackgroundColor(Button button, boolean isActive) {
+        if (isActive) {
             button.setBackgroundColor(colorSelectedBtnBg);
             button.setTextColor(getResources().getColor(R.color.white));
-        }else {
+        } else {
             button.setBackgroundColor(colorNormalBtnBg);
             button.setTextColor(colorNormalBtnFg);
         }

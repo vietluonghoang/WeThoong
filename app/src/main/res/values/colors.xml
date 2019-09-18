@@ -7,4 +7,5 @@
     <color name="white">#ffffff</color>
     <color name="normalBtnBG">#87ede8</color>
     <color name="selectedBtnBG">#728be5</color>
+    <color name="grayout">#c9ccd1</color>
 </resources>

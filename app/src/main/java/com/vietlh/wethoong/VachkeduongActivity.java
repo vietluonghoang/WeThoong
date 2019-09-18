@@ -105,6 +105,16 @@ public class VachkeduongActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        boolean isInForeground = new RedirectionHelper().isAppInForeground(getApplicationContext());
+        System.out.println("############ In Onstop - " + isInForeground);
+        if (!isInForeground) {
+            GeneralSettings.isAppClosed = true;
+        }
+    }
+
     private void initAds() {
         adsView = (LinearLayout) findViewById(R.id.adsView);
         adsHelper.updateLastConnectionState();
@@ -164,7 +174,7 @@ public class VachkeduongActivity extends AppCompatActivity {
         searchResultRecyclerView.setLayoutManager(recyclerLayoutManager);
 
         // specify an adapter (see also next example)
-        searchResultListRecyclerAdapter = new ListRecyclerViewAdapter(this, allDieukhoan, 0,50);
+        searchResultListRecyclerAdapter = new ListRecyclerViewAdapter(this, allDieukhoan, 0, 50);
         updateResultList("");
 
         searchResultRecyclerView.setAdapter(searchResultListRecyclerAdapter);
@@ -193,11 +203,11 @@ public class VachkeduongActivity extends AppCompatActivity {
     }
 
     private void initVachShapeGroups() {
-        HashMap<String,String> groups = queries.getVachGroups();
+        HashMap<String, String> groups = queries.getVachGroups();
         for (String name :
                 groups.keySet()) {
             selectedVachShapeGroups.put(name, true);
-            shapeGroupNamePair.put(name,groups.get(name));
+            shapeGroupNamePair.put(name, groups.get(name));
         }
     }
 
@@ -212,7 +222,7 @@ public class VachkeduongActivity extends AppCompatActivity {
                 updateVachDetailsSelection(btnVachDetailsCross);
             }
         });
-        cloutCrossView = (ConstraintLayout)findViewById(R.id.crossView);
+        cloutCrossView = (ConstraintLayout) findViewById(R.id.crossView);
         cloutCrossView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -228,7 +238,7 @@ public class VachkeduongActivity extends AppCompatActivity {
                 updateVachDetailsSelection(btnVachDetailsOnroad);
             }
         });
-        cloutOnroadView = (ConstraintLayout)findViewById(R.id.onroadView);
+        cloutOnroadView = (ConstraintLayout) findViewById(R.id.onroadView);
         cloutOnroadView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -244,7 +254,7 @@ public class VachkeduongActivity extends AppCompatActivity {
                 updateVachDetailsSelection(btnVachDetailsSidewalk);
             }
         });
-        cloutSidewalkView = (ConstraintLayout)findViewById(R.id.sidewalkView);
+        cloutSidewalkView = (ConstraintLayout) findViewById(R.id.sidewalkView);
         cloutSidewalkView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -260,7 +270,7 @@ public class VachkeduongActivity extends AppCompatActivity {
                 updateVachDetailsSelection(btnVachDetailsObstacle);
             }
         });
-        cloutObstacleView = (ConstraintLayout)findViewById(R.id.obstacleView);
+        cloutObstacleView = (ConstraintLayout) findViewById(R.id.obstacleView);
         cloutObstacleView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -283,8 +293,8 @@ public class VachkeduongActivity extends AppCompatActivity {
         int desirableHeight = (int) ((float) helper.getScreenHeight() * 0.15);
         int desirablePadding = (int) ((float) desirableHeight * 0.05);
 
-        ((ImageButton)findViewById(R.id.btnLeftNav)).setBackground(helper.getDrawableFromAssets(this,"parts/navigate_left.png"));
-        ((ImageButton)findViewById(R.id.btnRightNav)).setBackground(helper.getDrawableFromAssets(this,"parts/navigate_right.png"));
+        ((ImageButton) findViewById(R.id.btnLeftNav)).setBackground(helper.getDrawableFromAssets(this, "parts/navigate_left.png"));
+        ((ImageButton) findViewById(R.id.btnRightNav)).setBackground(helper.getDrawableFromAssets(this, "parts/navigate_right.png"));
 
         ArrayList<String> groups = new ArrayList<>();
         for (String group :
@@ -329,8 +339,8 @@ public class VachkeduongActivity extends AppCompatActivity {
             }
         }
 
-        if (!isSelectedVachShapePersisted && isVachShapeSelected(currentSelectedVachShape)){
-            selectedVachShapes.put(currentSelectedVachShape,false);
+        if (!isSelectedVachShapePersisted && isVachShapeSelected(currentSelectedVachShape)) {
+            selectedVachShapes.put(currentSelectedVachShape, false);
         }
     }
 
@@ -378,7 +388,7 @@ public class VachkeduongActivity extends AppCompatActivity {
         for (String detailsGroup : selectedVachDetails.keySet()) {
             //TO DO: in future, if we support advance search which allows user to select a (or many) figures/signs in each group, the value that appends to 'params' should has the same form of 'plateShape' above (with colon in the midlle of group and figure/sign name)
             if (selectedVachDetails.get(detailsGroup)) {
-                params.add("positions:"+detailsGroup.trim());
+                params.add("positions:" + detailsGroup.trim());
             }
         }
         return params;
@@ -702,10 +712,10 @@ public class VachkeduongActivity extends AppCompatActivity {
             } else {
                 child.setBackgroundColor(colorNormalBtnBg);
                 if (imgView != null) {
-                    if (isVachShapeSelected((String) ((ImageView)child.getChildAt(0)).getTag())) {
+                    if (isVachShapeSelected((String) ((ImageView) child.getChildAt(0)).getTag())) {
                         isAlreadyRemoved = true;
                     }
-                    selectedVachShapes.put((String) ((ImageView)child.getChildAt(0)).getTag(), false);
+                    selectedVachShapes.put((String) ((ImageView) child.getChildAt(0)).getTag(), false);
                 }
             }
             if (isAlreadyRemoved && isAlreadySet) {

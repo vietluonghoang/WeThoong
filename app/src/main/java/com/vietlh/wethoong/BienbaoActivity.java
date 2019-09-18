@@ -132,6 +132,16 @@ public class BienbaoActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        boolean isInForeground = new RedirectionHelper().isAppInForeground(getApplicationContext());
+        System.out.println("############ In Onstop - " + isInForeground);
+        if (!isInForeground) {
+            GeneralSettings.isAppClosed = true;
+        }
+    }
+
     private void initAds() {
         adsView = (LinearLayout) findViewById(R.id.adsView);
         adsHelper.updateLastConnectionState();
@@ -191,7 +201,7 @@ public class BienbaoActivity extends AppCompatActivity {
         searchResultRecyclerView.setLayoutManager(recyclerLayoutManager);
 
         // specify an adapter (see also next example)
-        searchResultListRecyclerAdapter = new ListRecyclerViewAdapter(this, allDieukhoan, 0,50);
+        searchResultListRecyclerAdapter = new ListRecyclerViewAdapter(this, allDieukhoan, 0, 50);
         updateResultList("");
 
         searchResultRecyclerView.setAdapter(searchResultListRecyclerAdapter);
@@ -238,7 +248,7 @@ public class BienbaoActivity extends AppCompatActivity {
                 updatePlateDetailsSelection(btnPlateDetailsAlphanumerics);
             }
         });
-        cloutAlphanumericsView = (ConstraintLayout)findViewById(R.id.alphanumericsView);
+        cloutAlphanumericsView = (ConstraintLayout) findViewById(R.id.alphanumericsView);
         cloutAlphanumericsView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -254,7 +264,7 @@ public class BienbaoActivity extends AppCompatActivity {
                 updatePlateDetailsSelection(btnPlateDetailsArrow);
             }
         });
-        cloutArrowView = (ConstraintLayout)findViewById(R.id.arrowView);
+        cloutArrowView = (ConstraintLayout) findViewById(R.id.arrowView);
         cloutArrowView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -270,7 +280,7 @@ public class BienbaoActivity extends AppCompatActivity {
                 updatePlateDetailsSelection(btnPlateDetailsCreatures);
             }
         });
-        cloutCreaturesView = (ConstraintLayout)findViewById(R.id.creaturesView);
+        cloutCreaturesView = (ConstraintLayout) findViewById(R.id.creaturesView);
         cloutCreaturesView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -286,7 +296,7 @@ public class BienbaoActivity extends AppCompatActivity {
                 updatePlateDetailsSelection(btnPlateDetailsStructures);
             }
         });
-        cloutStructuresView = (ConstraintLayout)findViewById(R.id.structuresView);
+        cloutStructuresView = (ConstraintLayout) findViewById(R.id.structuresView);
         cloutStructuresView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -302,7 +312,7 @@ public class BienbaoActivity extends AppCompatActivity {
                 updatePlateDetailsSelection(btnPlateDetailsFigures);
             }
         });
-        cloutFiguresView = (ConstraintLayout)findViewById(R.id.figuresView);
+        cloutFiguresView = (ConstraintLayout) findViewById(R.id.figuresView);
         cloutFiguresView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -318,7 +328,7 @@ public class BienbaoActivity extends AppCompatActivity {
                 updatePlateDetailsSelection(btnPlateDetailsVehicles);
             }
         });
-        cloutVehiclesView = (ConstraintLayout)findViewById(R.id.vehiclesView);
+        cloutVehiclesView = (ConstraintLayout) findViewById(R.id.vehiclesView);
         cloutVehiclesView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -334,7 +344,7 @@ public class BienbaoActivity extends AppCompatActivity {
                 updatePlateDetailsSelection(btnPlateDetailsSigns);
             }
         });
-        cloutSignsView = (ConstraintLayout)findViewById(R.id.signsView);
+        cloutSignsView = (ConstraintLayout) findViewById(R.id.signsView);
         cloutSignsView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -352,7 +362,7 @@ public class BienbaoActivity extends AppCompatActivity {
 //                updatePlateDetailsSelection(btnPlateDetailsExtras);
             }
         });
-        cloutExtrasView = (ConstraintLayout)findViewById(R.id.extrasView);
+        cloutExtrasView = (ConstraintLayout) findViewById(R.id.extrasView);
         cloutExtrasView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -375,8 +385,8 @@ public class BienbaoActivity extends AppCompatActivity {
         int desirableHeight = (int) ((float) helper.getScreenHeight() * 0.1);
         int desirablePadding = (int) ((float) desirableHeight * 0.05);
 
-        ((ImageButton)findViewById(R.id.btnLeftNav)).setBackground(helper.getDrawableFromAssets(this,"parts/navigate_left.png"));
-        ((ImageButton)findViewById(R.id.btnRightNav)).setBackground(helper.getDrawableFromAssets(this,"parts/navigate_right.png"));
+        ((ImageButton) findViewById(R.id.btnLeftNav)).setBackground(helper.getDrawableFromAssets(this, "parts/navigate_left.png"));
+        ((ImageButton) findViewById(R.id.btnRightNav)).setBackground(helper.getDrawableFromAssets(this, "parts/navigate_right.png"));
 
         ArrayList<String> groups = new ArrayList<>();
         for (String group :
@@ -421,8 +431,8 @@ public class BienbaoActivity extends AppCompatActivity {
             }
         }
 
-        if (!isSelectedPlateShapePersisted && isPlateShapeSelected(currentSelectedPlateShape)){
-            selectedPlateShapes.put(currentSelectedPlateShape,false);
+        if (!isSelectedPlateShapePersisted && isPlateShapeSelected(currentSelectedPlateShape)) {
+            selectedPlateShapes.put(currentSelectedPlateShape, false);
         }
     }
 
@@ -749,10 +759,10 @@ public class BienbaoActivity extends AppCompatActivity {
             } else {
                 child.setBackgroundColor(colorNormalBtnBg);
                 if (imgView != null) {
-                    if (isPlateShapeSelected((String) ((ImageView)child.getChildAt(0)).getTag())) {
+                    if (isPlateShapeSelected((String) ((ImageView) child.getChildAt(0)).getTag())) {
                         isAlreadyRemoved = true;
                     }
-                    selectedPlateShapes.put((String) ((ImageView)child.getChildAt(0)).getTag(), false);
+                    selectedPlateShapes.put((String) ((ImageView) child.getChildAt(0)).getTag(), false);
                 }
             }
             if (isAlreadyRemoved && isAlreadySet) {
