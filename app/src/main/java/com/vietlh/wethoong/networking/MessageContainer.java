@@ -8,7 +8,7 @@ public class MessageContainer {
     public static final String ERROR = "error";
     public static final String DATA = "data";
 
-    private HashMap<String,Object> messages = new HashMap<>();
+    private HashMap<String, Object> messages = new HashMap<>();
 
     public void setValue(String key, Object value) {
         messages.put(key, value);
@@ -30,7 +30,7 @@ public class MessageContainer {
         setValue(key, value);
     }
 
-    public Object getValue(String key){
+    public Object getValue(String key) {
         return messages.get(key);
     }
 }

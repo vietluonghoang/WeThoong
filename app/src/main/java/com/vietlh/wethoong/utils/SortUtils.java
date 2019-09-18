@@ -13,12 +13,12 @@ import java.util.Comparator;
 public class SortUtils {
     public ArrayList<Dieukhoan> sortBySortPoint(ArrayList<Dieukhoan> listDieukhoan, boolean isAscending) {
         final boolean itIsAscending = true;
-        Collections.sort(listDieukhoan,new Comparator<Dieukhoan>() {
+        Collections.sort(listDieukhoan, new Comparator<Dieukhoan>() {
             @Override
             public int compare(Dieukhoan o1, Dieukhoan o2) {
                 if (itIsAscending) {
                     return (o1.getSortPoint() > o2.getSortPoint() ? 1 : (o1.getSortPoint() < o2.getSortPoint() ? -1 : 0));
-                }else {
+                } else {
                     return (o1.getSortPoint() > o2.getSortPoint() ? -1 : (o1.getSortPoint() < o2.getSortPoint() ? 1 : 0));
                 }
             }
@@ -28,12 +28,12 @@ public class SortUtils {
 
     public ArrayList<Dieukhoan> sortByMatchCount(ArrayList<Dieukhoan> listDieukhoan, boolean isAscending) {
         final boolean itIsAscending = true;
-        Collections.sort(listDieukhoan,new Comparator<Dieukhoan>() {
+        Collections.sort(listDieukhoan, new Comparator<Dieukhoan>() {
             @Override
             public int compare(Dieukhoan o1, Dieukhoan o2) {
                 if (itIsAscending) {
                     return (o1.getMatchCount() > o2.getMatchCount() ? 1 : (o1.getMatchCount() < o2.getMatchCount() ? -1 : 0));
-                }else {
+                } else {
                     return (o1.getMatchCount() > o2.getMatchCount() ? -1 : (o1.getMatchCount() < o2.getMatchCount() ? 1 : 0));
                 }
             }
@@ -43,12 +43,12 @@ public class SortUtils {
 
     public ArrayList<Dieukhoan> sortByFirstAppearanceDistance(ArrayList<Dieukhoan> listDieukhoan, boolean isAscending) {
         final boolean itIsAscending = true;
-        Collections.sort(listDieukhoan,new Comparator<Dieukhoan>() {
+        Collections.sort(listDieukhoan, new Comparator<Dieukhoan>() {
             @Override
             public int compare(Dieukhoan o1, Dieukhoan o2) {
                 if (itIsAscending) {
                     return (o1.getFirstAppearanceDistance() > o2.getFirstAppearanceDistance() ? 1 : (o1.getFirstAppearanceDistance() < o2.getFirstAppearanceDistance() ? -1 : 0));
-                }else {
+                } else {
                     return (o1.getFirstAppearanceDistance() > o2.getFirstAppearanceDistance() ? -1 : (o1.getFirstAppearanceDistance() < o2.getFirstAppearanceDistance() ? 1 : 0));
                 }
             }
@@ -141,15 +141,15 @@ public class SortUtils {
 
     public ArrayList<Dieukhoan> sortByBestMatch(ArrayList<Dieukhoan> listDieukhoan, String keyword) {
         ArrayList<Dieukhoan> sortedList = sortByRelevent(listDieukhoan, keyword.toLowerCase());
-        sortedList = sortByEarlyMatch(sortedList,keyword.toLowerCase());
+        sortedList = sortByEarlyMatch(sortedList, keyword.toLowerCase());
 
         if (!sortedList.isEmpty()) {
-            Collections.sort(sortedList,new Comparator<Dieukhoan>() {
+            Collections.sort(sortedList, new Comparator<Dieukhoan>() {
                 @Override
                 public int compare(Dieukhoan o1, Dieukhoan o2) {
                     return ((o1.getMatchCount() > o2.getMatchCount())
                             || ((o1.getMatchCount() == o2.getMatchCount()
-                                && o1.getFirstAppearanceDistance() > o2.getFirstAppearanceDistance()))
+                            && o1.getFirstAppearanceDistance() > o2.getFirstAppearanceDistance()))
                             ? 1 : (o1.getMatchCount() < o2.getMatchCount() ? -1 : 0));
                 }
             });

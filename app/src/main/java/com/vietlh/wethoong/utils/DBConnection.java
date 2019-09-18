@@ -15,7 +15,7 @@ import java.io.OutputStream;
  * Created by vietlh on 2/23/18.
  */
 
-public class DBConnection extends SQLiteOpenHelper{
+public class DBConnection extends SQLiteOpenHelper {
     private static final String TAG = "SQLiteOpenHelper";
 
     private final Context context;
@@ -44,16 +44,15 @@ public class DBConnection extends SQLiteOpenHelper{
      * Copy packaged database from assets folder to the database created in the
      * application package context.
      *
-     * @param db
-     *            The target database in the application package context.
+     * @param db The target database in the application package context.
      */
     private void copyDatabaseFromAssets(SQLiteDatabase db) {
-        Log.i(TAG,"copyDatabase");
+        Log.i(TAG, "copyDatabase");
         InputStream myInput = null;
         OutputStream myOutput = null;
         try {
             // Open db packaged as asset as the input stream
-            Log.i(TAG, "==="+context.getAssets().list(assetPath).length + " - " + context.getAssets().list(assetPath)[0]);
+            Log.i(TAG, "===" + context.getAssets().list(assetPath).length + " - " + context.getAssets().list(assetPath)[0]);
             myInput = context.getAssets().open("database/Hieuluat.sqlite");
             // Open the db in the application package context:
             myOutput = new FileOutputStream(db.getPath());
@@ -74,10 +73,10 @@ public class DBConnection extends SQLiteOpenHelper{
             copiedDb.close();
 
         } catch (IOException e) {
-            Log.i(TAG,"ERROR: Failed on Copying Database: \n" + e.getMessage());
-            for (StackTraceElement trace:
-                 e.getStackTrace()) {
-                Log.i(TAG,trace.toString());
+            Log.i(TAG, "ERROR: Failed on Copying Database: \n" + e.getMessage());
+            for (StackTraceElement trace :
+                    e.getStackTrace()) {
+                Log.i(TAG, trace.toString());
             }
 
             e.printStackTrace();
@@ -148,7 +147,7 @@ public class DBConnection extends SQLiteOpenHelper{
         }
     }
 
-    public Cursor executeQuery(String query){
-        return this.database.rawQuery(query,null);
+    public Cursor executeQuery(String query) {
+        return this.database.rawQuery(query, null);
     }
 }

@@ -1,4 +1,5 @@
 package com.vietlh.wethoong.entities;
+
 import java.util.ArrayList;
 
 /**
@@ -141,7 +142,7 @@ public class Dieukhoan {
         this.id = id;
         this.cha = cha;
         this.vanban = vanban;
-        this.so ="";
+        this.so = "";
         this.tieude = "";
         this.noidung = "";
         this.sortPoint = 0;
@@ -168,8 +169,8 @@ public class Dieukhoan {
         this.vanban = vanban;
     }
 
-    public void addMinhhoa(String minhhoa){
-        if (minhhoa.length() > 0){
+    public void addMinhhoa(String minhhoa) {
+        if (minhhoa.length() > 0) {
             this.minhhoa.add(minhhoa);
         }
     }

@@ -63,7 +63,7 @@ public class HomeActivity extends AppCompatActivity {
             GeneralSettings.isAppClosed = false;
         }
         updateAppConfigs();
-        if (checkIfNeedToUpdate()){
+        if (checkIfNeedToUpdate()) {
             openUpdateScreen();
         }
     }
@@ -247,7 +247,7 @@ public class HomeActivity extends AppCompatActivity {
         }
         int result = compareVersionNames(versionName, GeneralSettings.MINIMUM_APP_VERSION_REQUIRED);
 
-        if (result == -1){
+        if (result == -1) {
             return true;
         }
         return false;
@@ -325,7 +325,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void openUpdateScreen() {
-        Intent i = new Intent(getApplicationContext(), ChungtoiActivity.class);
+        Intent i = new Intent(getApplicationContext(), UpdateActivity.class);
         startActivity(i);
     }
 }

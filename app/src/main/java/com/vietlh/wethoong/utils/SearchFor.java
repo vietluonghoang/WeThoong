@@ -21,10 +21,10 @@ public class SearchFor {
 
     public SearchFor(Context context) {
         this.context = context;
-        queries= new Queries(DBConnection.getInstance(context));
+        queries = new Queries(DBConnection.getInstance(context));
     }
 
-    public ArrayList<String> regexSearch(String pattern, String searchIn){
+    public ArrayList<String> regexSearch(String pattern, String searchIn) {
         ArrayList<String> allMatches = new ArrayList<>();
         try {
             String input = searchIn.toLowerCase();
@@ -35,8 +35,8 @@ public class SearchFor {
                 allMatches.add(matcher.group());
             }
 
-        } catch (Exception ex){
-            Log.i(TAG,"Error with RegEx");
+        } catch (Exception ex) {
+            Log.i(TAG, "Error with RegEx");
         }
         return allMatches;
     }
@@ -44,7 +44,7 @@ public class SearchFor {
     public boolean isStringExisted(String str, ArrayList<String> strArr) {
         for (String key :
                 strArr) {
-            if (key.equals(str)){
+            if (key.equals(str)) {
                 return true;
             }
         }
@@ -55,12 +55,12 @@ public class SearchFor {
         String ancesters = "";
         if (dieukhoan.getCha() == 0) {
             ancesters = "" + dieukhoan.getId();
-        }else{
+        } else {
             ancesters = "" + dieukhoan.getCha();
-            ArrayList<Dieukhoan> parents = queries.searchDieukhoanByID("" + dieukhoan.getCha(),vanbanId);
+            ArrayList<Dieukhoan> parents = queries.searchDieukhoanByID("" + dieukhoan.getCha(), vanbanId);
             while (parents.get(0).getCha() != 0) {
                 ancesters = "" + parents.get(0).getCha() + "-" + ancesters;
-                parents = queries.searchDieukhoanByID("" + parents.get(0).getCha(),vanbanId);
+                parents = queries.searchDieukhoanByID("" + parents.get(0).getCha(), vanbanId);
             }
 
         }
@@ -72,7 +72,7 @@ public class SearchFor {
         ArrayList<Dieukhoan> ancesters = new ArrayList<>();
 
         while (dk.getCha() != 0) {
-            dk = queries.searchDieukhoanByID("" + dk.getCha(),vanbanId).get(0);
+            dk = queries.searchDieukhoanByID("" + dk.getCha(), vanbanId).get(0);
             ancesters.add(dk);
         }
         return ancesters;
@@ -83,9 +83,9 @@ public class SearchFor {
         Dieukhoan dk = dieukhoan;
 
         while (dk.getCha() != 0) {
-            Dieukhoan parent = queries.searchDieukhoanByID("" + dk.getCha(),vanbanId).get(0);
+            Dieukhoan parent = queries.searchDieukhoanByID("" + dk.getCha(), vanbanId).get(0);
             dk = parent;
-            ancesters += dk.getSo()+"/";
+            ancesters += dk.getSo() + "/";
         }
         return ancesters;
     }
@@ -93,23 +93,23 @@ public class SearchFor {
     public Dieukhoan getDieunay(Dieukhoan currentDieukhoan, ArrayList<String> vanbanId) {
         Dieukhoan trackingDieukhoan = currentDieukhoan;
         while (!trackingDieukhoan.getSo().toLowerCase().contains("điều")) {
-            if(trackingDieukhoan.getCha() != 0){
-                trackingDieukhoan = queries.searchDieukhoanByID("" + trackingDieukhoan.getCha(),vanbanId).get(0);
-            }else{
+            if (trackingDieukhoan.getCha() != 0) {
+                trackingDieukhoan = queries.searchDieukhoanByID("" + trackingDieukhoan.getCha(), vanbanId).get(0);
+            } else {
                 return trackingDieukhoan;
             }
         }
         return trackingDieukhoan;
     }
 
-    public Dieukhoan getKhoannay(Dieukhoan currentDieukhoan, ArrayList<String> vanbanId)  {
+    public Dieukhoan getKhoannay(Dieukhoan currentDieukhoan, ArrayList<String> vanbanId) {
         Dieukhoan trackingDieukhoan = currentDieukhoan;
         Dieukhoan prevTrackingDieukhoan = currentDieukhoan;
         while (!trackingDieukhoan.getSo().toLowerCase().contains("điều")) {
             prevTrackingDieukhoan = trackingDieukhoan;
-            if(trackingDieukhoan.getCha() != 0){
-                trackingDieukhoan = queries.searchDieukhoanByID("" + trackingDieukhoan.getCha(),vanbanId).get(0);
-            }else{
+            if (trackingDieukhoan.getCha() != 0) {
+                trackingDieukhoan = queries.searchDieukhoanByID("" + trackingDieukhoan.getCha(), vanbanId).get(0);
+            } else {
                 return prevTrackingDieukhoan;
             }
         }

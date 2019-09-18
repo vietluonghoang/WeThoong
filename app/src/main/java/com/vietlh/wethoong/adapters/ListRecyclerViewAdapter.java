@@ -90,7 +90,7 @@ public class ListRecyclerViewAdapter extends RecyclerView.Adapter<ListRecyclerVi
             if (dk.getMinhhoa().size() > 0) {
                 int defaultMinhhoa = dk.getDefaultMinhhoa();
                 vHolder.showMinhhoa();
-                Bitmap bitmap = uHelper.getBitmapFromAssets(context, "minhhoa/" + dk.getMinhhoa().get(defaultMinhhoa).replace("\n","").trim());
+                Bitmap bitmap = uHelper.getBitmapFromAssets(context, "minhhoa/" + dk.getMinhhoa().get(defaultMinhhoa).replace("\n", "").trim());
                 vHolder.setImgView(bitmap);
             } else {
                 vHolder.hideMinhhoa();

@@ -87,7 +87,7 @@ public class DeviceInfoCollector extends AsyncTask<HashMap<String, String>, Void
 
     @Override
     protected HashMap<String, String> doInBackground(HashMap<String, String>... hashMaps) {
-        if (hashMaps.length > 0){
+        if (hashMaps.length > 0) {
             System.out.println("############ Getting device info....");
             hashMaps[0].put("idforvendor", getIdForVendor());
             hashMaps[0].put("adsid", getAdsId());
@@ -118,9 +118,9 @@ public class DeviceInfoCollector extends AsyncTask<HashMap<String, String>, Void
     @Override
     protected void onPostExecute(HashMap<String, String> stringStringHashMap) {
         super.onPostExecute(stringStringHashMap);
-        if (stringStringHashMap != null){
+        if (stringStringHashMap != null) {
             IS_READY = true;
         }
-        System.out.println("############ onPostExecute....\n"+stringStringHashMap);
+        System.out.println("############ onPostExecute....\n" + stringStringHashMap);
     }
 }
