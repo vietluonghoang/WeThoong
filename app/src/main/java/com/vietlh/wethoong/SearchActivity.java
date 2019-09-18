@@ -121,10 +121,8 @@ public class SearchActivity extends AppCompatActivity {
         ViewGroup.LayoutParams searchResultLayoutParams = searchResultRecyclerView.getLayoutParams();
         searchResultLayoutParams.width = helper.getScreenWidth();
         searchResultRecyclerView.setLayoutParams(searchResultLayoutParams);
+        initAds();
 
-        if (GeneralSettings.isAdsEnabled) {
-            initAds();
-        }
     }
 
     @Override
@@ -140,7 +138,7 @@ public class SearchActivity extends AppCompatActivity {
     private void initAds() {
         adsView = (LinearLayout) findViewById(R.id.adsView);
         adsHelper.updateLastConnectionState();
-        if (GeneralSettings.wasConnectedToInternet) {
+        if (GeneralSettings.wasConnectedToInternet && GeneralSettings.ENABLE_BANNER_ADS) {
             AdView googleAdView = new AdView(this);
             adsHelper.addBannerViewtoView(googleAdView, adsView);
             AdRequest adRequest = new AdRequest.Builder().build();

@@ -365,6 +365,8 @@
             android:id="@+id/btnXemthem"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/selectedBtnBG"
+            android:textColor="@color/white"
             android:text="@string/xem_cac_dieu_khoan_lien_quan" />
     </android.support.constraint.ConstraintLayout>
     <LinearLayout

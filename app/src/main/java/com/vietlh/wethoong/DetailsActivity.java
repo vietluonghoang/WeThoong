@@ -101,10 +101,7 @@ public class DetailsActivity extends AppCompatActivity {
         updateDetails();
 
         showDieukhoan();
-
-        if (GeneralSettings.isAdsEnabled) {
-            initAds();
-        }
+        initAds();
     }
 
     @Override
@@ -174,7 +171,7 @@ public class DetailsActivity extends AppCompatActivity {
     private void initAds() {
         adsView = (LinearLayout) findViewById(R.id.adsView);
         adsHelper.updateLastConnectionState();
-        if (GeneralSettings.wasConnectedToInternet) {
+        if (GeneralSettings.wasConnectedToInternet && GeneralSettings.ENABLE_BANNER_ADS) {
             AdView googleAdView = new AdView(this);
             adsHelper.addBannerViewtoView(googleAdView, adsView);
             AdRequest adRequest = new AdRequest.Builder().build();
@@ -194,7 +191,9 @@ public class DetailsActivity extends AppCompatActivity {
             btnFBBanner.setBackgroundResource(R.drawable.facebook_banner_wethoong);
             adsHelper.addButtonToView(btnFBBanner, adsView);
         }
-        adsHelper.initTJAds(this, getApplicationContext());
+        if (GeneralSettings.ENABLE_INTERSTITIAL_ADS) {
+            adsHelper.initTJAds(this, getApplicationContext());
+        }
     }
 
     private void updateDetails() {
