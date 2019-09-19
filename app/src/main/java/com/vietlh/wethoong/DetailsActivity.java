@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -113,6 +114,11 @@ public class DetailsActivity extends AppCompatActivity {
             GeneralSettings.isAppClosed = true;
         }
     }
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v,
+                                    ContextMenu.ContextMenuInfo menuInfo) {
+        helper.createContextMenu(menu, v,this);
+    }
 
     private void getPassingParameters() {
         dieukhoanId = (String) getIntent().getStringExtra("dieukhoanId");
@@ -125,12 +131,15 @@ public class DetailsActivity extends AppCompatActivity {
         lblVanban = (TextView) findViewById(R.id.lblVanban);
         lblDieukhoan = (TextView) findViewById(R.id.lblDieukhoan);
         lblNoidung = (TextView) findViewById(R.id.lblNoidung);
+        registerForContextMenu(lblNoidung);
         mucphatDetails = (TextView) findViewById(R.id.mucphatDetails);
         phuongtienDetails = (TextView) findViewById(R.id.phuongtienDetails);
         linhvucDetails = (TextView) findViewById(R.id.linhvucDetails);
         doituongDetails = (TextView) findViewById(R.id.doituongDetails);
         hinhphatbosungDetails = (TextView) findViewById(R.id.hinhphatbosungDetails);
+        registerForContextMenu(hinhphatbosungDetails);
         bienphapkhacphucDetails = (TextView) findViewById(R.id.bienphapkhacphucDetails);
+        registerForContextMenu(bienphapkhacphucDetails);
         tamgiuDetails = (TextView) findViewById(R.id.tamgiuDetails);
         thamquyenDetails = (TextView) findViewById(R.id.thamquyenDetails);
 

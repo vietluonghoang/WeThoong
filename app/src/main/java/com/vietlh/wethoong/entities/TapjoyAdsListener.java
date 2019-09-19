@@ -1,7 +1,6 @@
 package com.vietlh.wethoong.entities;
 
 import android.app.Activity;
-import android.content.Context;
 import android.util.Log;
 
 import com.tapjoy.TJActionRequest;
@@ -13,6 +12,7 @@ import com.tapjoy.TJPlacementVideoListener;
 import com.tapjoy.Tapjoy;
 import com.tapjoy.TapjoyLog;
 import com.vietlh.wethoong.utils.AdsHelper;
+import com.vietlh.wethoong.utils.GeneralSettings;
 
 import static android.support.constraint.Constraints.TAG;
 
@@ -43,6 +43,10 @@ public class TapjoyAdsListener extends Activity implements TJPlacementListener, 
         TapjoyLog.i(TAG, "onContentReady for placement " + tjPlacement.getName());
         if (AdsHelper.isValidToShowIntestitialAds()) {
             tjPlacement.showContent();
+            //record timestamp of the last video show
+            GeneralSettings.LAST_INTERSTITIAL_ADS_OPEN_TIMESTAMP = System.currentTimeMillis() / 1000;
+            //increase the time of show video
+            GeneralSettings.INTERSTITIAL_ADS_OPEN_TIME += 1;
         }
     }
 

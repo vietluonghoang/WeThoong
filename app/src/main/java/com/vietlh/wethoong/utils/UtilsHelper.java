@@ -1,5 +1,8 @@
 package com.vietlh.wethoong.utils;
 
+import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -14,9 +17,12 @@ import android.graphics.drawable.RippleDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.util.TypedValue;
+import android.view.ContextMenu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,6 +30,9 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
+
+import static android.content.Context.CLIPBOARD_SERVICE;
+import static android.support.v4.content.ContextCompat.getSystemService;
 
 /**
  * Created by vietlh on 2/26/18.
@@ -187,5 +196,20 @@ public class UtilsHelper {
         return r.nextInt((max - min) + 1) + min;
     }
 
+    public void createContextMenu(ContextMenu menu, View view, Activity activity) {
+        // user has long pressed your TextView
+        menu.add(0, view.getId(), 0,
+                "Copy");
+
+        // cast the received View to TextView so that you can get its text
+        TextView yourTextView = (TextView) view;
+
+        ClipboardManager clipboard = (ClipboardManager) activity.getSystemService(Context.CLIPBOARD_SERVICE);
+        // place your TextView's text in clipboard
+        ClipData clip = ClipData.newPlainText("noidung", yourTextView.getText());
+        clipboard.setPrimaryClip(clip);
+        Toast toast = Toast.makeText(activity, "Đã copy!", Toast.LENGTH_SHORT);
+        toast.show();
+    }
 
 }
