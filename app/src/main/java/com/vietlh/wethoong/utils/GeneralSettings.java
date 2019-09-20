@@ -21,7 +21,9 @@ public class GeneralSettings {
     public static final String PHUONGTIEN_DIBO = "Đi bộ";
     public static String tamgiuPhuongtienDieukhoanID = "2820";
 
-    public static boolean isAppClosed = false;
+    public static boolean isAdsEnabled = true;
+    public static boolean isDevMode = true;
+    public static int dbVersion = 4;
 
     public static String MINIMUM_APP_VERSION_REQUIRED = "1.0";
     public static boolean ENABLE_INAPP_NOTIF = false;
@@ -32,11 +34,9 @@ public class GeneralSettings {
     public static long LAST_APP_OPEN_TIMESTAMP = 0;
     public static long LAST_INTERSTITIAL_ADS_OPEN_TIMESTAMP = 0;
 
-    public static boolean isAdsEnabled = true;
-    public static boolean isDevMode = true;
-    public static int dbVersion = 4;
     public static int resultCountLimit = 100;
     public static boolean wasConnectedToInternet = false;
+    public static boolean isAppClosed = false;
 
     private static String nd46Id = "2";
     private static String qc41Id = "1";
