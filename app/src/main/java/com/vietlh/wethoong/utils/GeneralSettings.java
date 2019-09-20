@@ -33,7 +33,7 @@ public class GeneralSettings {
     public static long LAST_INTERSTITIAL_ADS_OPEN_TIMESTAMP = 0;
 
     public static boolean isAdsEnabled = true;
-    public static boolean isDevMode = true;
+    public static boolean isDevMode = false;
     public static int dbVersion = 4;
     public static int resultCountLimit = 100;
     public static boolean wasConnectedToInternet = false;
