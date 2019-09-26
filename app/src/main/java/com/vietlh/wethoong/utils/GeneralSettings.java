@@ -22,7 +22,7 @@ public class GeneralSettings {
     public static String tamgiuPhuongtienDieukhoanID = "2820";
 
     public static boolean isAdsEnabled = true;
-    public static boolean isDevMode = true;
+    public static boolean isDevMode = false;
     public static int dbVersion = 4;
 
     public static String MINIMUM_APP_VERSION_REQUIRED = "1.0";
