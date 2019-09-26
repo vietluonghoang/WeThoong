@@ -109,6 +109,15 @@ public class DBConnection extends SQLiteOpenHelper {
         upgradeDb = true;
     }
 
+    //override onDowngrad method because some crash issues happen on some devices on production without any reason.
+    // We suspect that there are something wrong with the DATABASE_VERSION variable then it causes
+    // onDowngrad method to be performed. Originally, the onDowngrad method will throw exception
+    // then it causes a crash
+    @Override
+    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        // do nothing to bypass the crash due to the exception thrown by the original onDowngrade method.
+    }
+
     @Override
     public void onOpen(SQLiteDatabase db) {
         Log.i(TAG, "onOpen db");
