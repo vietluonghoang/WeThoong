@@ -157,6 +157,11 @@ public class DBConnection extends SQLiteOpenHelper {
     }
 
     public Cursor executeQuery(String query) {
-        return this.database.rawQuery(query, null);
+        if (query.toLowerCase().startsWith("select")) {
+            return this.database.rawQuery(query, null);
+        }else {
+            this.database.execSQL(query);
+            return null;
+        }
     }
 }

@@ -1,10 +1,13 @@
 package com.vietlh.wethoong;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,6 +23,7 @@ public class ChungtoiActivity extends AppCompatActivity {
     private TextView lblFounderEmail;
     private UtilsHelper helper;
     private RedirectionHelper redirectionHelper;
+    private Button btnAdsOptout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,5 +70,24 @@ public class ChungtoiActivity extends AppCompatActivity {
         parms.width = (int) (helper.getScreenWidth() * 0.25);
         parms.height = parms.width;
         imgFounder.setLayoutParams(parms);
+
+        btnAdsOptout =(Button)findViewById(R.id.btnAdsOptout);
+        btnAdsOptout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openCouponScreen();
+            }
+        });
+        if (GeneralSettings.isAdsOptout){
+            btnAdsOptout.setEnabled(false);
+            btnAdsOptout.setTextColor(getResources().getColor(R.color.grayout));
+        }else {
+            btnAdsOptout.setEnabled(true);
+        }
+    }
+
+    private void openCouponScreen() {
+        Intent i = new Intent(getApplicationContext(), CouponRedeemActivity.class);
+        startActivity(i);
     }
 }

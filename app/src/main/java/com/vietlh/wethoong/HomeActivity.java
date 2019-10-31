@@ -3,7 +3,6 @@ package com.vietlh.wethoong;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -12,12 +11,14 @@ import android.widget.TextView;
 
 import com.google.android.gms.ads.MobileAds;
 import com.vietlh.wethoong.entities.AppConfiguration;
+import com.vietlh.wethoong.entities.interfaces.CallbackActivity;
 import com.vietlh.wethoong.networking.DeviceInfoCollector;
 import com.vietlh.wethoong.networking.MessageContainer;
 import com.vietlh.wethoong.networking.NetworkHandler;
 import com.vietlh.wethoong.utils.AdsHelper;
 import com.vietlh.wethoong.utils.DBConnection;
 import com.vietlh.wethoong.utils.GeneralSettings;
+import com.vietlh.wethoong.utils.Queries;
 import com.vietlh.wethoong.utils.RedirectionHelper;
 
 import org.json.JSONException;
@@ -26,16 +27,26 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Iterator;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity implements CallbackActivity {
     private DBConnection connection;
     private Button btnTracuuvanban;
     private Button btnTracuumucphat;
     private Button btnTracuubienbao;
     private Button btnTracuuvachkeduong;
+    private Button btnHuongdanluat;
     private Button btnChungtoilaai;
     private TextView versionInfo;
     private AdsHelper adsHelper;
+    private NetworkHandler network;
+    private NetworkHandler net;
     private MessageContainer msg;
+    private HashMap<String, String> deviceInfo = new HashMap<>();
+    private Queries queries = new Queries(DBConnection.getInstance(this));
+
+    //list of params for callback
+    private final String ACTION_CASE_SEND_ANALYTICS = "sendAnalytics";
+    private final String ACTION_CASE_UPDATE_APP_CONFIG = "updateConfig";
+    private final String ACTION_CASE_CHECK_ADS_OPTOUT_STATE = "checkAdsOptoutState";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,24 +56,22 @@ public class HomeActivity extends AppCompatActivity {
         initComponents();
         MobileAds.initialize(this, "ca-app-pub-1832172217205335~8071107814");
         adsHelper = new AdsHelper();
-        adsHelper.updateLastConnectionState();
+        adsHelper.updateLastConnectionState(this);
 
-        sendAnalytics();
+        new DeviceInfoCollector(this, getApplicationContext(), ACTION_CASE_SEND_ANALYTICS).execute(deviceInfo);
         getAppConfigs();
-        updateAppConfigs();
         GeneralSettings.LAST_APP_OPEN_TIMESTAMP = System.currentTimeMillis() / 1000;
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        System.out.println("############ In Onresume now. Checking.... ");
+        System.out.println("############ HomeActivity: In Onresume now. Checking.... ");
         if (GeneralSettings.isAppClosed) {
             sendAnalytics();
             getAppConfigs();
             GeneralSettings.isAppClosed = false;
         }
-        updateAppConfigs();
         if (checkIfNeedToUpdate()) {
             openUpdateScreen();
         }
@@ -72,7 +81,7 @@ public class HomeActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         boolean isInForeground = new RedirectionHelper().isAppInForeground(getApplicationContext());
-        System.out.println("############ In Onstop - " + isInForeground);
+        System.out.println("############ HomeActivity: In Onstop - " + isInForeground);
         if (!isInForeground) {
             GeneralSettings.isAppClosed = true;
         }
@@ -81,59 +90,62 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        System.out.println("############ In Onpause");
+        System.out.println("############ HomeActivity: In Onpause");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        System.out.println("############ In Ondestroy");
+        System.out.println("############ HomeActivity: In Ondestroy");
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        System.out.println("############ In OnRestart");
+        System.out.println("############ HomeActivity: In OnRestart");
+    }
+
+    @Override
+    public void triggerCallbackAction(String actionCase) {
+        switch (actionCase) {
+            case ACTION_CASE_SEND_ANALYTICS:
+                sendAnalytics();
+                break;
+            case ACTION_CASE_UPDATE_APP_CONFIG:
+                checkAdsOptout();
+                updateAppConfigs();
+                break;
+            case ACTION_CASE_CHECK_ADS_OPTOUT_STATE:
+                net.parseResultStatusData();
+                checkCodeState();
+                break;
+            default:
+                System.out.println("+++++ no valid action found +++++");
+        }
     }
 
     private void sendAnalytics() {
         System.out.println("############ Sending analytics now. Checking....");
-        final HashMap<String, String> deviceInfo = new HashMap<>();
-        new DeviceInfoCollector(getApplicationContext()).execute(deviceInfo);
-        AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                System.out.println("############ here1.");
-                while (!DeviceInfoCollector.IS_READY) {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-                if (deviceInfo != null) {
-                    deviceInfo.put("action", "app_open");
-                    deviceInfo.put("actiontype", "");
-                    deviceInfo.put("actionvalue", "");
-                    NetworkHandler net = new NetworkHandler();
-                    String analyticsUrl = "https://wethoong-server.herokuapp.com/analytics/";
-                    net.sendData(analyticsUrl, NetworkHandler.METHOD_POST, NetworkHandler.CONTENT_TYPE_APPLICATION_JSON, deviceInfo);
-                } else {
-                    System.out.println("------- Not ready to send analytics");
-                }
-            }
-        });
+        deviceInfo.put("action", "app_open");
+        deviceInfo.put("actiontype", "");
+        deviceInfo.put("actionvalue", "");
+        String analyticsUrl = "https://wethoong-server.herokuapp.com/analytics/";
+        new NetworkHandler(this, analyticsUrl, NetworkHandler.METHOD_POST, NetworkHandler.CONTENT_TYPE_APPLICATION_JSON, NetworkHandler.MIME_TYPE_APPLICATION_JSON, deviceInfo, "").execute();
     }
 
     private void getAppConfigs() {
-        NetworkHandler net = new NetworkHandler();
         String getConfigUrl = "https://wethoong-server.herokuapp.com/getconfig/";
-        net.requestData(getConfigUrl, NetworkHandler.MIME_TYPE_APPLICATION_JSON);
-        msg = net.getMessages();
+
+        network = new NetworkHandler(this, getConfigUrl, NetworkHandler.METHOD_GET, NetworkHandler.MIME_TYPE_APPLICATION_JSON, null, ACTION_CASE_UPDATE_APP_CONFIG);
+        network.execute();
     }
 
     private void updateAppConfigs() {
-        if (msg.getValue(MessageContainer.DATA) != null) {
+//        network.parseAppConfigData();
+        network.parseAppConfigData();
+        msg = network.getMessages();
+
+        if (msg != null && msg.getValue(MessageContainer.DATA) != null) {
             AppConfiguration appConfig = new AppConfiguration();
             JSONObject json = (JSONObject) msg.getValue(MessageContainer.DATA);
             for (Iterator<String> it = json.keys(); it.hasNext(); ) {
@@ -174,6 +186,46 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
+    private void checkAdsOptout() {
+        String valueInDatabase = queries.getAppConfigsFromDatabaseByKey("adsOptout");
+        switch (valueInDatabase) {
+            case "1":
+                System.out.println("adsoptout state set in database: True");
+                GeneralSettings.isAdsOptout = true;
+            case "0":
+                System.out.println("adsoptout state set in database: Failed");
+                GeneralSettings.isAdsOptout = false;
+            default:
+                System.out.println("send request to check adsoptout state");
+                String target = "https://wethoong-server.herokuapp.com/hasoptout";
+                net = new NetworkHandler(this, target, NetworkHandler.METHOD_POST, NetworkHandler.CONTENT_TYPE_APPLICATION_JSON, NetworkHandler.MIME_TYPE_APPLICATION_JSON, deviceInfo, ACTION_CASE_CHECK_ADS_OPTOUT_STATE);
+                net.execute();
+        }
+
+    }
+
+    private void checkCodeState() {
+        System.out.println("############# check code message.....");
+        try {
+            HashMap<String, String> message = (HashMap<String, String>) net.getMessages().getValue(MessageContainer.DATA);
+            System.out.println("code message: " + message);
+
+            HashMap<String, String> config = new HashMap<>();
+            if ("Success".equals(message.get("status"))) {
+                System.out.println("updating adsOptout to: '1'");
+                config.put(GeneralSettings.APP_CONFIG_KEY_ADSOPTOUT, "1");
+                GeneralSettings.isAdsOptout = queries.updateAppConfigsToDatabase(config);
+            } else {
+                System.out.println("updating adsOptout to: '0'");
+                config.put(GeneralSettings.APP_CONFIG_KEY_ADSOPTOUT, "0");
+                GeneralSettings.isAdsOptout = false;
+                queries.updateAppConfigsToDatabase(config);
+            }
+        } catch (Exception e) {
+            System.out.println("Fail to checkCodeState: " + e.getMessage());
+        }
+    }
+
     private void initComponents() {
         btnTracuuvanban = (Button) findViewById(R.id.btnTracuuvanbanphapluat);
         btnTracuuvanban.setOnClickListener(
@@ -208,6 +260,15 @@ public class HomeActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         openTracuuVachkeduongScreen();
+                    }
+                }
+        );
+        btnHuongdanluat = (Button) findViewById(R.id.btnHuongdanluat);
+        btnHuongdanluat.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        openHuongdanluatScreen();
                     }
                 }
         );
@@ -311,6 +372,13 @@ public class HomeActivity extends AppCompatActivity {
         Intent i = new Intent(getApplicationContext(), VachkeduongActivity.class);
         //TODO: need to change the hardcode searchType to something that configurable.
         i.putExtra("searchType", "vachkeduong");
+        startActivity(i);
+    }
+
+    private void openHuongdanluatScreen() {
+        Intent i = new Intent(getApplicationContext(), SearchPhantichActivity.class);
+        //TODO: need to change the hardcode searchType to something that configurable.
+//        i.putExtra("searchType", "vachkeduong");
         startActivity(i);
     }
 

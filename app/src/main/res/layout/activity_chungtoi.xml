@@ -9,43 +9,44 @@
     <LinearLayout
         android:id="@+id/founderView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/OptoutView"
+        app:layout_constraintTop_toTopOf="parent">
+
         <TextView
+            style="@style/smallBoldText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/founderTitle"
-            style="@style/smallBoldText"
-            android:paddingBottom="0px"
             android:paddingLeft="8px"
-            android:paddingRight="8px"
             android:paddingTop="8px"
-            />
+            android:paddingRight="8px"
+            android:paddingBottom="0px"
+            android:text="@string/founderTitle" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingBottom="0px"
             android:paddingLeft="8px"
-            android:paddingRight="8px"
             android:paddingTop="8px"
-            app:layout_constraintTop_toTopOf="parent"
+            android:paddingRight="8px"
+            android:paddingBottom="0px"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            >
+            app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
                 android:id="@+id/founderImage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:minHeight="100px"
-                android:minWidth="100px"
                 android:contentDescription="founder's image"
-                android:paddingBottom="0px"
+                android:minWidth="100px"
+                android:minHeight="100px"
                 android:paddingLeft="0px"
-                android:paddingRight="0px"
                 android:paddingTop="0px"
+                android:paddingRight="0px"
+                android:paddingBottom="0px"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -54,14 +55,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:paddingBottom="0px"
                 android:paddingLeft="16px"
-                android:paddingRight="0px"
                 android:paddingTop="0px"
+                android:paddingRight="0px"
+                android:paddingBottom="0px"
                 app:layout_constraintLeft_toRightOf="@id/founderImage"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                >
+                app:layout_constraintTop_toTopOf="parent">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -73,18 +73,18 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/fbTitle"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/founderFBDetails"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/wethoongFB"
-                        android:textColor="@color/blue"
-                        android:paddingBottom="0px"
                         android:paddingLeft="4px"
+                        android:paddingTop="0px"
                         android:paddingRight="0px"
-                        android:paddingTop="0px" />
+                        android:paddingBottom="0px"
+                        android:text="@string/wethoongFB"
+                        android:textColor="@color/blue" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -103,16 +103,34 @@
                         android:id="@+id/founderEDetails"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/wethoongEmail"
-                        android:textColor="@color/blue"
-                        android:paddingBottom="0px"
                         android:paddingLeft="4px"
+                        android:paddingTop="0px"
                         android:paddingRight="0px"
-                        android:paddingTop="0px" />
+                        android:paddingBottom="0px"
+                        android:text="@string/wethoongEmail"
+                        android:textColor="@color/blue" />
                 </LinearLayout>
             </LinearLayout>
 
         </LinearLayout>
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/OptoutView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/founderView">
+
+        <Button
+            android:id="@+id/btnAdsOptout"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_margin="0dp"
+            android:background="@android:color/transparent"
+            android:textColor="@color/blue"
+            android:padding="0dp"
+            android:text="Tắt quảng cáo" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

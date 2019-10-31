@@ -9,12 +9,12 @@ import android.provider.Settings;
 import com.google.android.gms.ads.identifier.AdvertisingIdClient;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.vietlh.wethoong.entities.interfaces.CallbackActivity;
 
 import java.io.IOException;
 import java.util.HashMap;
 
 public class DeviceInfoCollector extends AsyncTask<HashMap<String, String>, Void, HashMap<String, String>> {
-    public static boolean IS_READY = false;
     private String idForVendor = "";
     private String adsId = "";
     private String deviceName = "";
@@ -23,9 +23,13 @@ public class DeviceInfoCollector extends AsyncTask<HashMap<String, String>, Void
     private String appVersion = "";
     private String appVersionNumber = "";
     private Context context;
+    private String actionCase;
+    private CallbackActivity parent;
 
-    public DeviceInfoCollector(Context context) {
+    public DeviceInfoCollector(CallbackActivity parent, Context context, String actionCase) {
+        this.parent = parent;
         this.context = context;
+        this.actionCase = actionCase;
     }
 
     private String getIdForVendor() {
@@ -107,20 +111,20 @@ public class DeviceInfoCollector extends AsyncTask<HashMap<String, String>, Void
 
     @Override
     protected void onPreExecute() {
-        System.out.println("############ onPreExecute....");
+        System.out.println("############ onPreExecute DeviceInfoCollector....");
     }
 
     @Override
     protected void onProgressUpdate(Void... values) {
-        System.out.println("############ onProgressUpdate....");
+        System.out.println("############ onProgressUpdate DeviceInfoCollector....");
     }
 
     @Override
     protected void onPostExecute(HashMap<String, String> stringStringHashMap) {
         super.onPostExecute(stringStringHashMap);
         if (stringStringHashMap != null) {
-            IS_READY = true;
+            parent.triggerCallbackAction(actionCase);
         }
-        System.out.println("############ onPostExecute....\n" + stringStringHashMap);
+        System.out.println("############ onPostExecute DeviceInfoCollector....\n" + stringStringHashMap);
     }
 }

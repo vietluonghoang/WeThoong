@@ -20,8 +20,9 @@ public class GeneralSettings {
     public static final String PHUONGTIEN_TAUHOA = "Tàu hoả";
     public static final String PHUONGTIEN_DIBO = "Đi bộ";
     public static String tamgiuPhuongtienDieukhoanID = "2820";
+    public static final String APP_CONFIG_KEY_ADSOPTOUT ="adsOptout";
 
-    public static boolean isAdsEnabled = true;
+    public static boolean isAdsOptout = false; //false will allow ads to display
     public static boolean isDevMode = true;
     public static int dbVersion = 4;
 
@@ -36,6 +37,9 @@ public class GeneralSettings {
 
     public static int resultCountLimit = 100;
     public static boolean wasConnectedToInternet = false;
+    public static long lastConnectionCheckTimestamp = 0;
+    public static int defaultHttpRequestConnectionTimeout = 30; //in seconds
+    public static int defaultConnectionCheckInterval = 60;
     public static boolean isAppClosed = false;
 
     private static String nd46Id = "2";

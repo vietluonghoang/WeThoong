@@ -114,7 +114,7 @@ public class VachkeduongActivity extends AppCompatActivity {
 
     private void initAds() {
         adsView = (LinearLayout) findViewById(R.id.adsView);
-        adsHelper.updateLastConnectionState();
+        adsHelper.updateLastConnectionState(this);
         if (GeneralSettings.wasConnectedToInternet && GeneralSettings.ENABLE_BANNER_ADS) {
             AdView googleAdView = new AdView(this);
             adsHelper.addBannerViewtoView(googleAdView, adsView);

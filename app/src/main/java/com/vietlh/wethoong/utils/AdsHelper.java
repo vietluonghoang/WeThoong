@@ -3,6 +3,8 @@ package com.vietlh.wethoong.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.view.ViewGroup;
 import android.widget.Button;
 
@@ -11,7 +13,10 @@ import com.google.android.gms.ads.AdView;
 import com.tapjoy.Tapjoy;
 import com.tapjoy.TapjoyConnectFlag;
 import com.vietlh.wethoong.entities.TapjoyAdsListener;
+import com.vietlh.wethoong.entities.interfaces.CallbackActivity;
+import com.vietlh.wethoong.networking.NetworkHandler;
 
+import java.io.OutputStream;
 import java.net.InetAddress;
 import java.util.Hashtable;
 
@@ -39,19 +44,16 @@ public class AdsHelper {
         toView.addView(btnFBBanner);
     }
 
-    public void updateLastConnectionState() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    InetAddress ipAddr = InetAddress.getByName("google.com");
-                    //You can replace it with your name
-                    GeneralSettings.wasConnectedToInternet = true;
-                } catch (Exception e) {
-                    GeneralSettings.wasConnectedToInternet = false;
-                }
-            }
-        }).start();
+    public void updateLastConnectionState(final Activity activity) {
+        System.out.println("===== Prepare for Checking internet connection state");
+        long now = System.currentTimeMillis() / 1000;
+        if (now - GeneralSettings.lastConnectionCheckTimestamp > GeneralSettings.defaultConnectionCheckInterval || !GeneralSettings.wasConnectedToInternet) {
+            GeneralSettings.lastConnectionCheckTimestamp = now;
+            System.out.println("===== Checking internet connection state");
+            String targets = "https://google.com";
+            NetworkHandler net = new NetworkHandler(targets, NetworkHandler.ACTION_CASE_CHECK_CONNECTION, GeneralSettings.defaultHttpRequestConnectionTimeout);
+            net.execute();
+        }
     }
 
     public void initTJAds(Activity activity, Context context) {

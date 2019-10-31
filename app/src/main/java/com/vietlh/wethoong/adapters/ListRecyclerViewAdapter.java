@@ -126,7 +126,7 @@ public class ListRecyclerViewAdapter extends RecyclerView.Adapter<ListRecyclerVi
 
         vHolder.setLblNoidung(noidung);
         vHolder.setDieukhoanId(String.valueOf(dk.getId()));
-        vHolder.fitItemDetails();
+//        vHolder.fitItemDetails();
     }
 
     @Override
@@ -137,6 +137,7 @@ public class ListRecyclerViewAdapter extends RecyclerView.Adapter<ListRecyclerVi
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private ImageView imgView;
+        private LinearLayout item;
         private LinearLayout itemDetails;
         private TextView lblVanban;
         private TextView lblDieukhoan;
@@ -148,6 +149,7 @@ public class ListRecyclerViewAdapter extends RecyclerView.Adapter<ListRecyclerVi
 
             super(v);
             imgView = v.findViewById(R.id.item).findViewById(R.id.imageView);
+            item = v.findViewById(R.id.item);
             itemDetails = v.findViewById(R.id.itemDetails);
             lblVanban = v.findViewById(R.id.item).findViewById(R.id.itemDetails).findViewById(R.id.lblVanban);
             lblDieukhoan = v.findViewById(R.id.item).findViewById(R.id.itemDetails).findViewById(R.id.breadscrubsView).findViewById(R.id.lblDieukhoan);
@@ -233,10 +235,13 @@ public class ListRecyclerViewAdapter extends RecyclerView.Adapter<ListRecyclerVi
             dieukhoanId = id.trim();
         }
 
-        //workaround for fitting itemDetail
+        //this workaround for fitting itemDetail does not work as expected. Layout param width return 0 for image and -1 for item (parent view).
+        // This leads to incorrect value set to itemDetail width
         public void fitItemDetails() {
             ViewGroup.LayoutParams params = itemDetails.getLayoutParams();
-            params.width = uHelper.getScreenWidth() - imgView.getLayoutParams().width;
+            int iw = item.getLayoutParams().width;
+            int imw = imgView.getLayoutParams().width;
+            params.width = item.getLayoutParams().width - imgView.getLayoutParams().width;
             itemDetails.setLayoutParams(params);
         }
 

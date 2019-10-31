@@ -6,6 +6,7 @@ import com.vietlh.wethoong.entities.BosungKhacphuc;
 import com.vietlh.wethoong.entities.Coquanbanhanh;
 import com.vietlh.wethoong.entities.Dieukhoan;
 import com.vietlh.wethoong.entities.Loaivanban;
+import com.vietlh.wethoong.entities.Phantich;
 import com.vietlh.wethoong.entities.Vanban;
 
 import java.io.Serializable;
@@ -779,6 +780,181 @@ public class Queries {
         }
 
         return finalResult;
+    }
+
+    public HashMap<String,Phantich> getAllPhantich(){
+        connection.open();
+        String sql = "select p.id_key,p.author,p.title,p.shortdescription,p.source,p.source_inapp,p.revision" +
+                ",d.contentorder,d.content,d.minhhoa,d.minhhoatype from phantich as p join phantich_details as d on p.id_key = d.id_key " +
+                "order by p.id_key, d.contentorder";
+        Cursor cursor = connection.executeQuery(sql);
+        HashMap<String,Phantich> result = new HashMap<>();
+
+        if (cursor != null) {
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                String idKey = cursor.getString(0);
+                HashMap<String,String> rawContentDetailed = new HashMap<>();
+                rawContentDetailed.put("contentorder",String.valueOf(cursor.getInt(7)));
+                rawContentDetailed.put("content",cursor.getString(8));
+                rawContentDetailed.put("minhhoa",cursor.getString(9));
+                rawContentDetailed.put("minhhoatype",cursor.getString(10));
+
+                if (result.get(idKey) != null){
+                    result.get(idKey).updateRawContentDetailed(rawContentDetailed);
+                }else{
+                    String sia = cursor.getString(5);
+                            Phantich phantich = new Phantich(idKey, cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), String.valueOf(cursor.getInt(6)), rawContentDetailed);
+                    result.put(idKey, phantich);
+                }
+                cursor.moveToNext();
+            }
+        }
+        connection.close();
+        return result;
+    }
+
+    public HashMap<String,Phantich> getPhantichByKeyword(String keyword){
+        keyword = keyword.toLowerCase();
+
+        connection.open();
+        String sql = "select p.id_key,p.author,p.title,p.shortdescription,p.source,p.source_inapp,p.revision,d.contentorder,d.content,d.minhhoa,d.minhhoatype from phantich as p join phantich_details as d on p.id_key = d.id_key where d.forsearch like '%" + keyword + "%' order by p.id_key, d.contentorder";
+        Cursor cursor = connection.executeQuery(sql);
+        HashMap<String,Phantich> result = new HashMap<>();
+        if (cursor != null) {
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                String idKey = cursor.getString(0);
+                HashMap<String,String> rawContentDetailed = new HashMap<>();
+                rawContentDetailed.put("contentorder",String.valueOf(cursor.getInt(7)));
+                rawContentDetailed.put("content",cursor.getString(8));
+                rawContentDetailed.put("minhhoa",cursor.getString(9));
+                rawContentDetailed.put("minhhoatype",cursor.getString(10));
+
+                if (result.get(idKey) != null){
+                    result.get(idKey).updateRawContentDetailed(rawContentDetailed);
+                }else{
+                    String sia = cursor.getString(5);
+                    Phantich phantich = new Phantich(idKey, cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), String.valueOf(cursor.getInt(6)), rawContentDetailed);
+                    result.put(idKey, phantich);
+                }
+                cursor.moveToNext();
+            }
+        }
+
+        connection.close();
+        return result;
+    }
+
+    public HashMap<String,Phantich> getPhantichById(String id){
+        id = id.toLowerCase();
+
+        connection.open();
+        String sql = "select p.id_key,p.author,p.title,p.shortdescription,p.source,p.source_inapp,p.revision,d.contentorder,d.content,d.minhhoa,d.minhhoatype from phantich as p join phantich_details as d on p.id_key = d.id_key where p.id_key = '" + id + "' order by p.id_key, d.contentorder";
+        Cursor cursor = connection.executeQuery(sql);
+        HashMap<String,Phantich> result = new HashMap<>();
+        if (cursor != null) {
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                String idKey = cursor.getString(0);
+                HashMap<String,String> rawContentDetailed = new HashMap<>();
+                rawContentDetailed.put("contentorder",String.valueOf(cursor.getInt(7)));
+                rawContentDetailed.put("content",cursor.getString(8));
+                rawContentDetailed.put("minhhoa",cursor.getString(9));
+                rawContentDetailed.put("minhhoatype",cursor.getString(10));
+
+                if (result.get(idKey) != null){
+                    result.get(idKey).updateRawContentDetailed(rawContentDetailed);
+                }else{
+                    String sia = cursor.getString(5);
+                    Phantich phantich = new Phantich(idKey, cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), String.valueOf(cursor.getInt(6)), rawContentDetailed);
+                    result.put(idKey, phantich);
+                }
+                cursor.moveToNext();
+            }
+        }
+
+        connection.close();
+        return result;
+    }
+
+    public Boolean insertPhantichToDatabase(HashMap<String,Phantich> phantichList) {
+        connection.open();
+
+        HashMap<String,Phantich> addedPhantichList = new HashMap<>();
+        connection.executeQuery("delete from phantich");
+        connection.executeQuery("delete from phantich_details");
+
+        for (String key :
+                phantichList.keySet()) {
+            Phantich ptich = phantichList.get(key);
+            String keyId = ptich.getIdKey();
+            String title = ptich.getTittle();
+                String sqlPhantich = "insert into phantich (id_key,author,title,shortdescription,source,source_inapp,revision) values ('"
+                        + keyId + "','" + ptich.getAuthor() + "','" + title + "','" + ptich.getShortContent() + "','"
+                        + ptich.getSource() + "','" + ptich.getSourceInapp() + "'," + ptich.getRevision() +")";
+                connection.executeQuery(sqlPhantich);
+//                addedPhantichList[keyId] = ptich.value
+            for (HashMap<String,String> rawContent: ptich.getRawContentDetailed()) {
+                String sqlPhantichDetails = "insert into phantich_details (id_key,contentorder,content,minhhoa,minhhoatype,forsearch) values ('"
+                        + keyId + "','" + rawContent.get("contentorder") + "','" + rawContent.get("content") + "','" + rawContent.get("minhhoa")
+                        + "','" + rawContent.get("minhhoatype") + "','" + title.toLowerCase() + " " + rawContent.get("content").toLowerCase() + "')";
+                connection.executeQuery(sqlPhantichDetails);
+            }
+
+        }
+        connection.close();
+        return true;
+    }
+
+    public boolean updateAppConfigsToDatabase(HashMap<String,String> configList) {
+        connection.open();
+
+        for (String key : configList.keySet()) {
+            String sql = "select * from tblAppConfigs where configKey = '" + key + "'";
+            boolean isConfigExisted = false;
+            Cursor cursor = connection.executeQuery(sql);
+            if (cursor != null) {
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    isConfigExisted = true;
+                    sql = "update tblAppConfigs set configValue = '" + configList.get(key) + "' where configKey = '" + key + "'";
+                    connection.executeQuery(sql);
+                    cursor.moveToNext();
+                }
+            }
+
+            if (!isConfigExisted) {
+                sql = "insert into tblAppConfigs(configKey, configValue) values ('" + key + "','" + configList.get(key) + "')";
+                connection.executeQuery(sql);
+            }
+        }
+
+        connection.close();
+        return true;
+    }
+
+    public String getAppConfigsFromDatabaseByKey(String key) {
+        connection.open();
+        String configValue = "";
+        String sql = "select configValue from tblAppConfigs where configKey = '" + key + "'";
+        Cursor cursor = connection.executeQuery(sql);
+        if (cursor != null) {
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                configValue = cursor.getString(0);
+                cursor.moveToNext();
+            }
+        }
+
+        connection.close();
+        return configValue;
+    }
+
+    public void executeUpdateQuery(String query){
+        connection.open();
+        connection.executeQuery(query);
+        connection.close();
     }
 
     private void generateBosungKhacphucList(Cursor cursor, ArrayList<BosungKhacphuc> bosungKhacphucArray) {

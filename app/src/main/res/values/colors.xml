@@ -8,4 +8,29 @@
     <color name="normalBtnBG">#87ede8</color>
     <color name="selectedBtnBG">#728be5</color>
     <color name="grayout">#c9ccd1</color>
+
+    <!--change the first 2 numbers to change the opacity-->
+    <!--100% — FF-->
+    <!--95% — F2-->
+    <!--90% — E6-->
+    <!--85% — D9-->
+    <!--80% — CC-->
+    <!--75% — BF-->
+    <!--70% — B3-->
+    <!--65% — A6-->
+    <!--60% — 99-->
+    <!--55% — 8C-->
+    <!--50% — 80-->
+    <!--45% — 73-->
+    <!--40% — 66-->
+    <!--35% — 59-->
+    <!--30% — 4D-->
+    <!--25% — 40-->
+    <!--20% — 33-->
+    <!--15% — 26-->
+    <!--10% — 1A-->
+    <!--5% — 0D-->
+    <!--0% — 00-->
+    <color name="transparent80">#CC000000</color>
+    <color name="transparent20">#33000000</color>
 </resources>
