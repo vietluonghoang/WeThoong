@@ -261,11 +261,13 @@ public class NetworkHandler extends AsyncTask<Void, Void, MessageContainer> {
                         messages.setValue(MessageContainer.ERROR, "Invalid request method");
                         messages.setValue(MessageContainer.MESSAGE, "Method was set incorrectly as: '" + this.method + "'.");
                 }
-            }catch (SocketTimeoutException toEx){
+            } catch (SocketTimeoutException toEx) {
                 System.out.println("----Resetting connection status....");
                 GeneralSettings.wasConnectedToInternet = false;
                 System.out.println("----Extend connection timeout....");
-                GeneralSettings.defaultHttpRequestConnectionTimeout += 10;
+                if (connectionTimeout <= GeneralSettings.defaultHttpRequestConnectionTimeout * 2) {
+                    connectionTimeout += 10000;
+                }
                 toEx.printStackTrace();
                 messages.setValue(MessageContainer.ERROR, toEx.getClass().toString());
                 messages.setValue(MessageContainer.MESSAGE, toEx.getMessage());

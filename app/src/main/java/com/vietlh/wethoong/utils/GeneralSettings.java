@@ -37,10 +37,10 @@ public class GeneralSettings {
 
     public static int resultCountLimit = 100;
     public static boolean wasConnectedToInternet = false;
-    public static long lastConnectionCheckTimestamp = 0;
-    public static int defaultHttpRequestConnectionTimeout = 30; //in seconds
-    public static int defaultConnectionCheckInterval = 60;
-    public static boolean isAppClosed = false;
+    public static long lastApplicationStateCheckTimestamp = 0;
+    public static int defaultHttpRequestConnectionTimeout = 60000; //in miliseconds
+    public static int defaultApplicationStateCheckInterval = 60;
+    public static boolean isAppClosed = true;
 
     private static String nd46Id = "2";
     private static String qc41Id = "1";

@@ -46,13 +46,26 @@ public class AdsHelper {
 
     public void updateLastConnectionState(final Activity activity) {
         System.out.println("===== Prepare for Checking internet connection state");
-        long now = System.currentTimeMillis() / 1000;
-        if (now - GeneralSettings.lastConnectionCheckTimestamp > GeneralSettings.defaultConnectionCheckInterval || !GeneralSettings.wasConnectedToInternet) {
-            GeneralSettings.lastConnectionCheckTimestamp = now;
-            System.out.println("===== Checking internet connection state");
-            String targets = "https://google.com";
-            NetworkHandler net = new NetworkHandler(targets, NetworkHandler.ACTION_CASE_CHECK_CONNECTION, GeneralSettings.defaultHttpRequestConnectionTimeout);
-            net.execute();
+//        long now = System.currentTimeMillis() / 1000;
+//        if (now - GeneralSettings.lastConnectionCheckTimestamp > GeneralSettings.defaultConnectionCheckInterval || !GeneralSettings.wasConnectedToInternet) {
+//            GeneralSettings.lastConnectionCheckTimestamp = now;
+//            System.out.println("===== Checking internet connection state");
+//            String targets = "https://google.com";
+//            NetworkHandler net = new NetworkHandler(targets, NetworkHandler.ACTION_CASE_CHECK_CONNECTION, GeneralSettings.defaultHttpRequestConnectionTimeout);
+//            net.execute();
+//        }
+
+        ConnectivityManager cm =
+                (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        if (activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting()) {
+            System.out.println("===== Internet connection available ");
+            GeneralSettings.wasConnectedToInternet = true;
+        } else {
+            System.out.println("===== No internet connection");
+            GeneralSettings.wasConnectedToInternet = false;
         }
     }
 

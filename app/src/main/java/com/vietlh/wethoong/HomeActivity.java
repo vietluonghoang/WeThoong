@@ -57,9 +57,6 @@ public class HomeActivity extends AppCompatActivity implements CallbackActivity 
         MobileAds.initialize(this, "ca-app-pub-1832172217205335~8071107814");
         adsHelper = new AdsHelper();
         adsHelper.updateLastConnectionState(this);
-
-        new DeviceInfoCollector(this, getApplicationContext(), ACTION_CASE_SEND_ANALYTICS).execute(deviceInfo);
-        getAppConfigs();
         GeneralSettings.LAST_APP_OPEN_TIMESTAMP = System.currentTimeMillis() / 1000;
     }
 
@@ -67,10 +64,13 @@ public class HomeActivity extends AppCompatActivity implements CallbackActivity 
     protected void onResume() {
         super.onResume();
         System.out.println("############ HomeActivity: In Onresume now. Checking.... ");
-        if (GeneralSettings.isAppClosed) {
-            sendAnalytics();
+        long now = System.currentTimeMillis() / 1000;
+        if (GeneralSettings.isAppClosed && (now - GeneralSettings.lastApplicationStateCheckTimestamp > GeneralSettings.defaultApplicationStateCheckInterval)) {
+            System.out.println("!@#$%&*(*(&^&^%%$^#%#@$#!$@#%& con me no ==============");
+            new DeviceInfoCollector(this, getApplicationContext(), ACTION_CASE_SEND_ANALYTICS).execute(deviceInfo);
             getAppConfigs();
             GeneralSettings.isAppClosed = false;
+            GeneralSettings.lastApplicationStateCheckTimestamp = now;
         }
         if (checkIfNeedToUpdate()) {
             openUpdateScreen();
