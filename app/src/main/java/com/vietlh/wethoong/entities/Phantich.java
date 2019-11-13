@@ -162,6 +162,11 @@ public class Phantich {
             public void initChitietWithLink(int order, String noidung, final String urlLink) {
                 this.order = order;
                 Button minhhoaLink = new Button(context);
+                minhhoaLink.setBackgroundColor(Color.TRANSPARENT);
+                minhhoaLink.setText(urlLink);
+                minhhoaLink.setTextColor(Color.BLUE);
+                minhhoaLink.setTextSize(9);
+                minhhoaLink.setMinHeight(0);
                 minhhoaLink.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
