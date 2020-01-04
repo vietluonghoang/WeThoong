@@ -7,7 +7,10 @@ import java.util.HashMap;
  */
 
 public class GeneralSettings {
-    public static String[] mucphatRange = {"50.000", "60.000", "80.000", "100.000", "120.000", "200.000", "300.000", "400.000", "500.000", "600.000", "800.000", "1.000.000", "1.200.000", "500.000", "1.600.000", "2.000.000", "2.500.000", "3.000.000", "4.000.000", "5.000.000", "6.000.000", "7.000.000", "8.000.000", "10.000.000", "12.000.000", "14.000.000", "15.000.000", "16.000.000", "18.000.000", "20.000.000", "25.000.000", "28.000.000", "30.000.000", "32.000.000", "36.000.000", "37.500.000", "40.000.000", "50.000.000", "52.500.000", "56.000.000", "64.000.000", "70.000.000", "75.000.000", "80.000.000", "150.000.000"};
+//    public static String[] mucphatRange = {"50.000", "60.000", "80.000", "100.000", "120.000", "200.000", "300.000", "400.000", "500.000", "600.000", "800.000", "1.000.000", "1.200.000", "500.000", "1.600.000", "2.000.000", "2.500.000", "3.000.000", "4.000.000", "5.000.000", "6.000.000", "7.000.000", "8.000.000", "10.000.000", "12.000.000", "14.000.000", "15.000.000", "16.000.000", "18.000.000", "20.000.000", "25.000.000", "28.000.000", "30.000.000", "32.000.000", "36.000.000", "37.500.000", "40.000.000", "50.000.000", "52.500.000", "56.000.000", "64.000.000", "70.000.000", "75.000.000", "80.000.000", "150.000.000"};
+
+    //TO DO: temporarily change to ND100/2019
+    public static String[] mucphatRange = {"50.000","60.000","80.000","100.000","200.000","250.000","300.000","400.000","500.000","600.000","800.000","1.000.000","1.200.000","1.500.000","1.600.000","2.000.000","3.000.000","4.000.000","5.000.000","6.000.000","7.000.000","7.500.000","8.000.000","10.000.000","12.000.000","14.000.000","15.000.000","16.000.000","18.000.000","20.000.000","25.000.000","28.000.000","30.000.000","32.000.000","36.000.000","40.000.000","50.000.000","56.000.000","64.000.000","70.000.000","200.000.000"};
     public static String[] danhsachvanban = {"nd46", "qc41", "tt01", "lgt", "lxlvphc"};
     public static final String SEARCH_TYPE_VANBAN = "vanban";
     public static final String SEARCH_TYPE_MUCPHAT = "mucphat";
@@ -19,7 +22,7 @@ public class GeneralSettings {
     public static final String PHUONGTIEN_XECHUYENDUNG = "Xe chuyên dùng";
     public static final String PHUONGTIEN_TAUHOA = "Tàu hoả";
     public static final String PHUONGTIEN_DIBO = "Đi bộ";
-    public static String tamgiuPhuongtienDieukhoanID = "2820";
+    public static String tamgiuPhuongtienDieukhoanID = "6593"; //TO DO: temporarily change to ND100/2019
     public static final String APP_CONFIG_KEY_ADSOPTOUT ="adsOptout";
 
     public static boolean isAdsOptout = false; //false will allow ads to display
@@ -42,7 +45,8 @@ public class GeneralSettings {
     public static int defaultApplicationStateCheckInterval = 60;
     public static boolean isAppClosed = true;
 
-    private static String nd46Id = "2";
+    //TO DO: temporarily change to ND100/2019
+    private static String nd46Id = "6";
     private static String qc41Id = "1";
     private static String tt01Id = "3";
     private static String lgtId = "4";
@@ -102,15 +106,15 @@ public class GeneralSettings {
             switch (name) {
                 case "nd46":
                     vbInfo.put("id", nd46Id);
-                    vbInfo.put("fullName", "Nghị định 46 - 2016");
+                    vbInfo.put("fullName", "Nghị định 100/2019"); //TO DO: temporarily change to ND100/2019
                     break;
                 case "qc41":
                     vbInfo.put("id", qc41Id);
-                    vbInfo.put("fullName", "Quy chuẩn 41 - 2016");
+                    vbInfo.put("fullName", "Quy chuẩn 41/2016");
                     break;
                 case "tt01":
                     vbInfo.put("id", tt01Id);
-                    vbInfo.put("fullName", "Thông tư 01 - 2016");
+                    vbInfo.put("fullName", "Thông tư 01/2016");
                     break;
                 case "lgt":
                     vbInfo.put("id", lgtId);

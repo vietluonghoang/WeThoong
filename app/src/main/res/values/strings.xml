@@ -39,9 +39,9 @@
     <string name="title_activity_details">DetailsActivity</string>
     <string name="tam_giu_phuong_tien">Tạm giữ phương tiện:</string>
     <string name="underconstruction">Tính năng này sẽ sớm ra mắt trong một ngày gần đây!</string>
-    <string name="optionQC41">Quy chuẩn 41 - 2016</string>
-    <string name="optionND46">Nghị định 46 - 2016</string>
-    <string name="optionTT01">Thông tư 01 - BCA - 2016</string>
+    <string name="optionQC41">Quy chuẩn 41/2016</string>
+    <string name="optionND46">Nghị định 100/2019</string>
+    <string name="optionTT01">Thông tư 01/2016/BCA</string>
     <string name="optionLGT">Luật Giao thông Đường bộ - 2008</string>
     <string name="optionLXLVPHC">Luật Xử lý Vi phạm Hành chính - 2012</string>
     <string name="founderTitle">Founder</string>
