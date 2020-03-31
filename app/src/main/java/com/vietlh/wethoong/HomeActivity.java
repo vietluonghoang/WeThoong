@@ -129,6 +129,7 @@ public class HomeActivity extends AppCompatActivity implements CallbackActivity 
         deviceInfo.put("action", "app_open");
         deviceInfo.put("actiontype", "");
         deviceInfo.put("actionvalue", "");
+        deviceInfo.put("dbversion", "" + connection.getCurrentDBVersion());
         String analyticsUrl = "https://wethoong-server.herokuapp.com/analytics/";
         new NetworkHandler(this, analyticsUrl, NetworkHandler.METHOD_POST, NetworkHandler.CONTENT_TYPE_APPLICATION_JSON, NetworkHandler.MIME_TYPE_APPLICATION_JSON, deviceInfo, "").execute();
     }
@@ -295,7 +296,7 @@ public class HomeActivity extends AppCompatActivity implements CallbackActivity 
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-        return "v." + versionName + "(" + versionCode + ") db." + GeneralSettings.dbVersion;
+        return "v." + versionName + "(" + versionCode + ") db." + connection.getCurrentDBVersion();
     }
 
     private boolean checkIfNeedToUpdate() {

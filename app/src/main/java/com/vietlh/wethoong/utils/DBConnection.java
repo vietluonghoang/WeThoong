@@ -22,6 +22,7 @@ public class DBConnection extends SQLiteOpenHelper {
     private static String assetPath = "database";
     private static final int DATABASE_VERSION = GeneralSettings.dbVersion;
     private static final String DATABASE_NAME = "Hieuluat";
+    private int currentDBVersion = 0;
 
     private boolean createDb = false, upgradeDb = false;
 
@@ -31,12 +32,14 @@ public class DBConnection extends SQLiteOpenHelper {
     private DBConnection(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.context = context;
+        updateDatabaseVersion();
     }
 
     public static DBConnection getInstance(Context context) {
         if (instance == null) {
             instance = new DBConnection(context);
         }
+
         return instance;
     }
 
@@ -67,10 +70,10 @@ public class DBConnection extends SQLiteOpenHelper {
 
             // Set the version of the copied database to the current
             // version:
-            SQLiteDatabase copiedDb = context.openOrCreateDatabase(
-                    DATABASE_NAME, 0, null);
-            copiedDb.execSQL("PRAGMA user_version = " + DATABASE_VERSION);
-            copiedDb.close();
+//            SQLiteDatabase copiedDb = context.openOrCreateDatabase(
+//                    DATABASE_NAME, 0, null);
+//            copiedDb.execSQL("PRAGMA user_version = " + DATABASE_VERSION);
+//            copiedDb.close();
 
         } catch (IOException e) {
             Log.i(TAG, "ERROR: Failed on Copying Database: \n" + e.getMessage());
@@ -93,6 +96,18 @@ public class DBConnection extends SQLiteOpenHelper {
             } catch (IOException e) {
                 e.printStackTrace();
                 throw new Error(TAG + " Error closing streams");
+            }
+        }
+    }
+
+    //update the current database version for future reference
+    private void updateDatabaseVersion(){
+        Cursor cursor = this.database.rawQuery("PRAGMA user_version",null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                currentDBVersion = cursor.getInt(1);
+                cursor.moveToNext();
             }
         }
     }
@@ -145,6 +160,10 @@ public class DBConnection extends SQLiteOpenHelper {
      */
     public void open() {
         this.database = this.getWritableDatabase();
+    }
+
+    public int getCurrentDBVersion(){
+        return this.currentDBVersion;
     }
 
     /**
