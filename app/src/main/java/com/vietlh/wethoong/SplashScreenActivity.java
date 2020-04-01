@@ -2,8 +2,8 @@ package com.vietlh.wethoong;
 
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 import com.vietlh.wethoong.entities.interfaces.CallbackActivity;
 
@@ -42,6 +42,7 @@ public class SplashScreenActivity extends AppCompatActivity implements CallbackA
         });
 
         System.out.println("===== SplashScreenActivity: onResume");
+        System.out.println("===== SplashScreenActivity: onResume ---- Opening Homescreen");
 
     }
 
@@ -61,8 +62,11 @@ public class SplashScreenActivity extends AppCompatActivity implements CallbackA
     protected void onRestart() {
         super.onRestart();
         System.out.println("===== SplashScreenActivity: onRestart");
-        Intent i = new Intent(getApplicationContext(), HomeActivity.class);
-        startActivity(i);
+        finishAffinity();
+        System.exit(0);
+//        System.out.println("===== SplashScreenActivity: onRestart ---- Opening Homescreen");
+//        Intent i = new Intent(getApplicationContext(), HomeActivity.class);
+//        startActivity(i);
     }
 
     @Override

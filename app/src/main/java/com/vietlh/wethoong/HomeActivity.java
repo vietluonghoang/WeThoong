@@ -28,7 +28,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 public class HomeActivity extends AppCompatActivity implements CallbackActivity {
-    private DBConnection connection;
+    private DBConnection dbConnection;
     private Button btnTracuuvanban;
     private Button btnTracuumucphat;
     private Button btnTracuubienbao;
@@ -52,7 +52,9 @@ public class HomeActivity extends AppCompatActivity implements CallbackActivity 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        this.connection = DBConnection.getInstance(this);
+        this.dbConnection = DBConnection.getInstance(this);
+        dbConnection.open();
+        dbConnection.close();
         initComponents();
         MobileAds.initialize(this, "ca-app-pub-1832172217205335~8071107814");
         adsHelper = new AdsHelper();
@@ -129,7 +131,7 @@ public class HomeActivity extends AppCompatActivity implements CallbackActivity 
         deviceInfo.put("action", "app_open");
         deviceInfo.put("actiontype", "");
         deviceInfo.put("actionvalue", "");
-        deviceInfo.put("dbversion", "" + connection.getCurrentDBVersion());
+        deviceInfo.put("dbversion", "" + dbConnection.getCurrentDBVersion());
         String analyticsUrl = "https://wethoong-server.herokuapp.com/analytics/";
         new NetworkHandler(this, analyticsUrl, NetworkHandler.METHOD_POST, NetworkHandler.CONTENT_TYPE_APPLICATION_JSON, NetworkHandler.MIME_TYPE_APPLICATION_JSON, deviceInfo, "").execute();
     }
@@ -222,6 +224,9 @@ public class HomeActivity extends AppCompatActivity implements CallbackActivity 
                 GeneralSettings.isAdsOptout = false;
                 queries.updateAppConfigsToDatabase(config);
             }
+
+            //a tricky way to update database version on Homescreen
+            versionInfo.setText(getVersionInfo());
         } catch (Exception e) {
             System.out.println("Fail to checkCodeState: " + e.getMessage());
         }
@@ -296,7 +301,13 @@ public class HomeActivity extends AppCompatActivity implements CallbackActivity 
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-        return "v." + versionName + "(" + versionCode + ") db." + connection.getCurrentDBVersion();
+        String versionText = "v." + versionName + "(" + versionCode + ") db.";
+        if (dbConnection.getCurrentDBVersion() > 0){
+            versionText +=  dbConnection.getCurrentDBVersion();
+        }else {
+            versionText += GeneralSettings.requiredDBVersion;
+        }
+        return versionText;
     }
 
     private boolean checkIfNeedToUpdate() {

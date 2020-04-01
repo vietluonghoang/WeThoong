@@ -20,7 +20,7 @@ public class DBConnection extends SQLiteOpenHelper {
 
     private final Context context;
     private static String assetPath = "database";
-    private static final int DATABASE_VERSION = GeneralSettings.dbVersion;
+    private static final int DATABASE_VERSION = GeneralSettings.requiredDBVersion;
     private static final String DATABASE_NAME = "Hieuluat";
     private int currentDBVersion = 0;
 
@@ -32,14 +32,12 @@ public class DBConnection extends SQLiteOpenHelper {
     private DBConnection(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.context = context;
-        updateDatabaseVersion();
     }
 
     public static DBConnection getInstance(Context context) {
         if (instance == null) {
             instance = new DBConnection(context);
         }
-
         return instance;
     }
 
@@ -50,7 +48,7 @@ public class DBConnection extends SQLiteOpenHelper {
      * @param db The target database in the application package context.
      */
     private void copyDatabaseFromAssets(SQLiteDatabase db) {
-        Log.i(TAG, "copyDatabase");
+        Log.i(TAG, "===SQLITE: copyDatabase");
         InputStream myInput = null;
         OutputStream myOutput = null;
         try {
@@ -76,10 +74,10 @@ public class DBConnection extends SQLiteOpenHelper {
 //            copiedDb.close();
 
         } catch (IOException e) {
-            Log.i(TAG, "ERROR: Failed on Copying Database: \n" + e.getMessage());
+            Log.i(TAG, "=== ERROR: Failed on Copying Database: \n" + e.getMessage());
             for (StackTraceElement trace :
                     e.getStackTrace()) {
-                Log.i(TAG, trace.toString());
+                Log.i(TAG, "=== " + trace.toString());
             }
 
             e.printStackTrace();
@@ -102,25 +100,28 @@ public class DBConnection extends SQLiteOpenHelper {
 
     //update the current database version for future reference
     private void updateDatabaseVersion(){
-        Cursor cursor = this.database.rawQuery("PRAGMA user_version",null);
+        Log.i(TAG, "===SQLITE: updateDatabaseVersion db");
+        SQLiteDatabase copiedDb = context.openOrCreateDatabase(DATABASE_NAME, 0, null);
+        Cursor cursor = copiedDb.rawQuery("PRAGMA user_version",null);
         if (cursor != null) {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
-                currentDBVersion = cursor.getInt(1);
+                currentDBVersion = cursor.getInt(0);
                 cursor.moveToNext();
             }
         }
+        copiedDb.close();
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        Log.i(TAG, "onCreate db");
+        Log.i(TAG, "===SQLITE: onCreate db");
         createDb = true;
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        Log.i(TAG, "onUpgrade db");
+        Log.i(TAG, "===SQLITE: onUpgrade db");
         upgradeDb = true;
     }
 
@@ -131,11 +132,12 @@ public class DBConnection extends SQLiteOpenHelper {
     @Override
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // do nothing to bypass the crash due to the exception thrown by the original onDowngrade method.
+        Log.i(TAG, "===SQLITE: onDowngrade db");
     }
 
     @Override
     public void onOpen(SQLiteDatabase db) {
-        Log.i(TAG, "onOpen db");
+        Log.i(TAG, "===SQLITE: onOpen db");
         super.onOpen(db);
         db.disableWriteAheadLogging();
         if (createDb) {// The db in the application package
@@ -152,6 +154,10 @@ public class DBConnection extends SQLiteOpenHelper {
             upgradeDb = false;
             copyDatabaseFromAssets(db);
             // Your db upgrade logic here:
+        }
+
+        if (currentDBVersion == 0) {
+            updateDatabaseVersion();
         }
     }
 
