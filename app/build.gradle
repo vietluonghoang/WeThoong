@@ -6,7 +6,7 @@ android {
         applicationId "com.vietlh.wethoong"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 20033101
+        versionCode 20040401
         versionName "2.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
