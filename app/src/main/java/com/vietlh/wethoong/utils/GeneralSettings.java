@@ -11,7 +11,7 @@ public class GeneralSettings {
 
     //TO DO: temporarily change to ND100/2019
     public static String[] mucphatRange = {"50.000","60.000","80.000","100.000","200.000","250.000","300.000","400.000","500.000","600.000","800.000","1.000.000","1.200.000","1.500.000","1.600.000","2.000.000","3.000.000","4.000.000","5.000.000","6.000.000","7.000.000","7.500.000","8.000.000","10.000.000","12.000.000","14.000.000","15.000.000","16.000.000","18.000.000","20.000.000","25.000.000","28.000.000","30.000.000","32.000.000","36.000.000","40.000.000","50.000.000","56.000.000","64.000.000","70.000.000","200.000.000"};
-    public static String[] danhsachvanban = {"nd46", "qc41", "tt01", "lgt", "lxlvphc"};
+    public static String[] danhsachvanban = {"nd46", "qc41", "tt01", "lgt", "lxlvphc", "tt652020"};
     public static final String SEARCH_TYPE_VANBAN = "vanban";
     public static final String SEARCH_TYPE_MUCPHAT = "mucphat";
     public static final String SEARCH_TYPE_BIENBAO = "bienbao";
@@ -22,12 +22,12 @@ public class GeneralSettings {
     public static final String PHUONGTIEN_XECHUYENDUNG = "Xe chuyên dùng";
     public static final String PHUONGTIEN_TAUHOA = "Tàu hoả";
     public static final String PHUONGTIEN_DIBO = "Đi bộ";
-    public static String tamgiuPhuongtienDieukhoanID = "6593"; //TO DO: temporarily change to ND100/2019
+    public static String tamgiuPhuongtienDieukhoanID = "6592"; //TO DO: temporarily change to ND100/2019
     public static final String APP_CONFIG_KEY_ADSOPTOUT ="adsOptout";
 
     public static boolean isAdsOptout = false; //false will allow ads to display
     public static boolean isDevMode = true;
-    public static int requiredDBVersion = 8;
+    public static int requiredDBVersion = 9;
 
     public static String MINIMUM_APP_VERSION_REQUIRED = "1.0";
     public static boolean ENABLE_INAPP_NOTIF = false;
@@ -47,10 +47,12 @@ public class GeneralSettings {
 
     //TO DO: temporarily change to ND100/2019
     private static String nd46Id = "6";
-    private static String qc41Id = "1";
+    //TO DO: temporarily change to QC41/2019
+    private static String qc41Id = "7";
     private static String tt01Id = "3";
     private static String lgtId = "4";
     private static String lxlvphcId = "5";
+    private static String tt652020Id = "8";
     private static HashMap<String, HashMap<String, String>> vanbanInfo = new HashMap<>();
 
     public static int getRecordCapByRam() {
@@ -110,11 +112,15 @@ public class GeneralSettings {
                     break;
                 case "qc41":
                     vbInfo.put("id", qc41Id);
-                    vbInfo.put("fullName", "Quy chuẩn 41/2016");
+                    vbInfo.put("fullName", "Quy chuẩn 41/2019"); //TO DO: temporarily change to QC41/2019
                     break;
                 case "tt01":
                     vbInfo.put("id", tt01Id);
                     vbInfo.put("fullName", "Thông tư 01/2016");
+                    break;
+                case "tt652020":
+                    vbInfo.put("id", tt652020Id);
+                    vbInfo.put("fullName", "Thông tư 65/2020");
                     break;
                 case "lgt":
                     vbInfo.put("id", lgtId);

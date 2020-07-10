@@ -72,6 +72,7 @@ public class SearchActivity extends AppCompatActivity {
     private CheckBox cbTT01;
     private CheckBox cbLGTDB;
     private CheckBox cbLXLVPHC;
+    private CheckBox cbTT652020;
     private LinearLayout lineLoutPhuongtien;
     private Switch swtPhuongtien;
     private Button btnPhuongtienOto;
@@ -492,6 +493,17 @@ public class SearchActivity extends AppCompatActivity {
                     addVanbanidToList(GeneralSettings.danhsachvanban[4]);
                 } else {
                     removeVanbanidFromList(GeneralSettings.danhsachvanban[4]);
+                }
+            }
+        });
+        cbTT652020 = (CheckBox) customView.findViewById(R.id.optionTT652020Checkbox);
+        cbTT652020.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (cbTT652020.isChecked()) {
+                    addVanbanidToList(GeneralSettings.danhsachvanban[5]);
+                } else {
+                    removeVanbanidFromList(GeneralSettings.danhsachvanban[5]);
                 }
             }
         });

@@ -114,6 +114,26 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintRight_toRightOf="parent" />
         </LinearLayout>
+        <LinearLayout
+            android:id="@+id/optionTT652020Section"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintRight_toRightOf="parent">
+
+            <TextView
+                android:id="@+id/optionTT652020Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/optionTT652020"
+                android:layout_weight="4"/>
+
+            <CheckBox
+                android:id="@+id/optionTT652020Checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintRight_toRightOf="parent" />
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout

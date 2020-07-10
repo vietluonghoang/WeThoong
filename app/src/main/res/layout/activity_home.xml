@@ -36,10 +36,11 @@
         android:id="@+id/btnTracuubienbaohieu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/normalBtnBG"
+        android:background="@color/grayout"
         android:textColor="@color/white"
         android:textStyle="bold"
         android:text="@string/tra_cuu_bien_bao_hieu"
+        android:enabled="false"
         android:layout_marginTop="5dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -51,9 +52,10 @@
         android:layout_height="wrap_content"
         android:text="@string/tra_cuu_vach_ke_duong"
         android:layout_marginTop="5dp"
-        android:background="@color/normalBtnBG"
+        android:background="@color/grayout"
         android:textColor="@color/white"
         android:textStyle="bold"
+        android:enabled="false"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btnTracuubienbaohieu" />
@@ -92,5 +94,6 @@
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        app:layout_constraintRight_toRightOf="parent"
+        android:gravity="center_horizontal" />
 </android.support.constraint.ConstraintLayout>
