@@ -26,8 +26,8 @@ public class GeneralSettings {
     public static final String APP_CONFIG_KEY_ADSOPTOUT ="adsOptout";
 
     public static boolean isAdsOptout = false; //false will allow ads to display
-    public static boolean isDevMode = true;
-    public static int requiredDBVersion = 9;
+    public static boolean isDevMode = false;
+    public static int requiredDBVersion = 10;
 
     public static String MINIMUM_APP_VERSION_REQUIRED = "1.0";
     public static boolean ENABLE_INAPP_NOTIF = false;
