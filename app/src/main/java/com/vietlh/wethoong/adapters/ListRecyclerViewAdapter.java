@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.vietlh.wethoong.DetailsActivity;
 import com.vietlh.wethoong.R;
 import com.vietlh.wethoong.entities.Dieukhoan;
+import com.vietlh.wethoong.utils.GeneralSettings;
 import com.vietlh.wethoong.utils.SearchFor;
 import com.vietlh.wethoong.utils.UtilsHelper;
 
@@ -113,7 +114,7 @@ public class ListRecyclerViewAdapter extends RecyclerView.Adapter<ListRecyclerVi
         if (type == 0) {
             vHolder.hideLblVanban(false);
             vHolder.hideBtnBreadscrubs(false);
-            vHolder.setLblVanban(dk.getVanban().getMa());
+            vHolder.setLblVanban(GeneralSettings.getVanbanInfo(dk.getVanban().getId(),"shortname"));
 
             //TODO: the valude of 250 should be configurable
             if (noidung.length() > noidungLengthThreshold) {

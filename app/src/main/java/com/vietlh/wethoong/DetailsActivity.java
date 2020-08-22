@@ -2,11 +2,13 @@ package com.vietlh.wethoong;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.View;
@@ -16,11 +18,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
-import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.vietlh.wethoong.adapters.ListRecyclerViewAdapter;
 import com.vietlh.wethoong.entities.BosungKhacphuc;
@@ -33,10 +33,10 @@ import com.vietlh.wethoong.utils.RedirectionHelper;
 import com.vietlh.wethoong.utils.SearchFor;
 import com.vietlh.wethoong.utils.UtilsHelper;
 
-import org.w3c.dom.Text;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class DetailsActivity extends AppCompatActivity {
@@ -58,6 +58,7 @@ public class DetailsActivity extends AppCompatActivity {
     private ArrayList<BosungKhacphuc> bienphapkhacphucList = new ArrayList<>();
     private ListRecyclerViewAdapter searchResultListRecyclerAdapter;
     private RecyclerView.LayoutManager recyclerLayoutManager;
+    private String contentString = "";
 
     private ScrollView scrollView;
     private TextView lblVanban;
@@ -114,43 +115,44 @@ public class DetailsActivity extends AppCompatActivity {
             GeneralSettings.isAppClosed = true;
         }
     }
+
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v,
                                     ContextMenu.ContextMenuInfo menuInfo) {
-        helper.createContextMenu(menu, v,this);
+        helper.createContextMenu(menu, v, this);
     }
 
     private void getPassingParameters() {
-        dieukhoanId = (String) getIntent().getStringExtra("dieukhoanId");
+        dieukhoanId = getIntent().getStringExtra("dieukhoanId");
     }
 
     private void initComponents() {
-        scrollView = (ScrollView) findViewById(R.id.scrollView);
-        btnXemthemView = (ConstraintLayout) findViewById(R.id.btnXemthemView);
+        scrollView = findViewById(R.id.scrollView);
+        btnXemthemView = findViewById(R.id.btnXemthemView);
 
-        lblVanban = (TextView) findViewById(R.id.lblVanban);
-        lblDieukhoan = (TextView) findViewById(R.id.lblDieukhoan);
-        lblNoidung = (TextView) findViewById(R.id.lblNoidung);
+        lblVanban = findViewById(R.id.lblVanban);
+        lblDieukhoan = findViewById(R.id.lblDieukhoan);
+        lblNoidung = findViewById(R.id.lblNoidung);
         registerForContextMenu(lblNoidung);
-        mucphatDetails = (TextView) findViewById(R.id.mucphatDetails);
-        phuongtienDetails = (TextView) findViewById(R.id.phuongtienDetails);
-        linhvucDetails = (TextView) findViewById(R.id.linhvucDetails);
-        doituongDetails = (TextView) findViewById(R.id.doituongDetails);
-        hinhphatbosungDetails = (TextView) findViewById(R.id.hinhphatbosungDetails);
+        mucphatDetails = findViewById(R.id.mucphatDetails);
+        phuongtienDetails = findViewById(R.id.phuongtienDetails);
+        linhvucDetails = findViewById(R.id.linhvucDetails);
+        doituongDetails = findViewById(R.id.doituongDetails);
+        hinhphatbosungDetails = findViewById(R.id.hinhphatbosungDetails);
         registerForContextMenu(hinhphatbosungDetails);
-        bienphapkhacphucDetails = (TextView) findViewById(R.id.bienphapkhacphucDetails);
+        bienphapkhacphucDetails = findViewById(R.id.bienphapkhacphucDetails);
         registerForContextMenu(bienphapkhacphucDetails);
-        tamgiuDetails = (TextView) findViewById(R.id.tamgiuDetails);
-        thamquyenDetails = (TextView) findViewById(R.id.thamquyenDetails);
+        tamgiuDetails = findViewById(R.id.tamgiuDetails);
+        thamquyenDetails = findViewById(R.id.thamquyenDetails);
 
-        btnXemthem = (Button) findViewById(R.id.btnXemthem);
+        btnXemthem = findViewById(R.id.btnXemthem);
         btnXemthem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showRelatedDieukhoan();
             }
         });
-        btnBreadscrubs = (Button) findViewById(R.id.btnBreadscrubs);
+        btnBreadscrubs = findViewById(R.id.btnBreadscrubs);
         btnBreadscrubs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -162,19 +164,19 @@ public class DetailsActivity extends AppCompatActivity {
             }
         });
 
-        extraView = (LinearLayout) findViewById(R.id.extraView);
-        mucphatView = (LinearLayout) findViewById(R.id.mucphatView);
-        phuongtienView = (LinearLayout) findViewById(R.id.phuongtienView);
-        linhvucView = (LinearLayout) findViewById(R.id.linhvucView);
-        doituongView = (LinearLayout) findViewById(R.id.doituongView);
-        hinhphatbosung = (LinearLayout) findViewById(R.id.hinhphatbosung);
-        bienphapkhacphuc = (LinearLayout) findViewById(R.id.bienphapkhacphuc);
-        tamgiu = (LinearLayout) findViewById(R.id.tamgiu);
-        thamquyen = (LinearLayout) findViewById(R.id.thamquyen);
-        minhhoaView = (LinearLayout) findViewById(R.id.minhhoaView);
-        childrenDieukhoan = (RelativeLayout) findViewById(R.id.childrenDieukhoan);
+        extraView = findViewById(R.id.extraView);
+        mucphatView = findViewById(R.id.mucphatView);
+        phuongtienView = findViewById(R.id.phuongtienView);
+        linhvucView = findViewById(R.id.linhvucView);
+        doituongView = findViewById(R.id.doituongView);
+        hinhphatbosung = findViewById(R.id.hinhphatbosung);
+        bienphapkhacphuc = findViewById(R.id.bienphapkhacphuc);
+        tamgiu = findViewById(R.id.tamgiu);
+        thamquyen = findViewById(R.id.thamquyen);
+        minhhoaView = findViewById(R.id.minhhoaView);
+        childrenDieukhoan = findViewById(R.id.childrenDieukhoan);
 
-        rclChildrenDieukhoan = (RecyclerView) findViewById(R.id.rclChildrenDieukhoan);
+        rclChildrenDieukhoan = findViewById(R.id.rclChildrenDieukhoan);
     }
 
     private void initAds() {
@@ -255,7 +257,7 @@ public class DetailsActivity extends AppCompatActivity {
     }
 
     private void showDieukhoan() {
-        lblVanban.setText(dieukhoan.getVanban().getMa());
+        lblVanban.setText(GeneralSettings.getVanbanInfo(dieukhoan.getVanban().getId(), "shortname") + " (" + dieukhoan.getVanban().getMa() + ")");
         lblDieukhoan.setText(dieukhoan.getSo());
         String breadscrubText = search.getAncestersNumber(dieukhoan, vanbanid);
         if (breadscrubText.length() > 0) {
@@ -275,6 +277,13 @@ public class DetailsActivity extends AppCompatActivity {
         }
         lblNoidung.setText(noidung);
 
+        //Reverse breadscrub text
+        ArrayList<String> aces = new ArrayList<>(Arrays.asList(breadscrubText.split("/")));
+        Collections.reverse(aces);
+        //update content string
+        String so = (dieukhoan.getSo().endsWith("."))?dieukhoan.getSo():dieukhoan.getSo()+ ".";
+        contentString = TextUtils.join(" ", aces) + "\n" + so + " " + dieukhoan.getTieude() + "\n" + dieukhoan.getNoidung();
+
         ArrayList<String> images = dieukhoan.getMinhhoa();
 
         if (images.size() > 0) {
@@ -284,7 +293,7 @@ public class DetailsActivity extends AppCompatActivity {
         }
 
         // Enable extra section for details of ND46
-        if (String.valueOf(dieukhoan.getVanban().getId()).equals(GeneralSettings.getVanbanInfo(GeneralSettings.danhsachvanban[0], "id"))) {
+        if (dieukhoan.getVanban().getId() == GeneralSettings.getDefaultActiveNDXPId()) {
             hideExtraInfoView(false);
             populateExtraInfoView();
         } else {
@@ -323,6 +332,13 @@ public class DetailsActivity extends AppCompatActivity {
             ViewGroup.LayoutParams searchResultLayoutParams = rclChildrenDieukhoan.getLayoutParams();
             searchResultLayoutParams.width = helper.getScreenWidth();
             rclChildrenDieukhoan.setLayoutParams(searchResultLayoutParams);
+
+            //update content string with all major children info
+            for (Dieukhoan cdk : children) {
+                String s = (cdk.getSo().endsWith("."))?cdk.getSo():cdk.getSo()+ ".";
+                contentString += "\n" + s + " " + cdk.getTieude() + "\n" + cdk.getNoidung();
+            }
+
         } else {
             helper.hideSection(childrenDieukhoan);
         }
@@ -336,6 +352,7 @@ public class DetailsActivity extends AppCompatActivity {
                 bosungDetails += "- " + bosung.getNoidung() + "\n";
             }
             hinhphatbosungDetails.setText(bosungDetails);
+            contentString += "\nHình phạt bổ sung: " + bosungDetails;
         } else {
             helper.hideSection(hinhphatbosung);
         }
@@ -347,6 +364,7 @@ public class DetailsActivity extends AppCompatActivity {
                 khacphucDetails += "- " + khacphuc.getNoidung() + "\n";
             }
             bienphapkhacphucDetails.setText(khacphucDetails);
+            contentString += "\nBiện pháp khắc phục: " + khacphucDetails;
         } else {
             helper.hideSection(bienphapkhacphuc);
         }
@@ -354,6 +372,7 @@ public class DetailsActivity extends AppCompatActivity {
         if (tamgiuphuongtienList.size() > 0) {
             helper.showSection(tamgiu);
             tamgiuDetails.setText("07 ngày");
+            contentString += "\nTạm giữ phương tiện: 07 ngày";
         } else {
             helper.hideSection(tamgiu);
         }
@@ -379,24 +398,28 @@ public class DetailsActivity extends AppCompatActivity {
         if (mpText.length() > 0) {
             helper.showSection(mucphatView);
             mucphatDetails.setText(mpText);
+            contentString += "\nMức phạt: " + mpText;
         } else {
             helper.hideSection(mucphatView);
         }
         if (ptText.length() > 0) {
             helper.showSection(phuongtienView);
             phuongtienDetails.setText(ptText);
+            contentString += "\nPhương tiện: " + ptText;
         } else {
             helper.hideSection(phuongtienView);
         }
         if (lvText.length() > 0) {
             helper.showSection(linhvucView);
             linhvucDetails.setText(lvText);
+            contentString += "\nLĩnh vực: " + lvText;
         } else {
             helper.hideSection(linhvucView);
         }
         if (dtText.length() > 0) {
             helper.showSection(doituongView);
             doituongDetails.setText(dtText);
+            contentString += "\nĐối tượng: " + dtText;
         } else {
             helper.hideSection(doituongView);
         }
@@ -430,24 +453,15 @@ public class DetailsActivity extends AppCompatActivity {
     }
 
     private ArrayList<Dieukhoan> getTamgiuPhuongtienList() {
-//        String qry = "select distinct dk.id as dkId, dk.so as dkSo, tieude as dkTieude, dk.noidung as dkNoidungString" +
-//                 ", minhhoa as dkMinhhoa, cha as dkCha, vb.loai as lvbID, lvb.ten as lvbTen, vb.so as vbSo, vanbanid as vbId" +
-//                 ", vb.ten as vbTen, nam as vbNam, ma as vbMa, vb.noidung as vbNoidung, coquanbanhanh as vbCoquanbanhanhId" +
-//                 ", cq.ten as cqTen, dk.forSearch as dkSearch from tblChitietvanban as dk join tblVanban as vb on dk.vanbanid=vb.id " +
-//                 "join tblLoaivanban as lvb on vb.loai=lvb.id join tblCoquanbanhanh as cq on vb.coquanbanhanh=cq.id " +
-//                 "join tblRelatedDieukhoan as rdk on dk.id = rdk.dieukhoanId where (dkCha = " + GeneralSettings.tamgiuPhuongtienDieukhoanID +
-//                 " or dkCha in (select id from tblchitietvanban where cha = " + GeneralSettings.tamgiuPhuongtienDieukhoanID + ") " +
-//                 "or dkCha in (select id from tblchitietvanban where cha in (select id from tblchitietvanban where cha = " +
-//                 GeneralSettings.tamgiuPhuongtienDieukhoanID + "))) and rdk.relatedDieukhoanID = " + dieukhoanId;
         String qry = "select distinct dk.id as dkId, dk.so as dkSo, tieude as dkTieude, dk.noidung as dkNoidungString" +
                 ", minhhoa as dkMinhhoa, cha as dkCha, vb.loai as lvbID, lvb.ten as lvbTen, vb.so as vbSo, vanbanid as vbId" +
                 ", vb.ten as vbTen, nam as vbNam, ma as vbMa, vb.noidung as vbNoidung, coquanbanhanh as vbCoquanbanhanhId" +
                 ", cq.ten as cqTen, dk.forSearch as dkSearch from tblChitietvanban as dk join tblVanban as vb on dk.vanbanid=vb.id " +
                 "join tblLoaivanban as lvb on vb.loai=lvb.id join tblCoquanbanhanh as cq on vb.coquanbanhanh=cq.id " +
-                "join tblRelatedDieukhoan as rdk on dk.id = rdk.dieukhoanId where (dkCha = " + GeneralSettings.tamgiuPhuongtienDieukhoanID +
-                " or dkCha in (select id from tblchitietvanban where cha = " + GeneralSettings.tamgiuPhuongtienDieukhoanID + ")" +
+                "join tblRelatedDieukhoan as rdk on dk.id = rdk.dieukhoanId where (dkCha = " + GeneralSettings.getTamgiuPhuongtienDieukhoanID(dieukhoan.getVanban().getId()) +
+                " or dkCha in (select id from tblchitietvanban where cha = " + GeneralSettings.getTamgiuPhuongtienDieukhoanID(dieukhoan.getVanban().getId()) + ")" +
                 " or dkCha in (select id from tblchitietvanban where cha in (select id from tblchitietvanban where cha = " +
-                GeneralSettings.tamgiuPhuongtienDieukhoanID + "))) and (rdk.relatedDieukhoanID = " + dieukhoan.getId() +
+                GeneralSettings.getTamgiuPhuongtienDieukhoanID(dieukhoan.getVanban().getId()) + "))) and (rdk.relatedDieukhoanID = " + dieukhoan.getId() +
                 " or rdk.relatedDieukhoanID = " + dieukhoan.getCha() + " or rdk.relatedDieukhoanID = (select cha from " +
                 "tblchitietvanban where id = " + dieukhoan.getCha() + "))";
         ArrayList<Dieukhoan> tamgiuList = queries.searchDieukhoanByQuery(qry, vanbanid);
@@ -477,4 +491,9 @@ public class DetailsActivity extends AppCompatActivity {
     private ArrayList<Dieukhoan> getParent(String keyword) {
         return queries.searchDieukhoanByID(keyword, vanbanid);
     }
+
+    public String getFullText() {
+        return contentString;
+    }
+
 }

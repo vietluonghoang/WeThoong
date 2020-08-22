@@ -41,7 +41,7 @@
 
             <TextView
                 android:id="@+id/lblVanban"
-                style="@style/smallBlurBoldText"
+                style="@style/textSubtitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toTopOf="parent"
@@ -56,7 +56,7 @@
 
                 <TextView
                     android:id="@+id/lblDieukhoan"
-                    style="@style/smallBoldText"
+                    style="@style/textTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="123gggg"
@@ -87,6 +87,7 @@
                 android:id="@+id/lblNoidung"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                style="@style/textNormal"
                 android:layout_marginTop="2dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/breadscrubsView"

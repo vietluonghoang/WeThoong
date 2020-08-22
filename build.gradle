@@ -11,7 +11,7 @@ buildscript {
 //        }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.1'
+        classpath 'com.android.tools.build:gradle:3.6.3'
 //        api 'com.tapjoy:tapjoy-android-sdk:12.4.0@aar'
 
         // NOTE: Do not place your application dependencies here; they belong

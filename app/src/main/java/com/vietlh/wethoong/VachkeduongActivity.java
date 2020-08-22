@@ -17,6 +17,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
@@ -47,7 +48,6 @@ public class VachkeduongActivity extends AppCompatActivity {
     private Queries queries = new Queries(DBConnection.getInstance(this));
     private Button btnLoctheo;
     private TextView txtLoctheo;
-    private ConstraintLayout searchView;
     private ConstraintLayout lineLoutVachShapeSelect;
     private ConstraintLayout lineLoutVachDetailsSelect;
     private HorizontalScrollView scvVachShapes;
@@ -71,20 +71,17 @@ public class VachkeduongActivity extends AppCompatActivity {
     private AlertDialog.Builder builder;
     AlertDialog alert = null;
     private View customView;
-    private LinearLayout lineLoutLoaivanban;
-    private LinearLayout lineLoutMucphat;
-    private LinearLayout lineLoutPlateShapeGroupsSelection;
     private LinearLayout lineLoutVachShapeGroupsSelection;
-    private CheckBox cbVachShapeYellow;
-    private CheckBox cbVachShapeWhite;
-    private CheckBox cbVachShapeBlack;
-    private CheckBox cbVachShapeRed;
-    private CheckBox cbVachShapeAlphanumeric;
-    private CheckBox cbVachShapeShape;
-    private CheckBox cbVachShapeParallel;
-    private CheckBox cbVachShapeDuo;
-    private CheckBox cbVachShapeSingle;
-    private CheckBox cbVachShapeSign;
+    private Switch cbVachShapeYellow;
+    private Switch cbVachShapeWhite;
+    private Switch cbVachShapeBlack;
+    private Switch cbVachShapeRed;
+    private Switch cbVachShapeAlphanumeric;
+    private Switch cbVachShapeShape;
+    private Switch cbVachShapeParallel;
+    private Switch cbVachShapeDuo;
+    private Switch cbVachShapeSingle;
+    private Switch cbVachShapeSign;
     private int colorNormalBtnBg;
     private int colorNormalBtnFg;
     private int colorSelectedBtnBg;
@@ -113,7 +110,7 @@ public class VachkeduongActivity extends AppCompatActivity {
     }
 
     private void initAds() {
-        adsView = (LinearLayout) findViewById(R.id.adsView);
+        adsView = findViewById(R.id.adsView);
         adsHelper.updateLastConnectionState(this);
         if (GeneralSettings.wasConnectedToInternet && GeneralSettings.ENABLE_BANNER_ADS) {
             AdView googleAdView = new AdView(this);
@@ -137,16 +134,15 @@ public class VachkeduongActivity extends AppCompatActivity {
     }
 
     private void getPassingParameters() {
-        searchType = (String) getIntent().getStringExtra("searchType");
+        searchType = getIntent().getStringExtra("searchType");
     }
 
     private void initComponents() {
-        searchView = (ConstraintLayout) findViewById(R.id.searchView);
-        lineLoutVachShapeSelect = (ConstraintLayout) findViewById(R.id.filterView);
-        scvVachShapes = (HorizontalScrollView) findViewById(R.id.scvFilters);
-        lineLoutVachShapeItems = (LinearLayout) findViewById(R.id.filterItem);
-        btnLoctheo = (Button) ((ConstraintLayout) findViewById(R.id.locTheoView)).findViewById(R.id.btnLoctheo);
-        txtLoctheo = (TextView) ((ConstraintLayout) findViewById(R.id.locTheoView)).findViewById(R.id.lblLoctheo);
+        lineLoutVachShapeSelect = findViewById(R.id.filterView);
+        scvVachShapes = findViewById(R.id.scvFilters);
+        lineLoutVachShapeItems = findViewById(R.id.filterItem);
+        btnLoctheo = findViewById(R.id.locTheoView).findViewById(R.id.btnLoctheo);
+        txtLoctheo = findViewById(R.id.locTheoView).findViewById(R.id.lblLoctheo);
 
         initVachShapeGroups();
         initVachDetails();
@@ -160,7 +156,7 @@ public class VachkeduongActivity extends AppCompatActivity {
             }
         });
 
-        searchResultRecyclerView = (RecyclerView) findViewById(R.id.search_result);
+        searchResultRecyclerView = findViewById(R.id.search_result);
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -185,15 +181,24 @@ public class VachkeduongActivity extends AppCompatActivity {
             case GeneralSettings.SEARCH_TYPE_VANBAN:
                 break;
             case GeneralSettings.SEARCH_TYPE_MUCPHAT:
-                addVanbanidToList(GeneralSettings.danhsachvanban[0]);
+//                addVanbanidToList(GeneralSettings.danhsachvanban[0]);
+                addVanbanidToList(GeneralSettings.getDefaultActiveNDXPId()+"");
                 break;
             case GeneralSettings.SEARCH_TYPE_BIENBAO:
-                addVanbanidToList(GeneralSettings.danhsachvanban[1]);
+//                addVanbanidToList(GeneralSettings.danhsachvanban[1]);
+                addVanbanidToList(GeneralSettings.getDefaultActiveQC41Id()+"");
+                break;
             case GeneralSettings.SEARCH_TYPE_VACHKEDUONG:
-                addVanbanidToList(GeneralSettings.danhsachvanban[1]);
+//                addVanbanidToList(GeneralSettings.danhsachvanban[1]);
+                addVanbanidToList(GeneralSettings.getDefaultActiveQC41Id()+"");
+                break;
             default:
-                for (String key : GeneralSettings.danhsachvanban) {
-                    addVanbanidToList(key);
+                int maxId = GeneralSettings.getMaxVanbanId();
+                while (maxId > 0){
+                    if (GeneralSettings.getVanbanInfo(maxId,"shortname").length() > 0){
+                        addVanbanidToList(maxId + "");
+                    }
+                    maxId--;
                 }
                 break;
         }
@@ -209,8 +214,8 @@ public class VachkeduongActivity extends AppCompatActivity {
     }
 
     private void initVachDetails() {
-        lineLoutVachDetailsSelect = (ConstraintLayout) findViewById(R.id.detailsSelectView);
-        btnVachDetailsCross = (ImageButton) findViewById(R.id.btnCross);
+        lineLoutVachDetailsSelect = findViewById(R.id.detailsSelectView);
+        btnVachDetailsCross = findViewById(R.id.btnCross);
         btnVachDetailsCross.setTag("cross");
         setButtonBackgroundColor(btnVachDetailsCross, false);
         btnVachDetailsCross.setOnClickListener(new View.OnClickListener() {
@@ -290,8 +295,8 @@ public class VachkeduongActivity extends AppCompatActivity {
         int desirableHeight = (int) ((float) helper.getScreenHeight() * 0.15);
         int desirablePadding = (int) ((float) desirableHeight * 0.05);
 
-        ((ImageButton) findViewById(R.id.btnLeftNav)).setBackground(helper.getDrawableFromAssets(this, "parts/navigate_left.png"));
-        ((ImageButton) findViewById(R.id.btnRightNav)).setBackground(helper.getDrawableFromAssets(this, "parts/navigate_right.png"));
+        findViewById(R.id.btnLeftNav).setBackground(helper.getDrawableFromAssets(this, "parts/navigate_left.png"));
+        findViewById(R.id.btnRightNav).setBackground(helper.getDrawableFromAssets(this, "parts/navigate_right.png"));
 
         ArrayList<String> groups = new ArrayList<>();
         for (String group :
@@ -395,37 +400,15 @@ public class VachkeduongActivity extends AppCompatActivity {
         LayoutInflater layoutInflater = getLayoutInflater();
 
         //this is custom dialog
-        customView = layoutInflater.inflate(R.layout.popup_filters, null);
-
-        lineLoutLoaivanban = (LinearLayout) customView.findViewById(R.id.Loaivanban);
-        lineLoutMucphat = (LinearLayout) customView.findViewById(R.id.mucphatSection);
-        lineLoutPlateShapeGroupsSelection = (LinearLayout) customView.findViewById(R.id.PlateShapeSelection);
+        customView = layoutInflater.inflate(R.layout.popup_filter_vachke, null);
         lineLoutVachShapeGroupsSelection = (LinearLayout) customView.findViewById(R.id.vachShapeSelection);
 //        ViewGroup.LayoutParams hiddenSection;
         switch (searchType) {
             case GeneralSettings.SEARCH_TYPE_VANBAN:
                 break;
             case GeneralSettings.SEARCH_TYPE_BIENBAO:
-                lineLoutMucphat.setVisibility(View.INVISIBLE);
-                lineLoutLoaivanban.setVisibility(View.INVISIBLE);
-                lineLoutPlateShapeGroupsSelection.setVisibility(View.VISIBLE);
-                lineLoutVachShapeGroupsSelection.setVisibility(View.INVISIBLE);
-
-                helper.hideSection(lineLoutMucphat);
-                helper.hideSection(lineLoutLoaivanban);
-                initVachShapeFilters();
-                updateUIFromFilterData();
-
                 break;
             case GeneralSettings.SEARCH_TYPE_VACHKEDUONG:
-                lineLoutMucphat.setVisibility(View.INVISIBLE);
-                lineLoutLoaivanban.setVisibility(View.INVISIBLE);
-                lineLoutPlateShapeGroupsSelection.setVisibility(View.INVISIBLE);
-                lineLoutVachShapeGroupsSelection.setVisibility(View.VISIBLE);
-
-                helper.hideSection(lineLoutMucphat);
-                helper.hideSection(lineLoutLoaivanban);
-                helper.hideSection(lineLoutPlateShapeGroupsSelection);
                 initVachShapeFilters();
                 updateUIFromFilterData();
                 break;
@@ -450,7 +433,7 @@ public class VachkeduongActivity extends AppCompatActivity {
     }
 
     private void initVachShapeFilters() {
-        cbVachShapeAlphanumeric = (CheckBox) customView.findViewById(R.id.optionAlphanumericCheckbox);
+        cbVachShapeAlphanumeric = customView.findViewById(R.id.optionAlphanumericCheckbox);
         cbVachShapeAlphanumeric.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -461,7 +444,7 @@ public class VachkeduongActivity extends AppCompatActivity {
                 }
             }
         });
-        cbVachShapeBlack = (CheckBox) customView.findViewById(R.id.optionBlackCheckbox);
+        cbVachShapeBlack = customView.findViewById(R.id.optionBlackCheckbox);
         cbVachShapeBlack.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -472,7 +455,7 @@ public class VachkeduongActivity extends AppCompatActivity {
                 }
             }
         });
-        cbVachShapeDuo = (CheckBox) customView.findViewById(R.id.optionDuoCheckbox);
+        cbVachShapeDuo = customView.findViewById(R.id.optionDuoCheckbox);
         cbVachShapeDuo.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -483,7 +466,7 @@ public class VachkeduongActivity extends AppCompatActivity {
                 }
             }
         });
-        cbVachShapeParallel = (CheckBox) customView.findViewById(R.id.optionParallelCheckbox);
+        cbVachShapeParallel = customView.findViewById(R.id.optionParallelCheckbox);
         cbVachShapeParallel.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -494,7 +477,7 @@ public class VachkeduongActivity extends AppCompatActivity {
                 }
             }
         });
-        cbVachShapeRed = (CheckBox) customView.findViewById(R.id.optionRedCheckbox);
+        cbVachShapeRed = customView.findViewById(R.id.optionRedCheckbox);
         cbVachShapeRed.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -505,7 +488,7 @@ public class VachkeduongActivity extends AppCompatActivity {
                 }
             }
         });
-        cbVachShapeShape = (CheckBox) customView.findViewById(R.id.optionShapeCheckbox);
+        cbVachShapeShape = customView.findViewById(R.id.optionShapeCheckbox);
         cbVachShapeShape.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -516,7 +499,7 @@ public class VachkeduongActivity extends AppCompatActivity {
                 }
             }
         });
-        cbVachShapeSign = (CheckBox) customView.findViewById(R.id.optionSignCheckbox);
+        cbVachShapeSign = customView.findViewById(R.id.optionSignCheckbox);
         cbVachShapeSign.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -527,7 +510,7 @@ public class VachkeduongActivity extends AppCompatActivity {
                 }
             }
         });
-        cbVachShapeWhite = (CheckBox) customView.findViewById(R.id.optionWhiteCheckbox);
+        cbVachShapeWhite = customView.findViewById(R.id.optionWhiteCheckbox);
         cbVachShapeWhite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -538,7 +521,7 @@ public class VachkeduongActivity extends AppCompatActivity {
                 }
             }
         });
-        cbVachShapeSingle = (CheckBox) customView.findViewById(R.id.optionSingleCheckbox);
+        cbVachShapeSingle = customView.findViewById(R.id.optionSingleCheckbox);
         cbVachShapeSingle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -549,7 +532,7 @@ public class VachkeduongActivity extends AppCompatActivity {
                 }
             }
         });
-        cbVachShapeYellow = (CheckBox) customView.findViewById(R.id.optionYellowCheckbox);
+        cbVachShapeYellow = customView.findViewById(R.id.optionYellowCheckbox);
         cbVachShapeYellow.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -562,8 +545,7 @@ public class VachkeduongActivity extends AppCompatActivity {
         });
     }
 
-    private void addVanbanidToList(String vanbanKey) {
-        String vbID = GeneralSettings.getVanbanInfo(vanbanKey, "id");
+    private void addVanbanidToList(String vbID) {
         for (String id : vanbanid) {
             if (vbID.equals(id)) {
                 return;

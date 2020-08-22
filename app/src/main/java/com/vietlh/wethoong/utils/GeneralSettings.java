@@ -1,5 +1,7 @@
 package com.vietlh.wethoong.utils;
 
+import com.vietlh.wethoong.entities.Vanban;
+
 import java.util.HashMap;
 
 /**
@@ -7,11 +9,16 @@ import java.util.HashMap;
  */
 
 public class GeneralSettings {
-//    public static String[] mucphatRange = {"50.000", "60.000", "80.000", "100.000", "120.000", "200.000", "300.000", "400.000", "500.000", "600.000", "800.000", "1.000.000", "1.200.000", "500.000", "1.600.000", "2.000.000", "2.500.000", "3.000.000", "4.000.000", "5.000.000", "6.000.000", "7.000.000", "8.000.000", "10.000.000", "12.000.000", "14.000.000", "15.000.000", "16.000.000", "18.000.000", "20.000.000", "25.000.000", "28.000.000", "30.000.000", "32.000.000", "36.000.000", "37.500.000", "40.000.000", "50.000.000", "52.500.000", "56.000.000", "64.000.000", "70.000.000", "75.000.000", "80.000.000", "150.000.000"};
 
-    //TO DO: temporarily change to ND100/2019
-    public static String[] mucphatRange = {"50.000","60.000","80.000","100.000","200.000","250.000","300.000","400.000","500.000","600.000","800.000","1.000.000","1.200.000","1.500.000","1.600.000","2.000.000","3.000.000","4.000.000","5.000.000","6.000.000","7.000.000","7.500.000","8.000.000","10.000.000","12.000.000","14.000.000","15.000.000","16.000.000","18.000.000","20.000.000","25.000.000","28.000.000","30.000.000","32.000.000","36.000.000","40.000.000","50.000.000","56.000.000","64.000.000","70.000.000","200.000.000"};
-    public static String[] danhsachvanban = {"nd46", "qc41", "tt01", "lgt", "lxlvphc", "tt652020"};
+    private static HashMap<Integer,String[]> mucphatRangePerVanban = new HashMap<Integer,String[]>(){{
+        put(6, new String[]{"50.000", "60.000", "80.000", "100.000", "200.000", "250.000", "300.000", "400.000", "500.000", "600.000", "800.000", "1.000.000", "1.200.000", "1.500.000", "1.600.000", "2.000.000", "3.000.000", "4.000.000", "5.000.000", "6.000.000", "7.000.000", "7.500.000", "8.000.000", "10.000.000", "12.000.000", "14.000.000", "15.000.000", "16.000.000", "18.000.000", "20.000.000", "25.000.000", "28.000.000", "30.000.000", "32.000.000", "36.000.000", "40.000.000", "50.000.000", "56.000.000", "64.000.000", "70.000.000", "200.000.000"});
+        put(2, new String[]{"50.000", "60.000", "80.000", "100.000", "120.000", "200.000", "300.000", "400.000", "500.000", "600.000", "800.000", "1.000.000", "1.200.000", "500.000", "1.600.000", "2.000.000", "2.500.000", "3.000.000", "4.000.000", "5.000.000", "6.000.000", "7.000.000", "8.000.000", "10.000.000", "12.000.000", "14.000.000", "15.000.000", "16.000.000", "18.000.000", "20.000.000", "25.000.000", "28.000.000", "30.000.000", "32.000.000", "36.000.000", "37.500.000", "40.000.000", "50.000.000", "52.500.000", "56.000.000", "64.000.000", "70.000.000", "75.000.000", "80.000.000", "150.000.000"});
+    }};
+    private static HashMap<Integer,String> tamgiuPhuongtienDieukhoanID = new HashMap<Integer,String>(){{
+        put(6,"6592");
+        put(2, "2820");
+    }};
+//    public static String[] danhsachvanban = {"nd46", "qc41", "tt01", "lgt", "lxlvphc", "tt652020"};
     public static final String SEARCH_TYPE_VANBAN = "vanban";
     public static final String SEARCH_TYPE_MUCPHAT = "mucphat";
     public static final String SEARCH_TYPE_BIENBAO = "bienbao";
@@ -22,12 +29,13 @@ public class GeneralSettings {
     public static final String PHUONGTIEN_XECHUYENDUNG = "Xe chuyên dùng";
     public static final String PHUONGTIEN_TAUHOA = "Tàu hoả";
     public static final String PHUONGTIEN_DIBO = "Đi bộ";
-    public static String tamgiuPhuongtienDieukhoanID = "6592"; //TO DO: temporarily change to ND100/2019
     public static final String APP_CONFIG_KEY_ADSOPTOUT ="adsOptout";
 
     public static boolean isAdsOptout = false; //false will allow ads to display
     public static boolean isDevMode = true;
     public static int requiredDBVersion = 9;
+    private static int defaultActiveQC41Id = 7; //this would be used for the search of querying the lastest road sign
+    private static int defaultActiveNDXPId = 6; //this would be used for the search of querying the latest NDXP
 
     public static String MINIMUM_APP_VERSION_REQUIRED = "1.0";
     public static boolean ENABLE_INAPP_NOTIF = false;
@@ -45,15 +53,8 @@ public class GeneralSettings {
     public static int defaultApplicationStateCheckInterval = 60;
     public static boolean isAppClosed = true;
 
-    //TO DO: temporarily change to ND100/2019
-    private static String nd46Id = "6";
-    //TO DO: temporarily change to QC41/2019
-    private static String qc41Id = "7";
-    private static String tt01Id = "3";
-    private static String lgtId = "4";
-    private static String lxlvphcId = "5";
-    private static String tt652020Id = "8";
-    private static HashMap<String, HashMap<String, String>> vanbanInfo = new HashMap<>();
+    private static HashMap<Integer, Vanban> vanbanInfo = new HashMap<>();
+    private static int maxVanbanId = 0; //check if the maximum value of vanbanId
 
     public static int getRecordCapByRam() {
         float ram = getFreePhysicalMemorySize();
@@ -100,45 +101,63 @@ public class GeneralSettings {
         return (float) (freeSize / 1048576L);
     }
 
-    public static String getVanbanInfo(String name, String info) {
-        HashMap<String, String> value = vanbanInfo.get(name);
-
-        if (value == null) {
-            HashMap<String, String> vbInfo = new HashMap<>();
-            switch (name) {
-                case "nd46":
-                    vbInfo.put("id", nd46Id);
-                    vbInfo.put("fullName", "Nghị định 100/2019"); //TO DO: temporarily change to ND100/2019
-                    break;
-                case "qc41":
-                    vbInfo.put("id", qc41Id);
-                    vbInfo.put("fullName", "Quy chuẩn 41/2019"); //TO DO: temporarily change to QC41/2019
-                    break;
-                case "tt01":
-                    vbInfo.put("id", tt01Id);
-                    vbInfo.put("fullName", "Thông tư 01/2016");
-                    break;
-                case "tt652020":
-                    vbInfo.put("id", tt652020Id);
-                    vbInfo.put("fullName", "Thông tư 65/2020");
-                    break;
-                case "lgt":
-                    vbInfo.put("id", lgtId);
-                    vbInfo.put("fullName", "Luật giao thông 2008");
-                    break;
-                case "lxlvphc":
-                    vbInfo.put("id", lxlvphcId);
-                    vbInfo.put("fullName", "Luật xử lý vi phạm hành chính 2012");
-                    break;
-                default:
-                    break;
-            }
-            vanbanInfo.put(name, vbInfo);
-            return vanbanInfo.get(name).get(info);
-        } else {
-            return value.get(info);
+    public static String[] getMucphatRangePerVanban(int id) {
+        String[] mucphat = mucphatRangePerVanban.get(id);
+        if (mucphat != null){
+            return  mucphat;
+        }else {
+            return new String[]{""};
         }
     }
 
+    public static String getTamgiuPhuongtienDieukhoanID(int id) {
+        return tamgiuPhuongtienDieukhoanID.get(id);
+    }
 
+    public static String getVanbanInfo(int id, String info) {
+        Vanban vanban = vanbanInfo.get(id);
+
+        if(vanban != null){
+            switch (info.toLowerCase()){
+                case "valid":
+                    return vanban.getHieuluc();
+                case "shortname":
+                    return vanban.getTenRutgon();
+                case "fullname":
+                    return vanban.getTen();
+                case "replace":
+                    return ""+vanban.getVanbanThaytheId();
+                default:
+                    return "";
+            }
+        } else {
+            return "";
+        }
+    }
+
+    public static void setVanbanInfo(Vanban[] vanbans) {
+        maxVanbanId = 0;
+        for(Vanban vb: vanbans) {
+            vanbanInfo.put(vb.getId(),vb);
+            if (vb.getId() > maxVanbanId) {
+                maxVanbanId = vb.getId();
+            }
+        }
+    }
+
+    public static int getMaxVanbanId() {
+        return maxVanbanId;
+    }
+
+    public static void setMaxVanbanId(int maxVanbanId) {
+        GeneralSettings.maxVanbanId = maxVanbanId;
+    }
+
+    public static int getDefaultActiveQC41Id() {
+        return defaultActiveQC41Id;
+    }
+
+    public static int getDefaultActiveNDXPId() {
+        return defaultActiveNDXPId;
+    }
 }

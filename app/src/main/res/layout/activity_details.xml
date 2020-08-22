@@ -21,11 +21,11 @@
                 android:id="@+id/lblVanban"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="8px"
-                android:paddingRight="8px"
-                android:paddingTop="2px"
-                android:paddingBottom="0px"
-                style="@style/smallBlurBoldText"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="0dp"
+                style="@style/textSubtitle"
                 app:layout_constraintTop_toTopOf="parent" />
             <android.support.constraint.ConstraintLayout
                 android:id="@+id/breadscrubsView"
@@ -36,12 +36,12 @@
 
                 <TextView
                     android:id="@+id/lblDieukhoan"
-                    style="@style/smallBoldText"
+                    style="@style/textTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingTop="2dp"
                     android:paddingBottom="2dp"
-                    android:gravity="center_vertical|left"
+                    android:gravity="center_vertical|start"
                     android:text="123gggg"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -53,7 +53,7 @@
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
                     android:textColor="@color/blue"
-                    android:gravity="center_vertical|right"
+                    android:gravity="center_vertical|end"
                     android:paddingTop="1dp"
                     android:paddingBottom="1dp"
                     android:paddingRight="1dp"
@@ -70,10 +70,11 @@
                 android:id="@+id/lblNoidung"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="8px"
-                android:paddingRight="8px"
-                android:paddingTop="2px"
-                android:paddingBottom="0px"
+                style="@style/textNormal"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="0dp"
                 app:layout_constraintTop_toBottomOf="@id/breadscrubsView" />
 
             <LinearLayout
@@ -81,10 +82,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingLeft="8px"
-                android:paddingRight="8px"
-                android:paddingTop="2px"
-                android:paddingBottom="0px"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="0dp"
                 app:layout_constraintTop_toBottomOf="@id/lblNoidung" >
 
                 <LinearLayout
@@ -99,7 +100,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
                         android:text="@string/muc_phat"
-                        style="@style/smallBoldText"/>
+                        style="@style/textBold"/>
 
                     <TextView
                         android:id="@+id/mucphatDetails"
@@ -121,7 +122,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
                         android:text="@string/phuong_tien"
-                        style="@style/smallBoldText"/>
+                        style="@style/textBold"/>
 
                     <TextView
                         android:id="@+id/phuongtienDetails"
@@ -142,7 +143,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
                         android:text="@string/linh_vuc"
-                        style="@style/smallBoldText"/>
+                        style="@style/textBold"/>
 
                     <TextView
                         android:id="@+id/linhvucDetails"
@@ -164,7 +165,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight=".2"
                         android:text="@string/doi_tuong"
-                        style="@style/smallBoldText"/>
+                        style="@style/textBold"/>
 
                     <TextView
                         android:id="@+id/doituongDetails"
@@ -179,10 +180,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingLeft="4px"
-                android:paddingRight="8px"
-                android:paddingTop="2px"
-                android:paddingBottom="0px"
+                android:paddingLeft="4dp"
+                android:paddingRight="8dp"
+                android:paddingTop="4dp"
+                android:paddingBottom="0dp"
                 app:layout_constraintTop_toBottomOf="@id/extraView" >
 
                 <LinearLayout
@@ -194,14 +195,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/hinh_phat_bo_sung"
-                        style="@style/smallBoldText" />
+                        style="@style/textBold" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:paddingLeft="8px">
+                    android:paddingLeft="8dp">
 
                     <TextView
                         android:id="@+id/hinhphatbosungDetails"
@@ -215,10 +216,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingLeft="4px"
-                android:paddingRight="8px"
-                android:paddingTop="2px"
-                android:paddingBottom="0px"
+                android:paddingLeft="4dp"
+                android:paddingRight="8dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="0dp"
                 app:layout_constraintTop_toBottomOf="@id/hinhphatbosung">
 
                 <LinearLayout
@@ -230,14 +231,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/bien_phap_khac_phuc"
-                        style="@style/smallBoldText" />
+                        style="@style/textBold" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:paddingLeft="8px">
+                    android:paddingLeft="8dp">
 
                     <TextView
                         android:id="@+id/bienphapkhacphucDetails"
@@ -251,11 +252,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingLeft="4px"
-                android:paddingRight="8px"
-                android:paddingTop="2px"
-                android:paddingBottom="0px"
-                app:layout_constraintTop_toBottomOf="@id/bienphapkhacphuc">
+                android:paddingLeft="4dp"
+                android:paddingRight="8dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="0dp"
+                app:layout_constraintTop_toBottomOf="@id/bienphapkhacphuc"
+                android:paddingStart="4dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -266,14 +268,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/tam_giu_phuong_tien"
-                        style="@style/smallBoldText"/>
+                        style="@style/textBold"/>
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:paddingLeft="8px" >
+                    android:paddingLeft="8dp" >
 
                     <TextView
                         android:id="@+id/tamgiuDetails"
@@ -287,10 +289,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingLeft="4px"
-                android:paddingRight="8px"
-                android:paddingTop="2px"
-                android:paddingBottom="0px"
+                android:paddingLeft="4dp"
+                android:paddingRight="8dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="0dp"
                 app:layout_constraintTop_toBottomOf="@id/tamgiu">
 
                 <LinearLayout
@@ -302,14 +304,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/tham_quyen"
-                        style="@style/smallBoldText"/>
+                        style="@style/textBold"/>
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:paddingLeft="8px" >
+                    android:paddingLeft="8dp" >
 
                     <TextView
                         android:id="@+id/thamquyenDetails"
@@ -330,10 +332,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingLeft="4px"
-                android:paddingRight="4px"
-                android:paddingTop="2px"
-                android:paddingBottom="0px"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="0dp"
                 app:layout_constraintTop_toBottomOf="@id/minhhoaView"
                 app:layout_constraintBottom_toBottomOf="parent">
                 <!-- RecyclerView should be wrapped by a RelativeLayout since we want all RecycleView's items
@@ -366,6 +368,10 @@
             android:id="@+id/btnXemthem"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
             android:background="@color/selectedBtnBG"
             android:textColor="@color/white"
             android:text="@string/xem_cac_dieu_khoan_lien_quan" />

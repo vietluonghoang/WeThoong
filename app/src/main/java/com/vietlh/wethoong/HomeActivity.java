@@ -60,6 +60,7 @@ public class HomeActivity extends AppCompatActivity implements CallbackActivity 
         adsHelper = new AdsHelper();
         adsHelper.updateLastConnectionState(this);
         GeneralSettings.LAST_APP_OPEN_TIMESTAMP = System.currentTimeMillis() / 1000;
+        GeneralSettings.setVanbanInfo(queries.selectAllVanban());
     }
 
     @Override

@@ -24,6 +24,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.vietlh.wethoong.DetailsActivity;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
@@ -202,11 +204,18 @@ public class UtilsHelper {
                 "Copy");
 
         // cast the received View to TextView so that you can get its text
-        TextView yourTextView = (TextView) view;
+//        TextView yourTextView = (TextView) view;
+
+        // cast the received activity to Activity class so that you can get its text by calling its methods
+        DetailsActivity senderActivity = (DetailsActivity) activity;
 
         ClipboardManager clipboard = (ClipboardManager) activity.getSystemService(Context.CLIPBOARD_SERVICE);
         // place your TextView's text in clipboard
-        ClipData clip = ClipData.newPlainText("noidung", yourTextView.getText());
+//        ClipData clip = ClipData.newPlainText("noidung", yourTextView.getText());
+
+        // place your activity's returned text in clipboard
+        ClipData clip = ClipData.newPlainText("noidung", senderActivity.getFullText());
+
         clipboard.setPrimaryClip(clip);
         Toast toast = Toast.makeText(activity, "Đã copy!", Toast.LENGTH_SHORT);
         toast.show();

@@ -9,7 +9,6 @@ import com.vietlh.wethoong.entities.Loaivanban;
 import com.vietlh.wethoong.entities.Phantich;
 import com.vietlh.wethoong.entities.Vanban;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -39,6 +38,27 @@ public class Queries {
         }
         dkArr.add(dieukhoan);
         return dkArr;
+    }
+
+    public Vanban[] selectAllVanban(){
+        connection.open();
+        String sql = "select vb.id as id, vb.ten as ten, vb.loai as lvbId, lvb.ten as lvbTen, vb.so as so, vb.nam as nam, vb.ma as ma, vb.coquanbanhanh as cqId, cq.ten as cqTen, vb.noidung as noidung, vb.hieuluc as hieuluc, vb.vanbanThaytheId as vanbanThaytheId, vb.tenRutgon as tenRutgon from tblVanban as vb join tblLoaiVanban as lvb on vb.loai = lvb.id JOIN tblCoquanbanhanh as cq on vb.coquanbanhanh = cq.id";
+        Cursor cursor = connection.executeQuery(sql);
+        ArrayList<Vanban> vanbanArray = new ArrayList<>();
+        if (cursor != null) {
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                Loaivanban loaivanban = new Loaivanban(cursor.getInt(2), cursor.getString(3));
+                Coquanbanhanh coquanbanhanh = new Coquanbanhanh(cursor.getInt(7), cursor.getString(8));
+                Vanban vanban = new Vanban(cursor.getInt(0), cursor.getString(1), loaivanban, cursor.getString(4), cursor.getString(5), cursor.getString(6), coquanbanhanh, cursor.getString(9),cursor.getString(12),cursor.getString(10),cursor.getInt(11));
+                vanbanArray.add(vanban);
+                cursor.moveToNext();
+            }
+        }
+        connection.close();
+        Vanban[] vanbanArr = new Vanban[vanbanArray.size()];
+        vanbanArr = vanbanArray.toArray(vanbanArr);
+        return vanbanArr;
     }
 
     public ArrayList<Dieukhoan> getAllDieukhoan() {
@@ -369,7 +389,7 @@ public class Queries {
                 String tcDen = cursor.getString(3);
 
                 if ((!"".equals(tcTu)) && (!"".equals(tcDen))) {
-                    result = "cá nhân: " + cnTu + " - " + cnDen + "tổ chức: " + tcTu + " - " + tcDen;
+                    result = "cá nhân: " + cnTu + " - " + cnDen + " \ntổ chức: " + tcTu + " - " + tcDen;
                 } else {
                     if (!"".equals(cnDen)) {
                         if (!"".equals(cnTu)) {
@@ -691,7 +711,8 @@ public class Queries {
 
         HashMap<String, Dieukhoan> dkList = new HashMap<>();
         ArrayList<String> vbid = new ArrayList<String>();
-        vbid.add(GeneralSettings.getVanbanInfo("qc41", "id"));
+//        vbid.add(GeneralSettings.getVanbanInfo("qc41", "id"));
+        vbid.add(""+GeneralSettings.getDefaultActiveQC41Id());
         for (Dieukhoan dk : searchDieukhoanByIDs(new ArrayList<String>(result.values()), vbid)) {
             dkList.put(String.valueOf(dk.getId()), dk);
         }
@@ -766,7 +787,7 @@ public class Queries {
 
         HashMap<String, Dieukhoan> dkList = new HashMap<>();
         ArrayList<String> vbid = new ArrayList<String>();
-        vbid.add(GeneralSettings.getVanbanInfo("qc41", "id"));
+        vbid.add(GeneralSettings.getDefaultActiveQC41Id() + "");
         for (Dieukhoan dk : searchDieukhoanByIDs(new ArrayList<String>(result.values()), vbid)) {
             dkList.put(String.valueOf(dk.getId()), dk);
         }

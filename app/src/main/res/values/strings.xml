@@ -54,4 +54,9 @@
     <string name="fbTitle">F:</string>
     <string name="eTitle">E:</string>
     <string name="huongdanluat">Hướng dẫn luật</string>
+    <string name="popupFilterTitle">Chọn văn bản:</string>
+    <string name="bienbaoFilterTitle">Chọn hình dạng biển báo:</string>
+    <string name="vachkeFilterTitle">Chọn đặc điểm của vạch kẻ đường:</string>
+    <string name="chitietBienbaoFilterTitle">Chọn chi tiết trên biển báo</string>
+    <string name="vitriVachkeFilterTitle">Chọn vị trí vạch kẻ đường</string>
 </resources>

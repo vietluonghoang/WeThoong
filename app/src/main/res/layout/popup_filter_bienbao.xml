@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:id="@+id/bienbaoFilterTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:padding="2dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/viewTitle"
+            android:text="@string/bienbaoFilterTitle" />
+    </LinearLayout>
+    <ScrollView
+        android:id="@+id/filterPopupContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="4dp"
+        app:layout_constraintBottom_toTopOf="@id/btnXongSection"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bienbaoFilterTitle">
+
+            <LinearLayout
+                android:id="@+id/PlateShapeSelection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_margin="2dp">
+                <LinearLayout
+                    android:id="@+id/optionCircleSection"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="2dp">
+
+                    <TextView
+                        android:id="@+id/optionCircleTitle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="4"
+                        style="@style/textNormal"
+                        android:text="Hình tròn" />
+
+                    <Switch
+                        android:id="@+id/optionCircleCheckbox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintRight_toRightOf="parent" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/optionRectangleSection"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="2dp">
+
+                    <TextView
+                        android:id="@+id/optionRectangleTitle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="4"
+                        style="@style/textNormal"
+                        android:text="Hình chữ nhật" />
+
+                    <Switch
+                        android:id="@+id/optionRectangleCheckbox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintRight_toRightOf="parent" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/optionTriangleSection"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="2dp">
+
+                    <TextView
+                        android:id="@+id/optionTriangleTitle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="4"
+                        style="@style/textNormal"
+                        android:text="Hình tam giác" />
+
+                    <Switch
+                        android:id="@+id/optionTriangleCheckbox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintRight_toRightOf="parent" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/optionArrowSection"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="2dp">
+
+                    <TextView
+                        android:id="@+id/optionArrowTitle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="4"
+                        style="@style/textNormal"
+                        android:text="Hình mũi tên" />
+
+                    <Switch
+                        android:id="@+id/optionArrowCheckbox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintRight_toRightOf="parent" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/optionSquareSection"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:padding="2dp">
+
+                    <TextView
+                        android:id="@+id/optionSquareTitle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="4"
+                        style="@style/textNormal"
+                        android:text="Hình vuông" />
+
+                    <Switch
+                        android:id="@+id/optionSquareCheckbox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintRight_toRightOf="parent" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/optionRhombicSection"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:padding="2dp">
+
+                    <TextView
+                        android:id="@+id/optionRhombicTitle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="4"
+                        style="@style/textNormal"
+                        android:text="Hình thoi" />
+
+                    <Switch
+                        android:id="@+id/optionRhombicCheckbox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintRight_toRightOf="parent" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/optionXshapeSection"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:padding="2dp">
+
+                    <TextView
+                        android:id="@+id/optionXshapeTitle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="4"
+                        style="@style/textNormal"
+                        android:text="Hình chữ X" />
+
+                    <Switch
+                        android:id="@+id/optionXshapeCheckbox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintRight_toRightOf="parent" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/optionOctagonSection"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:padding="2dp">
+
+                    <TextView
+                        android:id="@+id/optionOctagonTitle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="4"
+                        style="@style/textNormal"
+                        android:text="Hình bát giác" />
+
+                    <Switch
+                        android:id="@+id/optionOctagonCheckbox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintRight_toRightOf="parent" />
+                </LinearLayout>
+
+            </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/btnXongSection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/filterPopupContent">
+
+        <Button
+            android:id="@+id/btnXong"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/selectedBtnBG"
+            android:text="@string/xong"
+            android:textColor="@color/white" />
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>

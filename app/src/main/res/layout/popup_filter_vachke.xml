@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:id="@+id/vachkeFilterTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:padding="2dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/viewTitle"
+            android:text="@string/vachkeFilterTitle" />
+    </LinearLayout>
+    <ScrollView
+        android:id="@+id/filterPopupContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="4dp"
+        app:layout_constraintBottom_toTopOf="@id/btnXongSection"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/vachkeFilterTitle">
+
+            <LinearLayout
+                android:id="@+id/vachShapeSelection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_margin="2dp">
+
+                <LinearLayout
+                    android:id="@+id/optionYellowSelection"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="2dp">
+
+                    <TextView
+                        android:id="@+id/optionYellowTitle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="4"
+                        style="@style/textNormal"
+                        android:text="Màu vàng" />
+
+                    <Switch
+                        android:id="@+id/optionYellowCheckbox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintRight_toRightOf="parent" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/optionWhiteSection"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="2dp">
+
+                    <TextView
+                        android:id="@+id/optionWhiteTitle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="4"
+                        style="@style/textNormal"
+                        android:text="Màu trắng" />
+
+                    <Switch
+                        android:id="@+id/optionWhiteCheckbox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintRight_toRightOf="parent" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/optionRedSection"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="2dp">
+
+                    <TextView
+                        android:id="@+id/optionRedTitle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="4"
+                        style="@style/textNormal"
+                        android:text="Màu đỏ" />
+
+                    <Switch
+                        android:id="@+id/optionRedCheckbox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintRight_toRightOf="parent" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/optionBlackSection"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="2dp">
+
+                    <TextView
+                        android:id="@+id/optionBlackTitle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="4"
+                        style="@style/textNormal"
+                        android:text="Màu đen" />
+
+                    <Switch
+                        android:id="@+id/optionBlackCheckbox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintRight_toRightOf="parent" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/optionAlphanumericSection"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:padding="2dp">
+
+                    <TextView
+                        android:id="@+id/optionAlphanumericTitle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="4"
+                        style="@style/textNormal"
+                        android:text="Vạch chữ viết" />
+
+                    <Switch
+                        android:id="@+id/optionAlphanumericCheckbox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintRight_toRightOf="parent" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/optionShapeSection"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:padding="2dp">
+
+                    <TextView
+                        android:id="@+id/optionShapeTitle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="4"
+                        style="@style/textNormal"
+                        android:text="Vạch theo hình" />
+
+                    <Switch
+                        android:id="@+id/optionShapeCheckbox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintRight_toRightOf="parent" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/optionParallelSection"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:padding="2dp">
+
+                    <TextView
+                        android:id="@+id/optionParallelTitle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="4"
+                        style="@style/textNormal"
+                        android:text="Vạch song song" />
+
+                    <Switch
+                        android:id="@+id/optionParallelCheckbox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintRight_toRightOf="parent" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/optionDuoSection"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:padding="2dp">
+
+                    <TextView
+                        android:id="@+id/optionDuoTitle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="4"
+                        style="@style/textNormal"
+                        android:text="Vạch đôi" />
+
+                    <Switch
+                        android:id="@+id/optionDuoCheckbox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintRight_toRightOf="parent" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/optionSingleSection"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:padding="2dp">
+
+                    <TextView
+                        android:id="@+id/optionSingleTitle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="4"
+                        style="@style/textNormal"
+                        android:text="Vạch đơn" />
+
+                    <Switch
+                        android:id="@+id/optionSingleCheckbox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintRight_toRightOf="parent" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/optionSignSection"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:padding="2dp">
+
+                    <TextView
+                        android:id="@+id/optionSignTitle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="4"
+                        style="@style/textNormal"
+                        android:text="Vạch biểu tượng" />
+
+                    <Switch
+                        android:id="@+id/optionSignCheckbox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintRight_toRightOf="parent" />
+                </LinearLayout>
+            </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/btnXongSection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/filterPopupContent">
+
+        <Button
+            android:id="@+id/btnXong"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/selectedBtnBG"
+            android:text="@string/xong"
+            android:textColor="@color/white" />
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>

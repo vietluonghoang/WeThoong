@@ -15,23 +15,23 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            style="@style/smallBoldText"
+            style="@style/textBold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="8px"
-            android:paddingTop="8px"
-            android:paddingRight="8px"
-            android:paddingBottom="0px"
+            android:paddingLeft="8dp"
+            android:paddingTop="8dp"
+            android:paddingRight="8dp"
+            android:paddingBottom="0dp"
             android:text="@string/founderTitle" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingLeft="8px"
-            android:paddingTop="8px"
-            android:paddingRight="8px"
-            android:paddingBottom="0px"
+            android:paddingLeft="8dp"
+            android:paddingTop="8dp"
+            android:paddingRight="8dp"
+            android:paddingBottom="0dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -41,12 +41,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="founder's image"
-                android:minWidth="100px"
-                android:minHeight="100px"
-                android:paddingLeft="0px"
-                android:paddingTop="0px"
-                android:paddingRight="0px"
-                android:paddingBottom="0px"
+                android:minWidth="100dp"
+                android:minHeight="100dp"
+                android:paddingLeft="0dp"
+                android:paddingTop="0dp"
+                android:paddingRight="0dp"
+                android:paddingBottom="0dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -55,10 +55,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:paddingLeft="16px"
-                android:paddingTop="0px"
-                android:paddingRight="0px"
-                android:paddingBottom="0px"
+                android:paddingLeft="16dp"
+                android:paddingTop="0dp"
+                android:paddingRight="0dp"
+                android:paddingBottom="0dp"
                 app:layout_constraintLeft_toRightOf="@id/founderImage"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -79,10 +79,10 @@
                         android:id="@+id/founderFBDetails"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingLeft="4px"
-                        android:paddingTop="0px"
-                        android:paddingRight="0px"
-                        android:paddingBottom="0px"
+                        android:paddingLeft="4dp"
+                        android:paddingTop="0dp"
+                        android:paddingRight="0dp"
+                        android:paddingBottom="0dp"
                         android:text="@string/wethoongFB"
                         android:textColor="@color/blue" />
                 </LinearLayout>
@@ -103,10 +103,10 @@
                         android:id="@+id/founderEDetails"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingLeft="4px"
-                        android:paddingTop="0px"
-                        android:paddingRight="0px"
-                        android:paddingBottom="0px"
+                        android:paddingLeft="4dp"
+                        android:paddingTop="0dp"
+                        android:paddingRight="0dp"
+                        android:paddingBottom="0dp"
                         android:text="@string/wethoongEmail"
                         android:textColor="@color/blue" />
                 </LinearLayout>

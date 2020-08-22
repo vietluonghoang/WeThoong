@@ -19,11 +19,10 @@
 
         <TextView
             android:id="@+id/lblPlateShape"
+            style="@style/textTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Chọn hình dạng biển báo "
-            android:textSize="9sp"
-            android:textStyle="bold"
+            android:text="@string/bienbaoFilterTitle"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -41,7 +40,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent">
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <ImageButton
                     android:id="@+id/btnLeftNav"
@@ -98,23 +98,23 @@
                     android:minHeight="20dp"
                     android:text="@string/loc_theo"
                     android:textColor="#0000ff"
-                    app:layout_constraintWidth_percent=".25"
                     app:layout_constraintBottom_toBottomOf="@id/lblLoctheo"
-                    app:layout_constraintRight_toLeftOf="@id/lblLoctheo"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintRight_toLeftOf="@id/lblLoctheo"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintWidth_percent=".25" />
 
                 <TextView
                     android:id="@+id/lblLoctheo"
-                    style="@style/smallText"
+                    style="@style/textSmall"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:baselineAligned="false"
-                    app:layout_constraintWidth_percent=".75"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toRightOf="@id/btnLoctheo"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintWidth_percent=".75" />
             </android.support.constraint.ConstraintLayout>
 
         </android.support.constraint.ConstraintLayout>
@@ -131,9 +131,8 @@
                 android:id="@+id/lblPlateDetails"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Chọn chi tiết trên biển báo "
-                android:textSize="9dp"
-                android:textStyle="bold"
+                android:text="@string/chitietBienbaoFilterTitle"
+                style="@style/textTitle"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -181,11 +180,12 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Mũi tên"
-                            android:textSize="12sp"
                             android:textAlignment="center"
+                            android:textSize="12sp"
                             app:layout_constraintLeft_toLeftOf="parent"
                             app:layout_constraintRight_toRightOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/btnArrow" />
+                            app:layout_constraintTop_toBottomOf="@id/btnArrow"
+                            android:gravity="center_horizontal" />
                     </android.support.constraint.ConstraintLayout>
 
                     <android.support.constraint.ConstraintLayout
@@ -213,11 +213,12 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Chữ viết"
-                            android:textSize="12sp"
                             android:textAlignment="center"
+                            android:textSize="12sp"
                             app:layout_constraintLeft_toLeftOf="parent"
                             app:layout_constraintRight_toRightOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/btnAlphanumerics" />
+                            app:layout_constraintTop_toBottomOf="@id/btnAlphanumerics"
+                            android:gravity="center_horizontal" />
                     </android.support.constraint.ConstraintLayout>
 
                     <android.support.constraint.ConstraintLayout
@@ -245,11 +246,12 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Người, \nđộng vật"
-                            android:textSize="12sp"
                             android:textAlignment="center"
+                            android:textSize="12sp"
                             app:layout_constraintLeft_toLeftOf="parent"
                             app:layout_constraintRight_toRightOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/btnCreatures" />
+                            app:layout_constraintTop_toBottomOf="@id/btnCreatures"
+                            android:gravity="center_horizontal" />
                     </android.support.constraint.ConstraintLayout>
 
                     <android.support.constraint.ConstraintLayout
@@ -278,11 +280,12 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Phương tiện"
-                            android:textSize="12sp"
                             android:textAlignment="center"
+                            android:textSize="12sp"
                             app:layout_constraintLeft_toLeftOf="parent"
                             app:layout_constraintRight_toRightOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/btnVehicles" />
+                            app:layout_constraintTop_toBottomOf="@id/btnVehicles"
+                            android:gravity="center_horizontal" />
 
                     </android.support.constraint.ConstraintLayout>
                 </android.support.constraint.ConstraintLayout>
@@ -324,11 +327,12 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Biểu tượng"
-                            android:textSize="12sp"
                             android:textAlignment="center"
+                            android:textSize="12sp"
                             app:layout_constraintLeft_toLeftOf="parent"
                             app:layout_constraintRight_toRightOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/btnSigns" />
+                            app:layout_constraintTop_toBottomOf="@id/btnSigns"
+                            android:gravity="center_horizontal" />
                     </android.support.constraint.ConstraintLayout>
 
                     <android.support.constraint.ConstraintLayout
@@ -356,11 +360,12 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Công trình, \nđịa hình"
-                            android:textSize="12sp"
                             android:textAlignment="center"
+                            android:textSize="12sp"
                             app:layout_constraintLeft_toLeftOf="parent"
                             app:layout_constraintRight_toRightOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/btnStructures" />
+                            app:layout_constraintTop_toBottomOf="@id/btnStructures"
+                            android:gravity="center_horizontal" />
                     </android.support.constraint.ConstraintLayout>
 
                     <android.support.constraint.ConstraintLayout
@@ -388,11 +393,12 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Ký hiệu"
-                            android:textSize="12sp"
                             android:textAlignment="center"
+                            android:textSize="12sp"
                             app:layout_constraintLeft_toLeftOf="parent"
                             app:layout_constraintRight_toRightOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/btnFigures" />
+                            app:layout_constraintTop_toBottomOf="@id/btnFigures"
+                            android:gravity="center_horizontal" />
                     </android.support.constraint.ConstraintLayout>
 
                     <android.support.constraint.ConstraintLayout
@@ -421,11 +427,12 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text=""
-                            android:textSize="12sp"
                             android:textAlignment="center"
+                            android:textSize="12sp"
                             app:layout_constraintLeft_toLeftOf="parent"
                             app:layout_constraintRight_toRightOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/btnExtras" />
+                            app:layout_constraintTop_toBottomOf="@id/btnExtras"
+                            android:gravity="center_horizontal" />
 
                     </android.support.constraint.ConstraintLayout>
                 </android.support.constraint.ConstraintLayout>

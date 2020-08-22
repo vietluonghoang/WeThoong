@@ -68,11 +68,7 @@ public class BienbaoActivity extends AppCompatActivity {
     private Queries queries = new Queries(DBConnection.getInstance(this));
     private Button btnLoctheo;
     private TextView txtLoctheo;
-    private ConstraintLayout searchView;
-    private ConstraintLayout lineLoutPlateShapeSelect;
     private ConstraintLayout lineLoutPlateDetailsSelect;
-    private LinearLayout lineLoutLoaivanban;
-    private LinearLayout lineLoutMucphat;
     private HorizontalScrollView scvPlateShapes;
     private LinearLayout lineLoutPlateShapeItems;
     private ConstraintLayout cloutArrowView;
@@ -104,14 +100,14 @@ public class BienbaoActivity extends AppCompatActivity {
     private View customView;
     private LinearLayout lineLoutPlateShapeGroupsSelection;
     private LinearLayout lineLoutVachShapeGroupsSelection;
-    private CheckBox cbPlateShapeRectangle;
-    private CheckBox cbPlateShapeTriangle;
-    private CheckBox cbPlateShapeCircle;
-    private CheckBox cbPlateShapeSquare;
-    private CheckBox cbPlateShapeXshape;
-    private CheckBox cbPlateShapeOctagon;
-    private CheckBox cbPlateShapeRhombic;
-    private CheckBox cbPlateShapeArrow;
+    private Switch cbPlateShapeRectangle;
+    private Switch cbPlateShapeTriangle;
+    private Switch cbPlateShapeCircle;
+    private Switch cbPlateShapeSquare;
+    private Switch cbPlateShapeXshape;
+    private Switch cbPlateShapeOctagon;
+    private Switch cbPlateShapeRhombic;
+    private Switch cbPlateShapeArrow;
     private int colorNormalBtnBg;
     private int colorNormalBtnFg;
     private int colorSelectedBtnBg;
@@ -140,7 +136,7 @@ public class BienbaoActivity extends AppCompatActivity {
     }
 
     private void initAds() {
-        adsView = (LinearLayout) findViewById(R.id.adsView);
+        adsView = findViewById(R.id.adsView);
         adsHelper.updateLastConnectionState(this);
         if (GeneralSettings.wasConnectedToInternet && GeneralSettings.ENABLE_BANNER_ADS) {
             AdView googleAdView = new AdView(this);
@@ -168,12 +164,10 @@ public class BienbaoActivity extends AppCompatActivity {
     }
 
     private void initComponents() {
-        searchView = (ConstraintLayout) findViewById(R.id.searchView);
-        lineLoutPlateShapeSelect = (ConstraintLayout) findViewById(R.id.filterView);
-        scvPlateShapes = (HorizontalScrollView) findViewById(R.id.scvFilters);
-        lineLoutPlateShapeItems = (LinearLayout) findViewById(R.id.filterItem);
-        btnLoctheo = (Button) ((ConstraintLayout) findViewById(R.id.locTheoView)).findViewById(R.id.btnLoctheo);
-        txtLoctheo = (TextView) ((ConstraintLayout) findViewById(R.id.locTheoView)).findViewById(R.id.lblLoctheo);
+        scvPlateShapes = findViewById(R.id.scvFilters);
+        lineLoutPlateShapeItems = findViewById(R.id.filterItem);
+        btnLoctheo = findViewById(R.id.locTheoView).findViewById(R.id.btnLoctheo);
+        txtLoctheo = ((ConstraintLayout) findViewById(R.id.locTheoView)).findViewById(R.id.lblLoctheo);
 
         initPlateShapeGroups();
         initPlateDetails();
@@ -212,15 +206,19 @@ public class BienbaoActivity extends AppCompatActivity {
             case GeneralSettings.SEARCH_TYPE_VANBAN:
                 break;
             case GeneralSettings.SEARCH_TYPE_MUCPHAT:
-                addVanbanidToList(GeneralSettings.danhsachvanban[0]);
+                addVanbanidToList(GeneralSettings.getDefaultActiveNDXPId()+"");
                 break;
             case GeneralSettings.SEARCH_TYPE_BIENBAO:
-                addVanbanidToList(GeneralSettings.danhsachvanban[1]);
+                addVanbanidToList(GeneralSettings.getDefaultActiveQC41Id()+"");
             case GeneralSettings.SEARCH_TYPE_VACHKEDUONG:
-                addVanbanidToList(GeneralSettings.danhsachvanban[1]);
+                addVanbanidToList(GeneralSettings.getDefaultActiveQC41Id()+"");
             default:
-                for (String key : GeneralSettings.danhsachvanban) {
-                    addVanbanidToList(key);
+                int maxId = GeneralSettings.getMaxVanbanId();
+                while (maxId > 0){
+                    if (GeneralSettings.getVanbanInfo(maxId,"shortname").length() > 0){
+                        addVanbanidToList(maxId + "");
+                    }
+                    maxId--;
                 }
                 break;
         }
@@ -235,8 +233,8 @@ public class BienbaoActivity extends AppCompatActivity {
     }
 
     private void initPlateDetails() {
-        lineLoutPlateDetailsSelect = (ConstraintLayout) findViewById(R.id.detailsSelectView);
-        btnPlateDetailsAlphanumerics = (ImageButton) findViewById(R.id.btnAlphanumerics);
+        lineLoutPlateDetailsSelect = findViewById(R.id.detailsSelectView);
+        btnPlateDetailsAlphanumerics = findViewById(R.id.btnAlphanumerics);
         btnPlateDetailsAlphanumerics.setTag("Alphanumerics");
         setButtonBackgroundColor(btnPlateDetailsAlphanumerics, false);
         btnPlateDetailsAlphanumerics.setOnClickListener(new View.OnClickListener() {
@@ -245,14 +243,14 @@ public class BienbaoActivity extends AppCompatActivity {
                 updatePlateDetailsSelection(btnPlateDetailsAlphanumerics);
             }
         });
-        cloutAlphanumericsView = (ConstraintLayout) findViewById(R.id.alphanumericsView);
+        cloutAlphanumericsView = findViewById(R.id.alphanumericsView);
         cloutAlphanumericsView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 updatePlateDetailsSelection(btnPlateDetailsAlphanumerics);
             }
         });
-        btnPlateDetailsArrow = (ImageButton) findViewById(R.id.btnArrow);
+        btnPlateDetailsArrow = findViewById(R.id.btnArrow);
         btnPlateDetailsArrow.setTag("Arrows");
         setButtonBackgroundColor(btnPlateDetailsArrow, false);
         btnPlateDetailsArrow.setOnClickListener(new View.OnClickListener() {
@@ -261,14 +259,14 @@ public class BienbaoActivity extends AppCompatActivity {
                 updatePlateDetailsSelection(btnPlateDetailsArrow);
             }
         });
-        cloutArrowView = (ConstraintLayout) findViewById(R.id.arrowView);
+        cloutArrowView = findViewById(R.id.arrowView);
         cloutArrowView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 updatePlateDetailsSelection(btnPlateDetailsArrow);
             }
         });
-        btnPlateDetailsCreatures = (ImageButton) findViewById(R.id.btnCreatures);
+        btnPlateDetailsCreatures = findViewById(R.id.btnCreatures);
         btnPlateDetailsCreatures.setTag("Creatures");
         setButtonBackgroundColor(btnPlateDetailsCreatures, false);
         btnPlateDetailsCreatures.setOnClickListener(new View.OnClickListener() {
@@ -277,14 +275,14 @@ public class BienbaoActivity extends AppCompatActivity {
                 updatePlateDetailsSelection(btnPlateDetailsCreatures);
             }
         });
-        cloutCreaturesView = (ConstraintLayout) findViewById(R.id.creaturesView);
+        cloutCreaturesView = findViewById(R.id.creaturesView);
         cloutCreaturesView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 updatePlateDetailsSelection(btnPlateDetailsCreatures);
             }
         });
-        btnPlateDetailsStructures = (ImageButton) findViewById(R.id.btnStructures);
+        btnPlateDetailsStructures = findViewById(R.id.btnStructures);
         btnPlateDetailsStructures.setTag("Structures");
         setButtonBackgroundColor(btnPlateDetailsStructures, false);
         btnPlateDetailsStructures.setOnClickListener(new View.OnClickListener() {
@@ -293,14 +291,14 @@ public class BienbaoActivity extends AppCompatActivity {
                 updatePlateDetailsSelection(btnPlateDetailsStructures);
             }
         });
-        cloutStructuresView = (ConstraintLayout) findViewById(R.id.structuresView);
+        cloutStructuresView = findViewById(R.id.structuresView);
         cloutStructuresView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 updatePlateDetailsSelection(btnPlateDetailsStructures);
             }
         });
-        btnPlateDetailsFigures = (ImageButton) findViewById(R.id.btnFigures);
+        btnPlateDetailsFigures = findViewById(R.id.btnFigures);
         btnPlateDetailsFigures.setTag("Figures");
         setButtonBackgroundColor(btnPlateDetailsFigures, false);
         btnPlateDetailsFigures.setOnClickListener(new View.OnClickListener() {
@@ -309,14 +307,14 @@ public class BienbaoActivity extends AppCompatActivity {
                 updatePlateDetailsSelection(btnPlateDetailsFigures);
             }
         });
-        cloutFiguresView = (ConstraintLayout) findViewById(R.id.figuresView);
+        cloutFiguresView = findViewById(R.id.figuresView);
         cloutFiguresView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 updatePlateDetailsSelection(btnPlateDetailsFigures);
             }
         });
-        btnPlateDetailsVehicles = (ImageButton) findViewById(R.id.btnVehicles);
+        btnPlateDetailsVehicles = findViewById(R.id.btnVehicles);
         btnPlateDetailsVehicles.setTag("Vehicles");
         setButtonBackgroundColor(btnPlateDetailsVehicles, false);
         btnPlateDetailsVehicles.setOnClickListener(new View.OnClickListener() {
@@ -325,14 +323,14 @@ public class BienbaoActivity extends AppCompatActivity {
                 updatePlateDetailsSelection(btnPlateDetailsVehicles);
             }
         });
-        cloutVehiclesView = (ConstraintLayout) findViewById(R.id.vehiclesView);
+        cloutVehiclesView = findViewById(R.id.vehiclesView);
         cloutVehiclesView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 updatePlateDetailsSelection(btnPlateDetailsVehicles);
             }
         });
-        btnPlateDetailsSigns = (ImageButton) findViewById(R.id.btnSigns);
+        btnPlateDetailsSigns = findViewById(R.id.btnSigns);
         btnPlateDetailsSigns.setTag("Signs");
         setButtonBackgroundColor(btnPlateDetailsSigns, false);
         btnPlateDetailsSigns.setOnClickListener(new View.OnClickListener() {
@@ -341,14 +339,14 @@ public class BienbaoActivity extends AppCompatActivity {
                 updatePlateDetailsSelection(btnPlateDetailsSigns);
             }
         });
-        cloutSignsView = (ConstraintLayout) findViewById(R.id.signsView);
+        cloutSignsView = findViewById(R.id.signsView);
         cloutSignsView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 updatePlateDetailsSelection(btnPlateDetailsSigns);
             }
         });
-        btnPlateDetailsExtras = (ImageButton) findViewById(R.id.btnExtras);
+        btnPlateDetailsExtras = findViewById(R.id.btnExtras);
         btnPlateDetailsExtras.setTag("Extras");
         //make it invisible
 //        setButtonBackgroundColor(btnPlateDetailsExtras,false);
@@ -359,7 +357,7 @@ public class BienbaoActivity extends AppCompatActivity {
 //                updatePlateDetailsSelection(btnPlateDetailsExtras);
             }
         });
-        cloutExtrasView = (ConstraintLayout) findViewById(R.id.extrasView);
+        cloutExtrasView = findViewById(R.id.extrasView);
         cloutExtrasView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -382,8 +380,8 @@ public class BienbaoActivity extends AppCompatActivity {
         int desirableHeight = (int) ((float) helper.getScreenHeight() * 0.1);
         int desirablePadding = (int) ((float) desirableHeight * 0.05);
 
-        ((ImageButton) findViewById(R.id.btnLeftNav)).setBackground(helper.getDrawableFromAssets(this, "parts/navigate_left.png"));
-        ((ImageButton) findViewById(R.id.btnRightNav)).setBackground(helper.getDrawableFromAssets(this, "parts/navigate_right.png"));
+        findViewById(R.id.btnLeftNav).setBackground(helper.getDrawableFromAssets(this, "parts/navigate_left.png"));
+        findViewById(R.id.btnRightNav).setBackground(helper.getDrawableFromAssets(this, "parts/navigate_right.png"));
 
         ArrayList<String> groups = new ArrayList<>();
         for (String group :
@@ -487,24 +485,13 @@ public class BienbaoActivity extends AppCompatActivity {
         LayoutInflater layoutInflater = getLayoutInflater();
 
         //this is custom dialog
-        customView = layoutInflater.inflate(R.layout.popup_filters, null);
-
-        lineLoutLoaivanban = (LinearLayout) customView.findViewById(R.id.Loaivanban);
-        lineLoutMucphat = (LinearLayout) customView.findViewById(R.id.mucphatSection);
+        customView = layoutInflater.inflate(R.layout.popup_filter_bienbao, null);
         lineLoutPlateShapeGroupsSelection = (LinearLayout) customView.findViewById(R.id.PlateShapeSelection);
-        lineLoutVachShapeGroupsSelection = (LinearLayout) customView.findViewById(R.id.vachShapeSelection);
-//        ViewGroup.LayoutParams hiddenSection;
+
         switch (searchType) {
             case GeneralSettings.SEARCH_TYPE_VANBAN:
                 break;
             case GeneralSettings.SEARCH_TYPE_BIENBAO:
-                lineLoutMucphat.setVisibility(View.INVISIBLE);
-                lineLoutLoaivanban.setVisibility(View.INVISIBLE);
-                lineLoutPlateShapeGroupsSelection.setVisibility(View.VISIBLE);
-                lineLoutVachShapeGroupsSelection.setVisibility(View.INVISIBLE);
-
-                helper.hideSection(lineLoutMucphat);
-                helper.hideSection(lineLoutLoaivanban);
                 initPlateShapeFilters();
                 updateUIFromFilterData();
 
@@ -532,7 +519,7 @@ public class BienbaoActivity extends AppCompatActivity {
     }
 
     private void initPlateShapeFilters() {
-        cbPlateShapeArrow = (CheckBox) customView.findViewById(R.id.optionArrowCheckbox);
+        cbPlateShapeArrow = customView.findViewById(R.id.optionArrowCheckbox);
         cbPlateShapeArrow.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -543,7 +530,7 @@ public class BienbaoActivity extends AppCompatActivity {
                 }
             }
         });
-        cbPlateShapeCircle = (CheckBox) customView.findViewById(R.id.optionCircleCheckbox);
+        cbPlateShapeCircle = customView.findViewById(R.id.optionCircleCheckbox);
         cbPlateShapeCircle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -554,7 +541,7 @@ public class BienbaoActivity extends AppCompatActivity {
                 }
             }
         });
-        cbPlateShapeRectangle = (CheckBox) customView.findViewById(R.id.optionRectangleCheckbox);
+        cbPlateShapeRectangle = customView.findViewById(R.id.optionRectangleCheckbox);
         cbPlateShapeRectangle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -565,7 +552,7 @@ public class BienbaoActivity extends AppCompatActivity {
                 }
             }
         });
-        cbPlateShapeSquare = (CheckBox) customView.findViewById(R.id.optionSquareCheckbox);
+        cbPlateShapeSquare = customView.findViewById(R.id.optionSquareCheckbox);
         cbPlateShapeSquare.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -576,7 +563,7 @@ public class BienbaoActivity extends AppCompatActivity {
                 }
             }
         });
-        cbPlateShapeXshape = (CheckBox) customView.findViewById(R.id.optionXshapeCheckbox);
+        cbPlateShapeXshape = customView.findViewById(R.id.optionXshapeCheckbox);
         cbPlateShapeXshape.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -587,7 +574,7 @@ public class BienbaoActivity extends AppCompatActivity {
                 }
             }
         });
-        cbPlateShapeTriangle = (CheckBox) customView.findViewById(R.id.optionTriangleCheckbox);
+        cbPlateShapeTriangle = customView.findViewById(R.id.optionTriangleCheckbox);
         cbPlateShapeTriangle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -598,7 +585,7 @@ public class BienbaoActivity extends AppCompatActivity {
                 }
             }
         });
-        cbPlateShapeOctagon = (CheckBox) customView.findViewById(R.id.optionOctagonCheckbox);
+        cbPlateShapeOctagon = customView.findViewById(R.id.optionOctagonCheckbox);
         cbPlateShapeOctagon.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -609,7 +596,7 @@ public class BienbaoActivity extends AppCompatActivity {
                 }
             }
         });
-        cbPlateShapeRhombic = (CheckBox) customView.findViewById(R.id.optionRhombicCheckbox);
+        cbPlateShapeRhombic = customView.findViewById(R.id.optionRhombicCheckbox);
         cbPlateShapeRhombic.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -622,8 +609,8 @@ public class BienbaoActivity extends AppCompatActivity {
         });
     }
 
-    private void addVanbanidToList(String vanbanKey) {
-        String vbID = GeneralSettings.getVanbanInfo(vanbanKey, "id");
+    private void addVanbanidToList(String vbID) {
+//        String vbID = GeneralSettings.getVanbanInfo(vanbanKey, "id");
         for (String id : vanbanid) {
             if (vbID.equals(id)) {
                 return;
