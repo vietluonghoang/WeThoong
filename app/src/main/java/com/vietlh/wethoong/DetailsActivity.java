@@ -1,24 +1,32 @@
 package com.vietlh.wethoong;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.os.Build;
-import android.support.constraint.ConstraintLayout;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.speech.tts.TextToSpeech;
+import android.speech.tts.UtteranceProgressListener;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -35,9 +43,12 @@ import com.vietlh.wethoong.utils.UtilsHelper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Locale;
+
+import static com.vietlh.wethoong.R.*;
+import static com.vietlh.wethoong.R.color.*;
 
 public class DetailsActivity extends AppCompatActivity {
 
@@ -87,16 +98,60 @@ public class DetailsActivity extends AppCompatActivity {
     private RecyclerView rclChildrenDieukhoan;
 
     private ConstraintLayout btnXemthemView;
+    private ImageButton btnRead;
     private Button btnXemthem;
+    private TextToSpeech speak;
+    HashMap<String, String> speechParams = new HashMap<String, String>();
 
     private LinearLayout adsView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_details);
+        setContentView(layout.activity_details);
 
         getPassingParameters();
+        speak = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if (status == TextToSpeech.SUCCESS) {
+                    int ttsLang = speak.setLanguage(new Locale("vi"));
+
+                    if (ttsLang == TextToSpeech.LANG_MISSING_DATA
+                            || ttsLang == TextToSpeech.LANG_NOT_SUPPORTED) {
+                        Log.e("TTS", "The Language is not supported!");
+                    } else {
+                        Log.i("TTS", "Language Supported.");
+                    }
+                    Log.i("TTS", "Initialization success.");
+
+                    //I don't know why we need these params but adding these params and passing them to speak() method, it works
+                    speechParams.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "stringId");
+                    speak.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+                        @Override
+                        public void onStart(String s) {
+                            Log.i("TTS", "Speaker OnStart");
+                            updateSpeakerButton(false);
+                        }
+
+                        @Override
+                        public void onDone(String s) {
+                            Log.i("TTS", "Speaker OnDone.");
+                            updateSpeakerButton(true);
+                        }
+
+                        @Override
+                        public void onError(String s) {
+                            Log.i("TTS", "Speaker OnError.");
+                            updateSpeakerButton(false);
+                        }
+                    });
+                } else {
+                    Toast.makeText(getApplicationContext(), "TTS Initialization failed!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
         initComponents();
         dieukhoan = queries.searchDieukhoanByID(dieukhoanId, vanbanid).get(0);
         vanbanid.add(String.valueOf(dieukhoan.getVanban().getId()));
@@ -109,6 +164,11 @@ public class DetailsActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
+        //stop speech if needed
+        if (speak.isSpeaking()) {
+            speak.stop();
+            updateSpeakerButton(true);
+        }
         boolean isInForeground = new RedirectionHelper().isAppInForeground(getApplicationContext());
         System.out.println("############ In Onstop - " + isInForeground);
         if (!isInForeground) {
@@ -127,32 +187,57 @@ public class DetailsActivity extends AppCompatActivity {
     }
 
     private void initComponents() {
-        scrollView = findViewById(R.id.scrollView);
-        btnXemthemView = findViewById(R.id.btnXemthemView);
+        scrollView = findViewById(id.scrollView);
+        btnXemthemView = findViewById(id.btnXemthemView);
 
-        lblVanban = findViewById(R.id.lblVanban);
-        lblDieukhoan = findViewById(R.id.lblDieukhoan);
-        lblNoidung = findViewById(R.id.lblNoidung);
+        lblVanban = findViewById(id.lblVanban);
+        lblDieukhoan = findViewById(id.lblDieukhoan);
+        lblNoidung = findViewById(id.lblNoidung);
         registerForContextMenu(lblNoidung);
-        mucphatDetails = findViewById(R.id.mucphatDetails);
-        phuongtienDetails = findViewById(R.id.phuongtienDetails);
-        linhvucDetails = findViewById(R.id.linhvucDetails);
-        doituongDetails = findViewById(R.id.doituongDetails);
-        hinhphatbosungDetails = findViewById(R.id.hinhphatbosungDetails);
+        mucphatDetails = findViewById(id.mucphatDetails);
+        phuongtienDetails = findViewById(id.phuongtienDetails);
+        linhvucDetails = findViewById(id.linhvucDetails);
+        doituongDetails = findViewById(id.doituongDetails);
+        hinhphatbosungDetails = findViewById(id.hinhphatbosungDetails);
         registerForContextMenu(hinhphatbosungDetails);
-        bienphapkhacphucDetails = findViewById(R.id.bienphapkhacphucDetails);
+        bienphapkhacphucDetails = findViewById(id.bienphapkhacphucDetails);
         registerForContextMenu(bienphapkhacphucDetails);
-        tamgiuDetails = findViewById(R.id.tamgiuDetails);
-        thamquyenDetails = findViewById(R.id.thamquyenDetails);
+        tamgiuDetails = findViewById(id.tamgiuDetails);
+        thamquyenDetails = findViewById(id.thamquyenDetails);
 
-        btnXemthem = findViewById(R.id.btnXemthem);
+        btnXemthem = findViewById(id.btnXemthem);
         btnXemthem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showRelatedDieukhoan();
             }
         });
-        btnBreadscrubs = findViewById(R.id.btnBreadscrubs);
+        btnRead = findViewById(id.btnRead);
+        btnRead.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("ResourceAsColor")
+            @Override
+            public void onClick(View view) {
+                if (!speak.isSpeaking()) {
+                    int speechStatus = speak.speak(contentString, TextToSpeech.QUEUE_FLUSH, speechParams);
+
+                    if (speechStatus == TextToSpeech.ERROR) {
+                        Log.e("TTS", "Error in converting Text to Speech!");
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Đang đọc....\nHãy kiểm tra loa hoặc tai nghe", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    if (speak != null) {
+                        speak.stop();
+                        updateSpeakerButton(true);
+                        Toast.makeText(getApplicationContext(), "Đã ngừng đọc...", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+        //speaker button set to off initially
+        updateSpeakerButton(true);
+
+        btnBreadscrubs = findViewById(id.btnBreadscrubs);
         btnBreadscrubs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -164,23 +249,23 @@ public class DetailsActivity extends AppCompatActivity {
             }
         });
 
-        extraView = findViewById(R.id.extraView);
-        mucphatView = findViewById(R.id.mucphatView);
-        phuongtienView = findViewById(R.id.phuongtienView);
-        linhvucView = findViewById(R.id.linhvucView);
-        doituongView = findViewById(R.id.doituongView);
-        hinhphatbosung = findViewById(R.id.hinhphatbosung);
-        bienphapkhacphuc = findViewById(R.id.bienphapkhacphuc);
-        tamgiu = findViewById(R.id.tamgiu);
-        thamquyen = findViewById(R.id.thamquyen);
-        minhhoaView = findViewById(R.id.minhhoaView);
-        childrenDieukhoan = findViewById(R.id.childrenDieukhoan);
+        extraView = findViewById(id.extraView);
+        mucphatView = findViewById(id.mucphatView);
+        phuongtienView = findViewById(id.phuongtienView);
+        linhvucView = findViewById(id.linhvucView);
+        doituongView = findViewById(id.doituongView);
+        hinhphatbosung = findViewById(id.hinhphatbosung);
+        bienphapkhacphuc = findViewById(id.bienphapkhacphuc);
+        tamgiu = findViewById(id.tamgiu);
+        thamquyen = findViewById(id.thamquyen);
+        minhhoaView = findViewById(id.minhhoaView);
+        childrenDieukhoan = findViewById(id.childrenDieukhoan);
 
-        rclChildrenDieukhoan = findViewById(R.id.rclChildrenDieukhoan);
+        rclChildrenDieukhoan = findViewById(id.rclChildrenDieukhoan);
     }
 
     private void initAds() {
-        adsView = (LinearLayout) findViewById(R.id.adsView);
+        adsView = (LinearLayout) findViewById(id.adsView);
         adsHelper.updateLastConnectionState(this);
         if (GeneralSettings.wasConnectedToInternet && GeneralSettings.ENABLE_BANNER_ADS) {
             AdView googleAdView = new AdView(this);
@@ -193,17 +278,27 @@ public class DetailsActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     HashMap<String, HashMap<String, String>> urlSets = new HashMap<>();
-                    redirectionHelper.initFBUrlSets(urlSets, 0, getResources().getString(R.string.wethoongFB), getResources().getString(R.string.wethoongFBApp));
-                    redirectionHelper.initFBUrlSets(urlSets, 1, getResources().getString(R.string.condonghieuluatFB), getResources().getString(R.string.condonghieuluatFBApp));
+                    redirectionHelper.initFBUrlSets(urlSets, 0, getResources().getString(string.wethoongFB), getResources().getString(string.wethoongFBApp));
+                    redirectionHelper.initFBUrlSets(urlSets, 1, getResources().getString(string.condonghieuluatFB), getResources().getString(string.condonghieuluatFBApp));
                     redirectionHelper.openFacebook(getApplicationContext(), urlSets);
 
                 }
             });
-            btnFBBanner.setBackgroundResource(R.drawable.facebook_banner_wethoong);
+            btnFBBanner.setBackgroundResource(drawable.facebook_banner_wethoong);
             adsHelper.addButtonToView(btnFBBanner, adsView);
         }
         if (GeneralSettings.ENABLE_INTERSTITIAL_ADS) {
             adsHelper.initTJAds(this, getApplicationContext());
+        }
+    }
+
+    private void updateSpeakerButton(Boolean onNow) {
+        if (onNow) {
+            btnRead.setImageResource(drawable.speaker_on);
+            btnRead.setBackgroundResource(drawable.rounded_green_button);
+        } else {
+            btnRead.setImageResource(drawable.speaker_off);
+            btnRead.setBackgroundResource(drawable.round_red_button);
         }
     }
 
@@ -280,9 +375,23 @@ public class DetailsActivity extends AppCompatActivity {
         //Reverse breadscrub text
         ArrayList<String> aces = new ArrayList<>(Arrays.asList(breadscrubText.split("/")));
         Collections.reverse(aces);
+
+        //insert prefix for dieukhoan
+        String pref = "";
+        ArrayList<String> edittedAces = new ArrayList<>();
+        for (String scrub: aces){
+            edittedAces.add(pref + scrub);
+            if (scrub.trim().toLowerCase().startsWith("điều")){
+                pref = "khoản ";
+            }else if(pref.equals("khoản ")){
+                pref = "điểm ";
+            } else {
+                pref = "";
+            }
+        }
         //update content string
-        String so = (dieukhoan.getSo().endsWith("."))?dieukhoan.getSo():dieukhoan.getSo()+ ".";
-        contentString = TextUtils.join(" ", aces) + "\n" + so + " " + dieukhoan.getTieude() + "\n" + dieukhoan.getNoidung();
+        String so = (dieukhoan.getSo().endsWith(".")) ? dieukhoan.getSo() : dieukhoan.getSo() + ".";
+        contentString = TextUtils.join(" ", edittedAces) + "\n" + pref + so + " " + dieukhoan.getTieude() + "\n" + dieukhoan.getNoidung();
 
         ArrayList<String> images = dieukhoan.getMinhhoa();
 
@@ -310,8 +419,8 @@ public class DetailsActivity extends AppCompatActivity {
         }
 
         if (relatedChildren.size() < 1) {
-            btnXemthem.setVisibility(View.GONE);
-            helper.hideSection(btnXemthemView);
+            //just hide the btnXemthem button only
+            btnXemthem.setVisibility(View.INVISIBLE);
         }
 
         if (children.size() > 0) {
@@ -335,7 +444,7 @@ public class DetailsActivity extends AppCompatActivity {
 
             //update content string with all major children info
             for (Dieukhoan cdk : children) {
-                String s = (cdk.getSo().endsWith("."))?cdk.getSo():cdk.getSo()+ ".";
+                String s = (cdk.getSo().endsWith(".")) ? cdk.getSo() : cdk.getSo() + ".";
                 contentString += "\n" + s + " " + cdk.getTieude() + "\n" + cdk.getNoidung();
             }
 

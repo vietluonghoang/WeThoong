@@ -14,7 +14,7 @@ import com.tapjoy.TapjoyLog;
 import com.vietlh.wethoong.utils.AdsHelper;
 import com.vietlh.wethoong.utils.GeneralSettings;
 
-import static android.support.constraint.Constraints.TAG;
+import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class TapjoyAdsListener extends Activity implements TJPlacementListener, TJPlacementVideoListener, TJConnectListener {
     private TJPlacement placement;

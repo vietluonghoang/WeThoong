@@ -3,7 +3,7 @@ package com.vietlh.wethoong;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.vietlh.wethoong.entities.interfaces.CallbackActivity;
 

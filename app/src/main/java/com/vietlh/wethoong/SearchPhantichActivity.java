@@ -1,16 +1,13 @@
 package com.vietlh.wethoong;
 
-import android.os.AsyncTask;
-import android.support.constraint.ConstraintLayout;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.JsonReader;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -20,9 +17,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.vietlh.wethoong.adapters.ListRecyclerViewAdapter;
 import com.vietlh.wethoong.adapters.PhantichListRecyclerViewAdapter;
-import com.vietlh.wethoong.entities.Dieukhoan;
 import com.vietlh.wethoong.entities.Phantich;
 import com.vietlh.wethoong.entities.interfaces.CallbackActivity;
 import com.vietlh.wethoong.networking.MessageContainer;
@@ -34,7 +29,6 @@ import com.vietlh.wethoong.utils.Queries;
 import com.vietlh.wethoong.utils.RedirectionHelper;
 import com.vietlh.wethoong.utils.UtilsHelper;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 

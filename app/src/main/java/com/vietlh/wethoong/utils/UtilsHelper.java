@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
@@ -14,14 +12,11 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.RippleDrawable;
-import android.net.Uri;
 import android.os.Build;
-import android.util.TypedValue;
 import android.view.ContextMenu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.vietlh.wethoong.DetailsActivity;
@@ -29,12 +24,9 @@ import com.vietlh.wethoong.DetailsActivity;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Random;
 
-import static android.content.Context.CLIPBOARD_SERVICE;
-import static android.support.v4.content.ContextCompat.getSystemService;
+import static androidx.core.content.ContextCompat.getSystemService;
 
 /**
  * Created by vietlh on 2/26/18.

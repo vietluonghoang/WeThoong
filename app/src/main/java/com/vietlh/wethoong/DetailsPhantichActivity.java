@@ -1,6 +1,6 @@
 package com.vietlh.wethoong;
 
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.View;
@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.vietlh.wethoong.entities.Dieukhoan;
 import com.vietlh.wethoong.entities.Phantich;
 import com.vietlh.wethoong.entities.interfaces.CallbackActivity;
 import com.vietlh.wethoong.networking.DeviceInfoCollector;
@@ -25,7 +24,6 @@ import com.vietlh.wethoong.utils.RedirectionHelper;
 import com.vietlh.wethoong.utils.SearchFor;
 import com.vietlh.wethoong.utils.UtilsHelper;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class DetailsPhantichActivity extends AppCompatActivity implements CallbackActivity {

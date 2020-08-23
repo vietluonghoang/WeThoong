@@ -3,7 +3,7 @@ package com.vietlh.wethoong.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.vietlh.wethoong.DetailsActivity;
 import com.vietlh.wethoong.DetailsPhantichActivity;
 import com.vietlh.wethoong.R;
 import com.vietlh.wethoong.entities.Phantich;
