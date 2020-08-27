@@ -426,10 +426,10 @@ public class SearchActivity extends AppCompatActivity {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, defaultLocale);
-        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Hãy nói từ khoá bạn muốn tra cứu và bấm nút \"Xong\"");
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Hãy nói từ khoá bạn muốn tra cứu và bấm nút micro");
         try {
             startActivityForResult(intent, REQ_CODE);
-            Toast.makeText(getApplicationContext(), "Khởi tạo thành công", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Hãy nói từ khoá bạn muốn tra cứu...", Toast.LENGTH_SHORT).show();
         } catch (ActivityNotFoundException a) {
             Toast.makeText(getApplicationContext(), "Rất tiếc thiết bị của bạn không được hỗ trợ bởi Google :(", Toast.LENGTH_SHORT).show();
         }
