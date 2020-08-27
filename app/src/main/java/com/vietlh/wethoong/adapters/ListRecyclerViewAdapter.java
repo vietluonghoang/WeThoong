@@ -3,7 +3,10 @@ package com.vietlh.wethoong.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,10 +37,13 @@ public class ListRecyclerViewAdapter extends RecyclerView.Adapter<ListRecyclerVi
     private SearchFor search;
     private int type = 0; //default value for normal view
     private int noidungLengthThreshold = 250;
+    private int matchingPrefixThreshold = 10;
+    private String keyword = "";
 
-    public ListRecyclerViewAdapter(Context context, ArrayList<Dieukhoan> allDieukhoan) {
+    public ListRecyclerViewAdapter(Context context, ArrayList<Dieukhoan> allDieukhoan, String keyword) {
         this.allDieukhoan = allDieukhoan;
         this.context = context;
+        this.keyword = keyword;
         this.search = new SearchFor(this.context);
     }
 
@@ -61,11 +67,11 @@ public class ListRecyclerViewAdapter extends RecyclerView.Adapter<ListRecyclerVi
         notifyDataSetChanged();
     }
 
-//    public void showDetails(){
-//        int itemPosition = mRecyclerView.getChildLayoutPosition(view);
-//        String item = mList.get(itemPosition);
-//        Toast.makeText(mContext, item, Toast.LENGTH_LONG).show();
-//    }
+    public void updateView(ArrayList<Dieukhoan> allDieukhoan, String keyword) {
+        this.keyword = keyword;
+        this.allDieukhoan = allDieukhoan;
+        notifyDataSetChanged();
+    }
 
     @Override
     public ListRecyclerViewAdapter.ViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
@@ -114,11 +120,19 @@ public class ListRecyclerViewAdapter extends RecyclerView.Adapter<ListRecyclerVi
         if (type == 0) {
             vHolder.hideLblVanban(false);
             vHolder.hideBtnBreadscrubs(false);
-            vHolder.setLblVanban(GeneralSettings.getVanbanInfo(dk.getVanban().getId(),"shortname"));
+            vHolder.setLblVanban(GeneralSettings.getVanbanInfo(dk.getVanban().getId(), "shortname"));
 
             //TODO: the valude of 250 should be configurable
+//            if (noidung.length() > noidungLengthThreshold) {
+//                noidung = noidung.substring(0, noidungLengthThreshold - 1) + "...";
+//            }
             if (noidung.length() > noidungLengthThreshold) {
-                noidung = noidung.substring(0, noidungLengthThreshold - 1) + "...";
+                String matchingNoidung = populateMatchingKeyword(noidung);
+                if (matchingNoidung.length() > noidungLengthThreshold) {
+                    noidung = matchingNoidung.substring(0, noidungLengthThreshold - 1) + "...";
+                } else {
+                    noidung = matchingNoidung;
+                }
             }
         } else {
             vHolder.hideLblVanban(true);
@@ -133,6 +147,45 @@ public class ListRecyclerViewAdapter extends RecyclerView.Adapter<ListRecyclerVi
     @Override
     public int getItemCount() {
         return allDieukhoan.size();
+    }
+
+    private String populateMatchingKeyword(String noidung) {
+        if (keyword.length() > 0) {
+            String[] slicedKeyword = keyword.split(" ");
+            int matchingLength = slicedKeyword.length;
+
+            while (matchingLength > 0) {
+                String[][] chunks = chunkArray(slicedKeyword, matchingLength);
+                String matchingKeyword = TextUtils.join(" ", chunks[0]);
+
+                if (noidung.toLowerCase().contains(matchingKeyword.toLowerCase())) {
+                    String[] slicedNoidung = noidung.toLowerCase().replace(matchingKeyword.toLowerCase(), "|").split("\\|");
+                    if (slicedNoidung.length > 1) {
+                        if (slicedNoidung[0].length() > matchingPrefixThreshold) {
+                            return "..." + noidung.substring(slicedNoidung[0].length() - matchingPrefixThreshold, noidung.length() - 1);
+                        } else {
+                            return noidung.substring(slicedNoidung[0].length(), noidung.length() - 1);
+                        }
+                    } else {
+                        return noidung;
+                    }
+                }
+                matchingLength -= 1;
+            }
+        }
+        return noidung;
+    }
+
+    //split an array into chunks
+    private String[][] chunkArray(String[] array, int chunkSize) {
+        int chunkedSize = (int) Math.ceil((double) array.length / chunkSize); // chunked array size
+        String[][] chunked = new String[chunkedSize][chunkSize];
+        for (int index = 0; index < chunkedSize; index++) {
+            String[] chunk = new String[chunkSize]; // small array
+            System.arraycopy(array, index * chunkSize, chunk, 0, Math.min(chunkSize, array.length - index * chunkSize));
+            chunked[index] = chunk;
+        }
+        return chunked;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

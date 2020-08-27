@@ -59,4 +59,6 @@
     <string name="vachkeFilterTitle">Chọn đặc điểm của vạch kẻ đường:</string>
     <string name="chitietBienbaoFilterTitle">Chọn chi tiết trên biển báo</string>
     <string name="vitriVachkeFilterTitle">Chọn vị trí vạch kẻ đường</string>
+    <string name="search_here">Search here</string>
+    <string name="speech_recognizer_title">Hãy nói từ khoá bạn muốn tra cứu và bấm nút micro"</string>
 </resources>

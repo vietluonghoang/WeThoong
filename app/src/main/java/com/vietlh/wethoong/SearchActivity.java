@@ -1,12 +1,17 @@
 package com.vietlh.wethoong;
 
 import android.annotation.SuppressLint;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.speech.RecognizerIntent;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -19,10 +24,12 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -41,6 +48,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 
 public class SearchActivity extends AppCompatActivity {
     private static final String TAG = "SearchActivity";
@@ -53,6 +61,8 @@ public class SearchActivity extends AppCompatActivity {
     private Button btnLoctheo;
     private TextView txtLoctheo;
     private EditText tfSearch;
+    private ImageButton btnMicro;
+    private String searchKeyword;
     private LinearLayout adsView;
     private ArrayList<String> vanbanid = new ArrayList<>();
     private HashMap<Integer, Boolean> vanbanState = new HashMap<>();
@@ -62,6 +72,7 @@ public class SearchActivity extends AppCompatActivity {
     private UtilsHelper helper = new UtilsHelper();
     private AdsHelper adsHelper = new AdsHelper();
     private RedirectionHelper redirectionHelper = new RedirectionHelper();
+    private final int REQ_CODE = 100;
 
     //Filter popup elements
     private AlertDialog.Builder builder;
@@ -106,7 +117,7 @@ public class SearchActivity extends AppCompatActivity {
         searchResultRecyclerView.setLayoutManager(recyclerLayoutManager);
 
         // specify an adapter (see also next example)
-        searchResultListRecyclerAdapter = new ListRecyclerViewAdapter(this, allDieukhoan);
+        searchResultListRecyclerAdapter = new ListRecyclerViewAdapter(this, allDieukhoan, searchKeyword);
         if (!searchType.equals("lienquan")) {
             updateResultList("");
         } else {
@@ -129,6 +140,20 @@ public class SearchActivity extends AppCompatActivity {
         System.out.println("############ In Onstop - " + isInForeground);
         if (!isInForeground) {
             GeneralSettings.isAppClosed = true;
+        }
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case REQ_CODE: {
+                if (resultCode == RESULT_OK && null != data) {
+                    ArrayList result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                    updateSearchBarText(result.get(0).toString());
+                    System.out.println("=====SR: " + result.get(0));
+                }
+                break;
+            }
         }
     }
 
@@ -173,19 +198,27 @@ public class SearchActivity extends AppCompatActivity {
                 updateFilterLabel();
             }
         });
+        btnMicro = findViewById(R.id.btnMicro);
+        btnMicro.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                showSpeechRecognizerPopup();
+                startSpeechRecognizer();
+            }
+        });
         int maxId = GeneralSettings.getMaxVanbanId();
         switch (searchType) {
             case GeneralSettings.SEARCH_TYPE_VANBAN:
                 initFilterConfig();
                 break;
             case GeneralSettings.SEARCH_TYPE_MUCPHAT:
-                vanbanState.put(GeneralSettings.getDefaultActiveNDXPId(),true);
+                vanbanState.put(GeneralSettings.getDefaultActiveNDXPId(), true);
                 break;
             default:
                 maxId = GeneralSettings.getMaxVanbanId();
                 while (maxId > 0) {
                     if (GeneralSettings.getVanbanInfo(maxId, "shortname").length() > 0) {
-                        vanbanState.put(maxId,true);
+                        vanbanState.put(maxId, true);
                     }
                     maxId--;
                 }
@@ -213,7 +246,7 @@ public class SearchActivity extends AppCompatActivity {
 
     private void updateResultList(String keyword) {
         allDieukhoan = search(keyword.trim());
-        searchResultListRecyclerAdapter.updateView(allDieukhoan);
+        searchResultListRecyclerAdapter.updateView(allDieukhoan, this.searchKeyword);
     }
 
     private void updateResultListWithRelatedDieukhoan() {
@@ -232,6 +265,7 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private ArrayList<Dieukhoan> search(String keyword) {
+        this.searchKeyword = keyword;
         if (keyword.length() > 0) {
             switch (searchType) {
                 case GeneralSettings.SEARCH_TYPE_VANBAN:
@@ -245,6 +279,10 @@ public class SearchActivity extends AppCompatActivity {
         } else {
             return queries.searchChildren(keyword, vanbanid);
         }
+    }
+
+    public void updateSearchBarText(String keyword) {
+        tfSearch.setText(keyword);
     }
 
     private String getBuiltQuery(String keyword) {
@@ -362,6 +400,41 @@ public class SearchActivity extends AppCompatActivity {
         alert = builder.show();
     }
 
+    private void showSpeechRecognizerPopup() {
+        LayoutInflater layoutInflater = getLayoutInflater();
+        customView = layoutInflater.inflate(R.layout.popup_speech_recognizer, null);
+
+        Button btnXong = customView.findViewById(R.id.btnXong);
+        btnXong.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alert.dismiss();
+            }
+        });
+        colorNormalBtnFg = btnXong.getCurrentTextColor();
+
+        builder.setView(customView);
+        builder.create();
+        alert = builder.show();
+    }
+
+    private void startSpeechRecognizer() {
+        String languageToLoad  = "vi"; // your language
+        Locale locale = new Locale(languageToLoad);
+        Locale.setDefault(locale);
+        Locale defaultLocale = Locale.getDefault();
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, defaultLocale);
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Hãy nói từ khoá bạn muốn tra cứu và bấm nút \"Xong\"");
+        try {
+            startActivityForResult(intent, REQ_CODE);
+            Toast.makeText(getApplicationContext(), "Khởi tạo thành công", Toast.LENGTH_SHORT).show();
+        } catch (ActivityNotFoundException a) {
+            Toast.makeText(getApplicationContext(), "Rất tiếc thiết bị của bạn không được hỗ trợ bởi Google :(", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     private void initVanbanFilters(LayoutInflater layoutInflater) {
         //this is custom dialog
         customView = layoutInflater.inflate(R.layout.popup_filter_vanban, null);
@@ -432,7 +505,6 @@ public class SearchActivity extends AppCompatActivity {
             swtMucphat.setChecked(true);
         }
     }
-
 
     private void initPhuongtienFilterButtons() {
         btnPhuongtienOto = (Button) customView.findViewById(R.id.btnPhuongtienOto);
@@ -769,7 +841,6 @@ public class SearchActivity extends AppCompatActivity {
                 , LinearLayout.LayoutParams.WRAP_CONTENT));
         wrapperView.setOrientation(LinearLayout.HORIZONTAL);
         wrapperView.setPadding(2, 2, 2, 2);
-//        wrapperView.setWeightSum(5);
 
         LinearLayout wrapperTitleView = new LinearLayout(this);
         wrapperTitleView.setLayoutParams(new LinearLayout.LayoutParams(0
@@ -807,9 +878,9 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (swt.isChecked()) {
-                    vanbanState.put((Integer)swt.getTag(),true);
+                    vanbanState.put((Integer) swt.getTag(), true);
                 } else {
-                    vanbanState.put((Integer)swt.getTag(),false);
+                    vanbanState.put((Integer) swt.getTag(), false);
                 }
             }
         });
