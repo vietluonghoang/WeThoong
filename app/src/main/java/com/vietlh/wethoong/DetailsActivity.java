@@ -120,6 +120,8 @@ public class DetailsActivity extends AppCompatActivity {
                     if (ttsLang == TextToSpeech.LANG_MISSING_DATA
                             || ttsLang == TextToSpeech.LANG_NOT_SUPPORTED) {
                         Log.e("TTS", "The Language is not supported!");
+                        Toast.makeText(getApplicationContext(), "Ngôn ngữ không hỗ trợ! \nKiểm tra lại cài đặt \"Văn bản - Giọng nói\" trong phần cài đặt của thiết bị.", Toast.LENGTH_SHORT).show();
+                        btnRead.setVisibility(View.GONE);
                     } else {
                         Log.i("TTS", "Language Supported.");
                     }
@@ -147,7 +149,7 @@ public class DetailsActivity extends AppCompatActivity {
                         }
                     });
                 } else {
-                    Toast.makeText(getApplicationContext(), "TTS Initialization failed!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Có lỗi khi khởi tạo TTS!", Toast.LENGTH_SHORT).show();
                 }
             }
         });

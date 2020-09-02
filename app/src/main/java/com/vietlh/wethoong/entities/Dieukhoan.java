@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * Created by vietlh on 2/26/18.
  */
 
-public class Dieukhoan {
+public class Dieukhoan implements Comparable<Dieukhoan>{
     private int id;
     private String so;
     private String tieude;
@@ -187,5 +187,11 @@ public class Dieukhoan {
         this.bienphapkhacphuc = dk.getBienphapkhacphuc();
         this.sortPoint = dk.getSortPoint();
         this.defaultMinhhoa = dk.getDefaultMinhhoa();
+    }
+
+    @Override
+    public int compareTo(Dieukhoan dieukhoan) {
+        int comp = this.getId() < dieukhoan.getId() ? -1 : (this.getId() > dieukhoan.getId()) ? 1 : 0;
+        return comp;
     }
 }

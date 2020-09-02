@@ -31,6 +31,7 @@ import com.vietlh.wethoong.utils.RedirectionHelper;
 import com.vietlh.wethoong.utils.UtilsHelper;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class VachkeduongActivity extends AppCompatActivity {
@@ -372,7 +373,9 @@ public class VachkeduongActivity extends AppCompatActivity {
                             groups.add(group);
                         }
                     }
-                    return queries.getVachByParams(kw, groups);
+                    ArrayList<Dieukhoan> result = queries.getVachByParams(kw, groups);
+                    Collections.sort(result);
+                    return result;
                 default:
                     return queries.searchChildren(keyword, vanbanid);
             }

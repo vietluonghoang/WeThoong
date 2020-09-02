@@ -33,6 +33,8 @@ import com.vietlh.wethoong.utils.RedirectionHelper;
 import com.vietlh.wethoong.utils.UtilsHelper;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 
 public class BienbaoActivity extends AppCompatActivity {
@@ -446,7 +448,9 @@ public class BienbaoActivity extends AppCompatActivity {
                             groups.add(group);
                         }
                     }
-                    return queries.getPlateByParams(kw, groups);
+                    ArrayList<Dieukhoan> result = queries.getPlateByParams(kw, groups);
+                    Collections.sort(result);
+                    return result;
                 case GeneralSettings.SEARCH_TYPE_VACHKEDUONG:
                     return null;
                 default:

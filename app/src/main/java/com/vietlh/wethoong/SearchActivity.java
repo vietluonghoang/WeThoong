@@ -425,7 +425,7 @@ public class SearchActivity extends AppCompatActivity {
         Locale defaultLocale = Locale.getDefault();
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, defaultLocale);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, defaultLocale.toString());
         intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Hãy nói từ khoá bạn muốn tra cứu và bấm nút micro");
         try {
             startActivityForResult(intent, REQ_CODE);
