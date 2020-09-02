@@ -32,8 +32,8 @@ public class GeneralSettings {
     public static final String APP_CONFIG_KEY_ADSOPTOUT ="adsOptout";
 
     public static boolean isAdsOptout = false; //false will allow ads to display
-    public static boolean isDevMode = true;
-    public static int requiredDBVersion = 9;
+    public static boolean isDevMode = false;
+    public static int requiredDBVersion = 11;
     private static int defaultActiveQC41Id = 7; //this would be used for the search of querying the lastest road sign
     private static int defaultActiveNDXPId = 6; //this would be used for the search of querying the latest NDXP
 
