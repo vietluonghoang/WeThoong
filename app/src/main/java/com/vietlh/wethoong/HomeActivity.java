@@ -1,5 +1,6 @@
 package com.vietlh.wethoong;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.vietlh.wethoong.entities.AppConfiguration;
 import com.vietlh.wethoong.entities.interfaces.CallbackActivity;
 import com.vietlh.wethoong.networking.DeviceInfoCollector;
@@ -30,6 +32,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 public class HomeActivity extends AppCompatActivity implements CallbackActivity {
+    private FirebaseAnalytics mFirebaseAnalytics;
     private DBConnection dbConnection;
     private Button btnTracuuvanban;
     private Button btnTracuumucphat;
@@ -54,6 +57,8 @@ public class HomeActivity extends AppCompatActivity implements CallbackActivity 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         this.dbConnection = DBConnection.getInstance(this);
         dbConnection.open();
         dbConnection.close();
