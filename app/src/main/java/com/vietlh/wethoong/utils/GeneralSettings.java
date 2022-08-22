@@ -31,6 +31,8 @@ public class GeneralSettings {
     public static final String PHUONGTIEN_DIBO = "Đi bộ";
     public static final String APP_CONFIG_KEY_ADSOPTOUT ="adsOptout";
 
+
+    public static boolean isRemoteConfigFetched = false;
     public static boolean isAdsOptout = false; //false will allow ads to display
     public static boolean isDevMode = true;
     public static int requiredDBVersion = 9;
@@ -41,7 +43,7 @@ public class GeneralSettings {
     public static boolean ENABLE_INAPP_NOTIF = false;
     public static boolean ENABLE_BANNER_ADS = false;
     public static boolean ENABLE_INTERSTITIAL_ADS = false;
-    public static int MINIMUM_ADS_INTERVAL = 300; //in seconds
+    public static int MINIMUM_ADS_INTERVAL = 350; //in seconds
     public static int INTERSTITIAL_ADS_OPEN_TIME = 0;
     public static long LAST_APP_OPEN_TIMESTAMP = 0;
     public static long LAST_INTERSTITIAL_ADS_OPEN_TIMESTAMP = 0;
@@ -114,6 +116,10 @@ public class GeneralSettings {
         return tamgiuPhuongtienDieukhoanID.get(id);
     }
 
+    public static void setTamgiuPhuongtienDieukhoanID(HashMap<Integer,String> tamgiuPhuongtienDkID) {
+        tamgiuPhuongtienDieukhoanID = tamgiuPhuongtienDkID;
+    }
+
     public static String getVanbanInfo(int id, String info) {
         Vanban vanban = vanbanInfo.get(id);
 
@@ -156,8 +162,14 @@ public class GeneralSettings {
     public static int getDefaultActiveQC41Id() {
         return defaultActiveQC41Id;
     }
+    public static void setDefaultActiveQC41Id(int activeQC41Id) {
+         defaultActiveQC41Id = activeQC41Id;
+    }
 
     public static int getDefaultActiveNDXPId() {
         return defaultActiveNDXPId;
+    }
+    public static void setDefaultActiveNDXPId(int activeNDXPId) {
+        defaultActiveNDXPId = activeNDXPId;
     }
 }

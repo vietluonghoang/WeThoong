@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<defaults>
+  <entry>
+    <key>minimumAppVersion</key>
+    <value>1.0</value>
+  </entry>
+  <entry>
+    <key>tamgiuPhuongtienDieukhoanID</key>
+    <value>{"6":"6592", "2":"2820"}</value>
+  </entry>
+  <entry>
+    <key>enableInappNotif</key>
+    <value>false</value>
+  </entry>
+  <entry>
+    <key>enableBannerAds</key>
+    <value>false</value>
+  </entry>
+  <entry>
+    <key>enableInterstitialAds</key>
+    <value>false</value>
+  </entry>
+  <entry>
+    <key>minimumAdsInterval</key>
+    <value>500</value>
+  </entry>
+  <entry>
+    <key>defaultConnectionTries</key>
+    <value>30</value>
+  </entry>
+  <entry>
+    <key>requiredDBVersion</key>
+    <value>11</value>
+  </entry>
+  <entry>
+    <key>developementMode</key>
+    <value>false</value>
+  </entry>
+  <entry>
+    <key>defaultActiveQC41Id</key>
+    <value>7</value>
+  </entry>
+  <entry>
+    <key>defaultActiveNDXPId</key>
+    <value>6</value>
+  </entry>
+</defaults>

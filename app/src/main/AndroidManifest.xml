@@ -24,7 +24,8 @@
         <!-- Sample AdMob App ID: ca-app-pub-3940256099942544~3347511713 -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-1832172217205335~8071107814"/>
+            android:value="ca-app-pub-1832172217205335~8071107814" />
+
         <activity android:name=".HomeActivity" />
         <activity android:name=".SearchActivity" />
         <activity android:name=".DetailsActivity" />
@@ -45,9 +46,12 @@
         <activity android:name=".CouponRedeemActivity" />
         <activity android:name=".SearchPhantichActivity" />
         <activity android:name=".DetailsPhantichActivity" />
-        <activity android:name=".SplashScreenActivity" android:theme="@style/AppTheme.SplashScreen">
+        <activity
+            android:name=".SplashScreenActivity"
+            android:theme="@style/AppTheme.SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

@@ -5,15 +5,24 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.vietlh.wethoong.entities.AppConfiguration;
 import com.vietlh.wethoong.entities.interfaces.CallbackActivity;
 import com.vietlh.wethoong.networking.DeviceInfoCollector;
@@ -57,8 +66,11 @@ public class HomeActivity extends AppCompatActivity implements CallbackActivity 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        // Obtain the FirebaseAnalytics instance.
+
+        System.out.println("----- HomeActivity: Initializing Firebase analytics");
+        System.out.println("----- HomeActivity: minimumAdsInterval: " + GeneralSettings.MINIMUM_ADS_INTERVAL);
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        System.out.println("----- HomeActivity: Initializing database");
         this.dbConnection = DBConnection.getInstance(this);
         dbConnection.open();
         dbConnection.close();
@@ -149,14 +161,17 @@ public class HomeActivity extends AppCompatActivity implements CallbackActivity 
     }
 
     private void getAppConfigs() {
-        String getConfigUrl = "https://wethoong-server.herokuapp.com/getconfig/";
+        //won't get app configs from heroku source if the config from firebase are loaded
+        if (!GeneralSettings.isRemoteConfigFetched) {
+            String getConfigUrl = "https://wethoong-server.herokuapp.com/getconfig/";
 
-        network = new NetworkHandler(this, getConfigUrl, NetworkHandler.METHOD_GET, NetworkHandler.MIME_TYPE_APPLICATION_JSON, null, ACTION_CASE_UPDATE_APP_CONFIG);
-        network.execute();
+            network = new NetworkHandler(this, getConfigUrl, NetworkHandler.METHOD_GET, NetworkHandler.MIME_TYPE_APPLICATION_JSON, null, ACTION_CASE_UPDATE_APP_CONFIG);
+            network.execute();
+        }
     }
 
     private void updateAppConfigs() {
-//        network.parseAppConfigData();
+        System.out.println("----- HomeActivity: update settings from heroku");
         network.parseAppConfigData();
         msg = network.getMessages();
 
@@ -314,9 +329,9 @@ public class HomeActivity extends AppCompatActivity implements CallbackActivity 
             e.printStackTrace();
         }
         String versionText = "v." + versionName + "(" + versionCode + ") db.";
-        if (dbConnection.getCurrentDBVersion() > 0){
-            versionText +=  dbConnection.getCurrentDBVersion();
-        }else {
+        if (dbConnection.getCurrentDBVersion() > 0) {
+            versionText += dbConnection.getCurrentDBVersion();
+        } else {
             versionText += GeneralSettings.requiredDBVersion;
         }
         return versionText;
