@@ -111,6 +111,7 @@ public class DBConnection extends SQLiteOpenHelper {
             }
         }
         copiedDb.close();
+        AnalyticsHelper.dbVersion = instance.getCurrentDBVersion(); //update database version to analytics
     }
 
     @Override

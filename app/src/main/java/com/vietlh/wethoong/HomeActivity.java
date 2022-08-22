@@ -29,6 +29,7 @@ import com.vietlh.wethoong.networking.DeviceInfoCollector;
 import com.vietlh.wethoong.networking.MessageContainer;
 import com.vietlh.wethoong.networking.NetworkHandler;
 import com.vietlh.wethoong.utils.AdsHelper;
+import com.vietlh.wethoong.utils.AnalyticsHelper;
 import com.vietlh.wethoong.utils.DBConnection;
 import com.vietlh.wethoong.utils.GeneralSettings;
 import com.vietlh.wethoong.utils.Queries;
@@ -41,7 +42,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 public class HomeActivity extends AppCompatActivity implements CallbackActivity {
-    private FirebaseAnalytics mFirebaseAnalytics;
+
     private DBConnection dbConnection;
     private Button btnTracuuvanban;
     private Button btnTracuumucphat;
@@ -67,9 +68,6 @@ public class HomeActivity extends AppCompatActivity implements CallbackActivity 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        System.out.println("----- HomeActivity: Initializing Firebase analytics");
-        System.out.println("----- HomeActivity: minimumAdsInterval: " + GeneralSettings.MINIMUM_ADS_INTERVAL);
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         System.out.println("----- HomeActivity: Initializing database");
         this.dbConnection = DBConnection.getInstance(this);
         dbConnection.open();
@@ -158,6 +156,9 @@ public class HomeActivity extends AppCompatActivity implements CallbackActivity 
         deviceInfo.put("dbversion", "" + dbConnection.getCurrentDBVersion());
         String analyticsUrl = "https://wethoong-server.herokuapp.com/analytics/";
         new NetworkHandler(this, analyticsUrl, NetworkHandler.METHOD_POST, NetworkHandler.CONTENT_TYPE_APPLICATION_JSON, NetworkHandler.MIME_TYPE_APPLICATION_JSON, deviceInfo, "").execute();
+
+        //sending app_open event to Google Analytics here to make sure all params are filled
+        AnalyticsHelper.sendAnalyticEvent(this,"app_open",null);
     }
 
     private void getAppConfigs() {
@@ -387,6 +388,9 @@ public class HomeActivity extends AppCompatActivity implements CallbackActivity 
     }
 
     private void openTracuuvanbanScreen() {
+        HashMap<String,String> params = new HashMap<>();
+        params.put("screen_name","TracuuVanban");
+        AnalyticsHelper.sendAnalyticEvent(this,"open_screen",params);
         Intent i = new Intent(getApplicationContext(), SearchActivity.class);
         //TODO: need to change the hardcode searchType to something that configurable.
         i.putExtra("searchType", "vanban");
@@ -394,6 +398,9 @@ public class HomeActivity extends AppCompatActivity implements CallbackActivity 
     }
 
     private void openTracuumucphatScreen() {
+        HashMap<String,String> params = new HashMap<>();
+        params.put("screen_name","TracuuMucphat");
+        AnalyticsHelper.sendAnalyticEvent(this,"open_screen",params);
         Intent i = new Intent(getApplicationContext(), SearchActivity.class);
         //TODO: need to change the hardcode searchType to something that configurable.
         i.putExtra("searchType", "mucphat");
@@ -401,6 +408,9 @@ public class HomeActivity extends AppCompatActivity implements CallbackActivity 
     }
 
     private void openTracuuBienbaoScreen() {
+        HashMap<String,String> params = new HashMap<>();
+        params.put("screen_name","TracuuBienbao");
+        AnalyticsHelper.sendAnalyticEvent(this,"open_screen",params);
         Intent i = new Intent(getApplicationContext(), BienbaoActivity.class);
         //TODO: need to change the hardcode searchType to something that configurable.
         i.putExtra("searchType", "bienbao");
@@ -408,6 +418,9 @@ public class HomeActivity extends AppCompatActivity implements CallbackActivity 
     }
 
     private void openTracuuVachkeduongScreen() {
+        HashMap<String,String> params = new HashMap<>();
+        params.put("screen_name","TracuuVachkeduong");
+        AnalyticsHelper.sendAnalyticEvent(this,"open_screen",params);
         Intent i = new Intent(getApplicationContext(), VachkeduongActivity.class);
         //TODO: need to change the hardcode searchType to something that configurable.
         i.putExtra("searchType", "vachkeduong");
@@ -415,6 +428,9 @@ public class HomeActivity extends AppCompatActivity implements CallbackActivity 
     }
 
     private void openHuongdanluatScreen() {
+        HashMap<String,String> params = new HashMap<>();
+        params.put("screen_name","Huongdanluat");
+        AnalyticsHelper.sendAnalyticEvent(this,"open_screen",params);
         Intent i = new Intent(getApplicationContext(), SearchPhantichActivity.class);
         //TODO: need to change the hardcode searchType to something that configurable.
 //        i.putExtra("searchType", "vachkeduong");
@@ -422,16 +438,25 @@ public class HomeActivity extends AppCompatActivity implements CallbackActivity 
     }
 
     private void openChungtoiScreen() {
+        HashMap<String,String> params = new HashMap<>();
+        params.put("screen_name","AboutUs");
+        AnalyticsHelper.sendAnalyticEvent(this,"open_screen",params);
         Intent i = new Intent(getApplicationContext(), ChungtoiActivity.class);
         startActivity(i);
     }
 
     private void openUnderconstructionScreen() {
+        HashMap<String,String> params = new HashMap<>();
+        params.put("screen_name","Underconstruction");
+        AnalyticsHelper.sendAnalyticEvent(this,"open_screen",params);
         Intent i = new Intent(getApplicationContext(), UnderconstructionActivity.class);
         startActivity(i);
     }
 
     private void openUpdateScreen() {
+        HashMap<String,String> params = new HashMap<>();
+        params.put("screen_name","UpdateVersion");
+        AnalyticsHelper.sendAnalyticEvent(this,"open_screen",params);
         Intent i = new Intent(getApplicationContext(), UpdateActivity.class);
         startActivity(i);
     }

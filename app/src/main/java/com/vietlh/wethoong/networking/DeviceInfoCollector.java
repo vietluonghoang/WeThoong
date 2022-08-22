@@ -10,6 +10,7 @@ import com.google.android.gms.ads.identifier.AdvertisingIdClient;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.vietlh.wethoong.entities.interfaces.CallbackActivity;
+import com.vietlh.wethoong.utils.AnalyticsHelper;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -34,6 +35,7 @@ public class DeviceInfoCollector extends AsyncTask<HashMap<String, String>, Void
 
     private String getIdForVendor() {
         idForVendor = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+        AnalyticsHelper.idForVendor = idForVendor; //cross update for analytics helper
         return idForVendor;
     }
 
@@ -41,6 +43,7 @@ public class DeviceInfoCollector extends AsyncTask<HashMap<String, String>, Void
         try {
             System.out.println("############ Getting advertising id....");
             adsId = AdvertisingIdClient.getAdvertisingIdInfo(context).getId();
+            AnalyticsHelper.adsId = adsId; //cross update for analytics helper
         } catch (IOException e) {
             e.printStackTrace();
         } catch (GooglePlayServicesNotAvailableException e) {
