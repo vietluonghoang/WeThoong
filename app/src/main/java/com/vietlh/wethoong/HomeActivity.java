@@ -267,6 +267,7 @@ public class HomeActivity extends AppCompatActivity implements CallbackActivity 
                     @Override
                     public void onClick(View v) {
                         openTracuuvanbanScreen();
+//                        throw new RuntimeException("Test Crash"); // Force a crash
                     }
                 }
         );
