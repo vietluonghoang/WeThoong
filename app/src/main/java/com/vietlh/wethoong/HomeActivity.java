@@ -390,7 +390,7 @@ public class HomeActivity extends AppCompatActivity implements CallbackActivity 
 
     private void openTracuuvanbanScreen() {
         HashMap<String,String> params = new HashMap<>();
-        params.put("screen_name","TracuuVanban");
+        params.put("screen_name",AnalyticsHelper.SCREEN_NAME_TRACUUVANBAN);
         AnalyticsHelper.sendAnalyticEvent(this,"open_screen",params);
         Intent i = new Intent(getApplicationContext(), SearchActivity.class);
         //TODO: need to change the hardcode searchType to something that configurable.
@@ -400,7 +400,7 @@ public class HomeActivity extends AppCompatActivity implements CallbackActivity 
 
     private void openTracuumucphatScreen() {
         HashMap<String,String> params = new HashMap<>();
-        params.put("screen_name","TracuuMucphat");
+        params.put("screen_name",AnalyticsHelper.SCREEN_NAME_TRACUUMUCPHAT);
         AnalyticsHelper.sendAnalyticEvent(this,"open_screen",params);
         Intent i = new Intent(getApplicationContext(), SearchActivity.class);
         //TODO: need to change the hardcode searchType to something that configurable.
@@ -410,7 +410,7 @@ public class HomeActivity extends AppCompatActivity implements CallbackActivity 
 
     private void openTracuuBienbaoScreen() {
         HashMap<String,String> params = new HashMap<>();
-        params.put("screen_name","TracuuBienbao");
+        params.put("screen_name",AnalyticsHelper.SCREEN_NAME_TRACUUBIENBAO);
         AnalyticsHelper.sendAnalyticEvent(this,"open_screen",params);
         Intent i = new Intent(getApplicationContext(), BienbaoActivity.class);
         //TODO: need to change the hardcode searchType to something that configurable.
@@ -420,7 +420,7 @@ public class HomeActivity extends AppCompatActivity implements CallbackActivity 
 
     private void openTracuuVachkeduongScreen() {
         HashMap<String,String> params = new HashMap<>();
-        params.put("screen_name","TracuuVachkeduong");
+        params.put("screen_name",AnalyticsHelper.SCREEN_NAME_TRACUUVACHKEDUONG);
         AnalyticsHelper.sendAnalyticEvent(this,"open_screen",params);
         Intent i = new Intent(getApplicationContext(), VachkeduongActivity.class);
         //TODO: need to change the hardcode searchType to something that configurable.
@@ -430,7 +430,7 @@ public class HomeActivity extends AppCompatActivity implements CallbackActivity 
 
     private void openHuongdanluatScreen() {
         HashMap<String,String> params = new HashMap<>();
-        params.put("screen_name","Huongdanluat");
+        params.put("screen_name",AnalyticsHelper.SCREEN_NAME_HUONGDANLUAT);
         AnalyticsHelper.sendAnalyticEvent(this,"open_screen",params);
         Intent i = new Intent(getApplicationContext(), SearchPhantichActivity.class);
         //TODO: need to change the hardcode searchType to something that configurable.
@@ -440,7 +440,7 @@ public class HomeActivity extends AppCompatActivity implements CallbackActivity 
 
     private void openChungtoiScreen() {
         HashMap<String,String> params = new HashMap<>();
-        params.put("screen_name","AboutUs");
+        params.put("screen_name",AnalyticsHelper.SCREEN_NAME_CHUNGTOI);
         AnalyticsHelper.sendAnalyticEvent(this,"open_screen",params);
         Intent i = new Intent(getApplicationContext(), ChungtoiActivity.class);
         startActivity(i);
@@ -448,7 +448,7 @@ public class HomeActivity extends AppCompatActivity implements CallbackActivity 
 
     private void openUnderconstructionScreen() {
         HashMap<String,String> params = new HashMap<>();
-        params.put("screen_name","Underconstruction");
+        params.put("screen_name",AnalyticsHelper.SCREEN_NAME_UNDERCONSTRUCTION);
         AnalyticsHelper.sendAnalyticEvent(this,"open_screen",params);
         Intent i = new Intent(getApplicationContext(), UnderconstructionActivity.class);
         startActivity(i);
@@ -456,7 +456,7 @@ public class HomeActivity extends AppCompatActivity implements CallbackActivity 
 
     private void openUpdateScreen() {
         HashMap<String,String> params = new HashMap<>();
-        params.put("screen_name","UpdateVersion");
+        params.put("screen_name",AnalyticsHelper.SCREEN_NAME_UPDATEVERSION);
         AnalyticsHelper.sendAnalyticEvent(this,"open_screen",params);
         Intent i = new Intent(getApplicationContext(), UpdateActivity.class);
         startActivity(i);

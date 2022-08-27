@@ -9,6 +9,14 @@ import java.util.HashMap;
 
 public class AnalyticsHelper {
     private static FirebaseAnalytics mFirebaseAnalytics;
+    public static String SCREEN_NAME_TRACUUVANBAN = "TracuuVanban";
+    public static String SCREEN_NAME_TRACUUMUCPHAT = "TracuuMucphat";
+    public static String SCREEN_NAME_TRACUUBIENBAO = "TracuuBienbao";
+    public static String SCREEN_NAME_TRACUUVACHKEDUONG = "TracuuVachkeduong";
+    public static String SCREEN_NAME_HUONGDANLUAT = "Huongdanluat";
+    public static String SCREEN_NAME_CHUNGTOI = "AboutUs";
+    public static String SCREEN_NAME_UNDERCONSTRUCTION = "Underconstruction";
+    public static String SCREEN_NAME_UPDATEVERSION = "UpdateVersion";
 
     //these parameters are cross-updated by DeviceInfoCollector. Always make sure that it runs first before sending any analytics event
     public static String idForVendor = "";
