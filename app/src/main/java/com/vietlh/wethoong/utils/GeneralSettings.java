@@ -13,10 +13,12 @@ public class GeneralSettings {
     private static HashMap<Integer,String[]> mucphatRangePerVanban = new HashMap<Integer,String[]>(){{
         put(6, new String[]{"50.000", "60.000", "80.000", "100.000", "200.000", "250.000", "300.000", "400.000", "500.000", "600.000", "800.000", "1.000.000", "1.200.000", "1.500.000", "1.600.000", "2.000.000", "3.000.000", "4.000.000", "5.000.000", "6.000.000", "7.000.000", "7.500.000", "8.000.000", "10.000.000", "12.000.000", "14.000.000", "15.000.000", "16.000.000", "18.000.000", "20.000.000", "25.000.000", "28.000.000", "30.000.000", "32.000.000", "36.000.000", "40.000.000", "50.000.000", "56.000.000", "64.000.000", "70.000.000", "200.000.000"});
         put(2, new String[]{"50.000", "60.000", "80.000", "100.000", "120.000", "200.000", "300.000", "400.000", "500.000", "600.000", "800.000", "1.000.000", "1.200.000", "500.000", "1.600.000", "2.000.000", "2.500.000", "3.000.000", "4.000.000", "5.000.000", "6.000.000", "7.000.000", "8.000.000", "10.000.000", "12.000.000", "14.000.000", "15.000.000", "16.000.000", "18.000.000", "20.000.000", "25.000.000", "28.000.000", "30.000.000", "32.000.000", "36.000.000", "37.500.000", "40.000.000", "50.000.000", "52.500.000", "56.000.000", "64.000.000", "70.000.000", "75.000.000", "80.000.000", "150.000.000"});
+        put(17, new String[]{"50.000","60.000","80.000","100.000","120.000","200.000","250.000","300.000","400.000","500.000","600.000","800.000","1.000.000","1.200.000","1.500.000","1.600.000","2.000.000","3.000.000","4.000.000","5.000.000","6.000.000","7.000.000","7.500.000","8.000.000","10.000.000","12.000.000","12.000.000","12.000.000","13.000.000","14.000.000","15.000.000","16.000.000","18.000.000","20.000.000","24.000.000","25.000.000","28.000.000","30.000.000","32.000.000","35.000.000","36.000.000","40.000.000","50.000.000","56.000.000","60.000.000","64.000.000","70.000.000","75.000.000","140.000.000","150.000.000"});
     }};
     private static HashMap<Integer,String> tamgiuPhuongtienDieukhoanID = new HashMap<Integer,String>(){{
         put(6,"6592");
         put(2, "2820");
+        put(17, "12819");
     }};
 //    public static String[] danhsachvanban = {"nd46", "qc41", "tt01", "lgt", "lxlvphc", "tt652020"};
     public static final String SEARCH_TYPE_VANBAN = "vanban";
@@ -35,9 +37,9 @@ public class GeneralSettings {
     public static boolean isRemoteConfigFetched = false;
     public static boolean isAdsOptout = false; //false will allow ads to display
     public static boolean isDevMode = true;
-    public static int requiredDBVersion = 9;
+    public static int requiredDBVersion = 12;
     private static int defaultActiveQC41Id = 7; //this would be used for the search of querying the lastest road sign
-    private static int defaultActiveNDXPId = 6; //this would be used for the search of querying the latest NDXP
+    private static int defaultActiveNDXPId = 17; //this would be used for the search of querying the latest NDXP
 
     public static String MINIMUM_APP_VERSION_REQUIRED = "1.0";
     public static boolean ENABLE_INAPP_NOTIF = false;

@@ -150,8 +150,8 @@ public class SplashScreenActivity extends AppCompatActivity implements CallbackA
         GeneralSettings.setDefaultActiveQC41Id((int) mFirebaseRemoteConfig.getLong("defaultActiveQC41Id"));
         System.out.println("----- SplashScreenActivity: setDefaultActiveNDXPId: " + mFirebaseRemoteConfig.getLong("defaultActiveNDXPId"));
         GeneralSettings.setDefaultActiveNDXPId((int) mFirebaseRemoteConfig.getLong("defaultActiveNDXPId"));
-        System.out.println("----- SplashScreenActivity: isAdsOptout: " + mFirebaseRemoteConfig.getBoolean("adsOptout"));
-        GeneralSettings.isAdsOptout = mFirebaseRemoteConfig.getBoolean("adsOptout");
+//        System.out.println("----- SplashScreenActivity: isAdsOptout: " + mFirebaseRemoteConfig.getBoolean("adsOptout"));
+//        GeneralSettings.isAdsOptout = mFirebaseRemoteConfig.getBoolean("adsOptout");
         GeneralSettings.setTamgiuPhuongtienDieukhoanID(new Gson().fromJson(mFirebaseRemoteConfig.getString("tamgiuPhuongtienDieukhoanID"), new HashMap<Integer, String>().getClass()));
         GeneralSettings.isRemoteConfigFetched = true; //indicate that remote configs are set
     }
