@@ -36,14 +36,14 @@ public class GeneralSettings {
 
     public static boolean isRemoteConfigFetched = false;
     public static boolean isAdsOptout = false; //false will allow ads to display
-    public static boolean isDevMode = true;
+    public static boolean isDevMode = false;
     public static int requiredDBVersion = 12;
     private static int defaultActiveQC41Id = 7; //this would be used for the search of querying the lastest road sign
     private static int defaultActiveNDXPId = 17; //this would be used for the search of querying the latest NDXP
 
     public static String MINIMUM_APP_VERSION_REQUIRED = "1.0";
     public static boolean ENABLE_INAPP_NOTIF = false;
-    public static boolean ENABLE_BANNER_ADS = false;
+    public static boolean ENABLE_BANNER_ADS = true;
     public static boolean ENABLE_INTERSTITIAL_ADS = false;
     public static int MINIMUM_ADS_INTERVAL = 350; //in seconds
     public static int INTERSTITIAL_ADS_OPEN_TIME = 0;
