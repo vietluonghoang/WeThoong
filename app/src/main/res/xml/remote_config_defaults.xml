@@ -6,7 +6,7 @@
   </entry>
   <entry>
     <key>tamgiuPhuongtienDieukhoanID</key>
-    <value>{"6":"6592", "2":"2820"}</value>
+    <value>{"6":"6592", "2":"2820", "17":"12819"}</value>
   </entry>
   <entry>
     <key>enableInappNotif</key>
@@ -14,7 +14,7 @@
   </entry>
   <entry>
     <key>enableBannerAds</key>
-    <value>false</value>
+    <value>true</value>
   </entry>
   <entry>
     <key>enableInterstitialAds</key>
@@ -22,7 +22,7 @@
   </entry>
   <entry>
     <key>minimumAdsInterval</key>
-    <value>500</value>
+    <value>350</value>
   </entry>
   <entry>
     <key>defaultConnectionTries</key>
@@ -30,7 +30,7 @@
   </entry>
   <entry>
     <key>requiredDBVersion</key>
-    <value>11</value>
+    <value>12</value>
   </entry>
   <entry>
     <key>developementMode</key>
@@ -42,6 +42,6 @@
   </entry>
   <entry>
     <key>defaultActiveNDXPId</key>
-    <value>6</value>
+    <value>17</value>
   </entry>
 </defaults>

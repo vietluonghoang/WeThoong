@@ -419,7 +419,7 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void startSpeechRecognizer() {
-        String languageToLoad  = "vi"; // your language
+        String languageToLoad = "vi"; // your language
         Locale locale = new Locale(languageToLoad);
         Locale.setDefault(locale);
         Locale defaultLocale = Locale.getDefault();
@@ -939,13 +939,22 @@ public class SearchActivity extends AppCompatActivity {
             //iterate active Vanban to deactivate replaced ones
             //TO DO: multiple replacement
             for (int vbId : vanbanState.keySet()) {
-                String replaceId = GeneralSettings.getVanbanInfo(vbId, "replace");
-                Boolean existed = vanbanState.get(Integer.parseInt(replaceId));
+                String toReplaceVanbanId = GeneralSettings.getVanbanInfo(vbId, "replace");
+                Boolean existed = vanbanState.get(Integer.parseInt(toReplaceVanbanId));
                 if (existed != null) {
-                    if (vanbanState.get(vbId) && existed) {
-                        vanbanState.put(Integer.parseInt(GeneralSettings.getVanbanInfo(vbId, "replace")), false);
+                    if (vanbanState.get(vbId) && existed) { //only check if the filter is on, which means either it's valid or not being replaced
+                        System.out.println("Checking vanban " + vbId + " for replacement");
+                        System.out.println("vanban " + vbId + " to replace vanban " + toReplaceVanbanId);
+                        while (toReplaceVanbanId.compareTo("0") != 0) { //turn off all vanban until the last one in the hierarchy
+                            vanbanState.put(Integer.parseInt(toReplaceVanbanId), false);
+                            System.out.println("vanban " + toReplaceVanbanId + " is turning off");
+                            System.out.println("vanban " + toReplaceVanbanId + " to replace vanban....");
+                            toReplaceVanbanId = GeneralSettings.getVanbanInfo(Integer.parseInt(toReplaceVanbanId), "replace");
+                            System.out.println("...... " + toReplaceVanbanId);
+                        }
                     }
                 }
+
             }
         }
     }
