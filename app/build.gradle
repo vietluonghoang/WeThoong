@@ -9,8 +9,8 @@ android {
         applicationId "com.vietlh.wethoong"
         minSdkVersion 19
         targetSdkVersion 33
-        versionCode 20071001
-        versionName "2.1"
+        versionCode 23082001
+        versionName "2.4.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
@@ -26,6 +26,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    namespace 'com.vietlh.wethoong'
 }
 
 dependencies {
