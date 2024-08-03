@@ -4,11 +4,11 @@ apply plugin: 'com.google.gms.google-services'  // Google Services plugin
 apply plugin: 'com.google.firebase.crashlytics'
 
 android {
-    compileSdkVersion 33
+    compileSdk 35
     defaultConfig {
         applicationId "com.vietlh.wethoong"
         minSdkVersion 19
-        targetSdkVersion 33
+        targetSdkVersion 35
         versionCode 20071001
         versionName "2.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
