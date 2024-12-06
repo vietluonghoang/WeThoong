@@ -4,17 +4,17 @@ buildscript {
     
     repositories {
         google()
-        jcenter()
+        mavenCentral()
 //        maven {
 //            name "Tapjoy's maven repo"
 //            url "https://tapjoy.bintray.com/maven"
 //        }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.5.1'
-        classpath 'com.google.gms:google-services:4.3.13'  // Google Services plugin
+        classpath 'com.android.tools.build:gradle:8.5.2'
+        classpath 'com.google.gms:google-services:4.4.2'  // Google Services plugin
         // Add the Crashlytics Gradle plugin
-        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.1'
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:3.0.2'
 //        api 'com.tapjoy:tapjoy-android-sdk:12.4.0@aar'
 
         // NOTE: Do not place your application dependencies here; they belong
