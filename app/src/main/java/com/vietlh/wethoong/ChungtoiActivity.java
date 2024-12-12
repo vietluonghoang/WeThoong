@@ -82,7 +82,8 @@ public class ChungtoiActivity extends AppCompatActivity {
             btnAdsOptout.setEnabled(false);
             btnAdsOptout.setTextColor(getResources().getColor(R.color.grayout));
         }else {
-            btnAdsOptout.setEnabled(true);
+//            Disable the Ads Optout button
+//            btnAdsOptout.setEnabled(true);
         }
     }
 

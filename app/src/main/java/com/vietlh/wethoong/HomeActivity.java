@@ -298,15 +298,7 @@ public class HomeActivity extends AppCompatActivity implements CallbackActivity 
                     }
                 }
         );
-        btnHuongdanluat = (Button) findViewById(R.id.btnHuongdanluat);
-        btnHuongdanluat.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        openHuongdanluatScreen();
-                    }
-                }
-        );
+
         btnChungtoilaai = (Button) findViewById(R.id.btnChungtoilaai);
         btnChungtoilaai.setOnClickListener(
                 new View.OnClickListener() {

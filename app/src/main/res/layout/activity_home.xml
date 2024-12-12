@@ -6,93 +6,214 @@
     android:layout_height="match_parent"
     tools:context="com.vietlh.wethoong.HomeActivity">
 
-    <ScrollView
-        android:id="@+id/scrollView2"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:id="@+id/lnLayoutTopicSearch"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp"
-        app:layout_constraintBottom_toTopOf="@+id/btnChungtoilaai"
+        android:gravity="top"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/lnLayoutQuickSearch"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/tracuuView"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_gravity="center_horizontal|top"
+            android:layout_margin="2dp"
+            android:background="@drawable/border_thick"
+            android:padding="5dp">
 
-            <Button
-                android:id="@+id/btnTracuuvanbanphapluat"
+            <TextView
+                android:id="@+id/lblTracuu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/normalBtnBG"
-                android:text="@string/tra_cuu_van_ban_phap_luat"
-                android:textColor="@color/white"
-                android:textStyle="bold" />
+                android:layout_margin="5dp"
+                android:gravity="start"
+                android:text="@string/tracuu"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/lnLayoutTopics"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <Button
-                android:id="@+id/btnTracuumucphat"
-                android:layout_width="match_parent"
+            <LinearLayout
+                android:id="@+id/lnLayoutTopics"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/normalBtnBG"
-                android:text="@string/tra_cuu_muc_phat"
-                android:textColor="@color/white"
-                android:textStyle="bold" />
+                android:gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:weightSum="3"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="3"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/lblTracuu">
 
-            <Button
-                android:id="@+id/btnTracuubienbaohieu"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/normalBtnBG"
-                android:text="@string/tra_cuu_bien_bao_hieu"
-                android:textColor="@color/white"
-                android:textStyle="bold" />
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/mucphatView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_margin="2dp"
+                    android:layout_weight="1">
 
-            <Button
-                android:id="@+id/btnTracuuvachkeduong"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/normalBtnBG"
-                android:text="@string/tra_cuu_vach_ke_duong"
-                android:textColor="@color/white"
-                android:textStyle="bold" />
+                    <Button
+                        android:id="@+id/btnTracuumucphat"
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"
+                        android:layout_margin="5dp"
+                        android:background="@drawable/tracuumucphat"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toTopOf="@+id/lblTracuuMucphat"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-            <Button
-                android:id="@+id/btnHuongdanluat"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/normalBtnBG"
-                android:text="@string/huongdanluat"
-                android:textColor="@color/white"
-                android:textStyle="bold" />
-        </LinearLayout>
-    </ScrollView>
+                    <TextView
+                        android:id="@+id/lblTracuuMucphat"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|center_horizontal"
+                        android:layout_margin="5dp"
+                        android:gravity="center_horizontal"
+                        android:text="@string/tra_cuu_muc_phat"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <Button
-        android:id="@+id/btnChungtoilaai"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="147dp"
-        android:layout_marginEnd="147dp"
-        android:background="@android:color/transparent"
-        android:minHeight="0dp"
-        android:text="@string/chung_toi_la_ai"
-        android:textColor="@color/blue"
-        app:layout_constraintBottom_toTopOf="@+id/versionInfo"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/bienbaoView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_margin="2dp"
+                    android:layout_weight="1">
 
-    <TextView
-        android:id="@+id/versionInfo"
+                    <Button
+                        android:id="@+id/btnTracuubienbaohieu"
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"
+                        android:layout_margin="5dp"
+                        android:background="@drawable/tracuubienbao"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toTopOf="@+id/lblTracuuBienbao"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/lblTracuuBienbao"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:gravity="bottom|center_horizontal"
+                        android:text="@string/tra_cuu_bien_bao_hieu"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/vachkeView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_margin="2dp"
+                    android:layout_weight="1">
+
+                    <Button
+                        android:id="@+id/btnTracuuvachkeduong"
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"
+                        android:layout_margin="5dp"
+                        android:background="@drawable/tracuuvachke"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/lblTracuuVachke"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:gravity="bottom|center_horizontal"
+                        android:text="@string/tra_cuu_vach_ke_duong"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/btnTracuuvachkeduong" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lnLayoutQuickSearch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:text="version"
-        android:textAlignment="center"
-        android:textStyle="normal"
+        android:gravity="bottom|center_horizontal"
+        android:orientation="vertical"
+        android:padding="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lnLayoutTopicSearch">
+
+        <Button
+            android:id="@+id/btnTracuuvanbanphapluat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="50dp"
+            android:background="@color/normalBtnBG"
+            android:minWidth="250dp"
+            android:padding="10dp"
+            android:text="@string/tra_cuu_van_ban_phap_luat"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btnChungtoilaai"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dp"
+            android:background="@android:color/transparent"
+            android:minHeight="0dp"
+            android:text="@string/chung_toi_la_ai"
+            android:textColor="@color/blue" />
+
+        <TextView
+            android:id="@+id/versionInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            android:gravity="center_horizontal"
+            android:text="version"
+            android:textAlignment="center"
+            android:textStyle="normal" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

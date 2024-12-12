@@ -10,6 +10,7 @@
         android:id="@+id/founderView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_margin="5dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/OptoutView"
         app:layout_constraintTop_toTopOf="parent">
@@ -54,6 +55,7 @@
                 android:id="@+id/founderInfoView"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_margin="5dp"
                 android:orientation="vertical"
                 android:paddingLeft="16dp"
                 android:paddingTop="0dp"
@@ -129,8 +131,7 @@
             android:layout_height="50dp"
             android:layout_margin="0dp"
             android:background="@android:color/transparent"
-            android:textColor="@color/blue"
             android:padding="0dp"
-            android:text="Tắt quảng cáo" />
+            android:textColor="@color/blue" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

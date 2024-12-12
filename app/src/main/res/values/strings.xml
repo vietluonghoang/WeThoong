@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">WeThoong</string>
-    <string name="tra_cuu_van_ban_phap_luat">Tra cứu Văn bản Pháp luật</string>
-    <string name="tra_cuu_muc_phat">Tra cứu Mức phạt</string>
-    <string name="tra_cuu_bien_bao_hieu">Tra cứu Biển báo hiệu</string>
-    <string name="tra_cuu_vach_ke_duong">Tra cứu Vạch kẻ đường</string>
+    <string name="tra_cuu_van_ban_phap_luat">Tra cứu nhanh</string>
+    <string name="tra_cuu_muc_phat">Mức phạt</string>
+    <string name="tra_cuu_bien_bao_hieu">Biển báo hiệu</string>
+    <string name="tra_cuu_vach_ke_duong">Vạch kẻ đường</string>
     <string name="chung_toi_la_ai">Chúng tôi là ai?</string>
     <string name="loc_theo">Lọc theo:</string>
     <string name="muc_phat">Mức phạt</string>
@@ -61,4 +61,5 @@
     <string name="vitriVachkeFilterTitle">Chọn vị trí vạch kẻ đường</string>
     <string name="search_here">Search here</string>
     <string name="speech_recognizer_title">Hãy nói từ khoá bạn muốn tra cứu và bấm nút \"Xong\"</string>
+    <string name="tracuu">Tra Cứu</string>
 </resources>
