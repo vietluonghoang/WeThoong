@@ -36,6 +36,7 @@ import com.google.android.gms.ads.AdView;
 import com.vietlh.wethoong.adapters.ListRecyclerViewAdapter;
 import com.vietlh.wethoong.entities.Dieukhoan;
 import com.vietlh.wethoong.utils.AdsHelper;
+import com.vietlh.wethoong.utils.AnalyticsTimer;
 import com.vietlh.wethoong.utils.DBConnection;
 import com.vietlh.wethoong.utils.GeneralSettings;
 import com.vietlh.wethoong.utils.Queries;
@@ -73,6 +74,7 @@ public class SearchActivity extends AppCompatActivity {
     private AdsHelper adsHelper = new AdsHelper();
     private RedirectionHelper redirectionHelper = new RedirectionHelper();
     private final int REQ_CODE = 100;
+    private AnalyticsTimer analyticsTimer;
 
     //Filter popup elements
     private AlertDialog.Builder builder;
@@ -229,18 +231,32 @@ public class SearchActivity extends AppCompatActivity {
         tfSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                System.out.println("@@@@@ beforeTextChanged\n" + "Char: " + s +"\nstart: " + start + "\ncount: " + count + "\nafter: " + after);
+
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 updateResultList(s.toString());
-                System.out.println("@@@@@ onTextChanged\n" + "Char: " + s +"\nstart: " + start + "\ncount: " + count + "\nbefore: " + before);
+                String paramKey = "keyword";
+                System.out.println("=====Search: " + paramKey);
+                if(analyticsTimer == null){
+                    HashMap<String, String> params = new HashMap<>();
+                    params.put(paramKey, s.toString());
+                    System.out.println("=====Search: init");
+                    analyticsTimer = new AnalyticsTimer(System.currentTimeMillis(), 0, "search", params);
+                    new Thread(analyticsTimer).start();
+                }else {
+                    if(!analyticsTimer.isRunning) {
+                        new Thread(analyticsTimer).start();
+                    }
+                    analyticsTimer.update(System.currentTimeMillis(), paramKey, s.toString());
+                    System.out.println("=====Search: " + s.toString());
+                }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                System.out.println("@@@@@ afterTextChanged\n" + "Char: " + s);
+
             }
         });
     }

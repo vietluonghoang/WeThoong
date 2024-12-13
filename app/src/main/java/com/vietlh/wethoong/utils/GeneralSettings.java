@@ -45,6 +45,7 @@ public class GeneralSettings {
     public static final String DEFAULT_MIXPANEL_USER_ID = "USER_ID";
     public static boolean TRACK_AUTOMATIC_EVENTS = false;
     public static boolean MIXPANEL_ENABLED = true;
+    public static int DEFAULT_MIXPANEL_EVENT_SEND_TIMEOUT = 3000; //in miliseconds
     public static String MINIMUM_APP_VERSION_REQUIRED = "1.0";
     public static boolean ENABLE_INAPP_NOTIF = false;
     public static boolean ENABLE_BANNER_ADS = false;
