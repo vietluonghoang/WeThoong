@@ -107,8 +107,11 @@ public class DBConnection extends SQLiteOpenHelper {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
                 currentDBVersion = cursor.getInt(0);
+                Log.i(TAG, "===SQLITE: updateDatabaseVersion db: " + currentDBVersion);
                 cursor.moveToNext();
             }
+        } else{
+            Log.i(TAG, "===SQLITE: updateDatabaseVersion db.... Failed");
         }
         copiedDb.close();
         AnalyticsHelper.dbVersion = instance.getCurrentDBVersion(); //update database version to analytics

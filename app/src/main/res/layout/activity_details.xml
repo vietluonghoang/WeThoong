@@ -13,20 +13,24 @@
         app:layout_constraintBottom_toTopOf="@id/btnXemthemView"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_height="0dp">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="5dp">
+
             <TextView
                 android:id="@+id/lblVanban"
+                style="@style/textSubtitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingLeft="8dp"
-                android:paddingRight="8dp"
                 android:paddingTop="2dp"
-                android:paddingBottom="0dp"
-                style="@style/textSubtitle"
+                android:paddingRight="8dp"
+                android:paddingBottom="2dp"
                 app:layout_constraintTop_toTopOf="parent" />
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/breadscrubsView"
                 android:layout_width="match_parent"
@@ -39,41 +43,41 @@
                     style="@style/textTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:gravity="center_vertical|start"
                     android:paddingTop="2dp"
                     android:paddingBottom="2dp"
-                    android:gravity="center_vertical|start"
                     android:text="123gggg"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <Button
                     android:id="@+id/btnBreadscrubs"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
-                    android:textColor="@color/blue"
                     android:gravity="center_vertical|end"
-                    android:paddingTop="1dp"
-                    android:paddingBottom="1dp"
-                    android:paddingRight="1dp"
-                    android:text="Phụ Lục "
                     android:minHeight="0dp"
+                    android:paddingTop="1dp"
+                    android:paddingRight="1dp"
+                    android:paddingBottom="1dp"
+                    android:text="Phụ Lục "
+                    android:textColor="@color/blue"
                     app:layout_constraintBottom_toBottomOf="@id/lblDieukhoan"
-                    app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintLeft_toRightOf="@id/lblDieukhoan"
+                    app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
                 android:id="@+id/lblNoidung"
+                style="@style/textNormal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/textNormal"
                 android:paddingLeft="8dp"
-                android:paddingRight="8dp"
                 android:paddingTop="2dp"
+                android:paddingRight="8dp"
                 android:paddingBottom="0dp"
                 app:layout_constraintTop_toBottomOf="@id/breadscrubsView" />
 
@@ -83,31 +87,31 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingLeft="8dp"
-                android:paddingRight="8dp"
                 android:paddingTop="2dp"
+                android:paddingRight="8dp"
                 android:paddingBottom="0dp"
-                app:layout_constraintTop_toBottomOf="@id/lblNoidung" >
+                app:layout_constraintTop_toBottomOf="@id/lblNoidung">
 
                 <LinearLayout
                     android:id="@+id/mucphatView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    app:layout_constraintTop_toTopOf="parent" >
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
+                        style="@style/textBold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
-                        android:text="@string/muc_phat"
-                        style="@style/textBold"/>
+                        android:text="@string/muc_phat" />
 
                     <TextView
                         android:id="@+id/mucphatDetails"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="8"
-                        android:textColor="@color/colorAccent"/>
+                        android:textColor="@color/colorAccent" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -115,20 +119,20 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    app:layout_constraintTop_toBottomOf="@id/mucphatView" >
+                    app:layout_constraintTop_toBottomOf="@id/mucphatView">
 
                     <TextView
+                        style="@style/textBold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
-                        android:text="@string/phuong_tien"
-                        style="@style/textBold"/>
+                        android:text="@string/phuong_tien" />
 
                     <TextView
                         android:id="@+id/phuongtienDetails"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="8"/>
+                        android:layout_weight="8" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -136,20 +140,20 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    app:layout_constraintTop_toBottomOf="@id/phuongtienView" >
+                    app:layout_constraintTop_toBottomOf="@id/phuongtienView">
 
                     <TextView
+                        style="@style/textBold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
-                        android:text="@string/linh_vuc"
-                        style="@style/textBold"/>
+                        android:text="@string/linh_vuc" />
 
                     <TextView
                         android:id="@+id/linhvucDetails"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="8"/>
+                        android:layout_weight="8" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -157,21 +161,21 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    app:layout_constraintTop_toBottomOf="@id/linhvucView"
-                    app:layout_constraintBottom_toBottomOf="parent" >
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/linhvucView">
 
                     <TextView
+                        style="@style/textBold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight=".2"
-                        android:text="@string/doi_tuong"
-                        style="@style/textBold"/>
+                        android:text="@string/doi_tuong" />
 
                     <TextView
                         android:id="@+id/doituongDetails"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="8"/>
+                        android:layout_weight="8" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -181,10 +185,10 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingLeft="4dp"
-                android:paddingRight="8dp"
                 android:paddingTop="4dp"
+                android:paddingRight="8dp"
                 android:paddingBottom="0dp"
-                app:layout_constraintTop_toBottomOf="@id/extraView" >
+                app:layout_constraintTop_toBottomOf="@id/extraView">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -192,10 +196,10 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        style="@style/textBold"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/hinh_phat_bo_sung"
-                        style="@style/textBold" />
+                        android:text="@string/hinh_phat_bo_sung" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -217,8 +221,8 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingLeft="4dp"
-                android:paddingRight="8dp"
                 android:paddingTop="2dp"
+                android:paddingRight="8dp"
                 android:paddingBottom="0dp"
                 app:layout_constraintTop_toBottomOf="@id/hinhphatbosung">
 
@@ -228,10 +232,10 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        style="@style/textBold"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/bien_phap_khac_phuc"
-                        style="@style/textBold" />
+                        android:text="@string/bien_phap_khac_phuc" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -252,12 +256,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:paddingStart="4dp"
                 android:paddingLeft="4dp"
-                android:paddingRight="8dp"
                 android:paddingTop="2dp"
+                android:paddingRight="8dp"
                 android:paddingBottom="0dp"
-                app:layout_constraintTop_toBottomOf="@id/bienphapkhacphuc"
-                android:paddingStart="4dp">
+                app:layout_constraintTop_toBottomOf="@id/bienphapkhacphuc">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -265,17 +269,17 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        style="@style/textBold"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/tam_giu_phuong_tien"
-                        style="@style/textBold"/>
+                        android:text="@string/tam_giu_phuong_tien" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:paddingLeft="8dp" >
+                    android:paddingLeft="8dp">
 
                     <TextView
                         android:id="@+id/tamgiuDetails"
@@ -290,8 +294,8 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingLeft="4dp"
-                android:paddingRight="8dp"
                 android:paddingTop="2dp"
+                android:paddingRight="8dp"
                 android:paddingBottom="0dp"
                 app:layout_constraintTop_toBottomOf="@id/tamgiu">
 
@@ -301,17 +305,17 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        style="@style/textBold"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/tham_quyen"
-                        style="@style/textBold"/>
+                        android:text="@string/tham_quyen" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:paddingLeft="8dp" >
+                    android:paddingLeft="8dp">
 
                     <TextView
                         android:id="@+id/thamquyenDetails"
@@ -319,6 +323,7 @@
                         android:layout_height="wrap_content" />
                 </LinearLayout>
             </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/minhhoaView"
                 android:layout_width="match_parent"
@@ -327,17 +332,18 @@
                 app:layout_constraintTop_toBottomOf="@id/thamquyen">
 
             </LinearLayout>
+
             <RelativeLayout
                 android:id="@+id/childrenDieukhoan"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingLeft="4dp"
-                android:paddingRight="4dp"
                 android:paddingTop="2dp"
+                android:paddingRight="4dp"
                 android:paddingBottom="0dp"
-                app:layout_constraintTop_toBottomOf="@id/minhhoaView"
-                app:layout_constraintBottom_toBottomOf="parent">
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/minhhoaView">
                 <!-- RecyclerView should be wrapped by a RelativeLayout since we want all RecycleView's items
                 to be displayed as a fixed list inside a scrollable parent view to avoid 2 nested scrollable
                 views.  -->
@@ -345,9 +351,7 @@
                     android:id="@+id/rclChildrenDieukhoan"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:scrollbars="none"
-                    >
-                </androidx.recyclerview.widget.RecyclerView>
+                    android:scrollbars="none"></androidx.recyclerview.widget.RecyclerView>
 
             </RelativeLayout>
         </LinearLayout>

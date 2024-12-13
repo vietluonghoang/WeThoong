@@ -35,17 +35,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:padding="1dp"
             app:layout_constraintLeft_toRightOf="@id/imageView"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" >
+            app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                 android:id="@+id/lblVanban"
                 style="@style/textSubtitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
-                android:text="aaaa"/>
+                android:padding="2dp"
+                android:text="aaaa"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/breadscrubsView"
@@ -59,11 +61,11 @@
                     style="@style/textTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
                     android:text="123gggg"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    android:gravity="center_vertical" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <Button
                     android:id="@+id/btnBreadscrubs"
@@ -71,33 +73,33 @@
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
                     android:gravity="end"
+                    android:minHeight="0dp"
                     android:paddingTop="0dp"
                     android:paddingRight="1dp"
                     android:paddingBottom="1dp"
-                    android:minHeight="0dp"
                     android:text="Phụ Lục "
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/lblDieukhoan"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
                 android:id="@+id/lblNoidung"
+                style="@style/textNormal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/textNormal"
                 android:layout_marginTop="2dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/breadscrubsView"
                 android:padding="2dp"
                 android:text="This is because the server still calls LeanPlum to get gross_revenue data and the error happens when the LP can not be reached. This client-server call is
                 not a blocking API, so if there is an error, and data is not fetched from LP, the server
                 will use a default value. (Players are supposed to be not affected by this type of
                 error) As planned, we may turn off this call to LP by end of Oct 2019. I'll check with
                 Hung and Henry tomorrow to see if we are already at the end of LP contract and should
-                turn off the API call to LP."/>
+                turn off the API call to LP."
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/breadscrubsView" />
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

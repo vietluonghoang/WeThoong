@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.util.Log;
 import android.view.View;
@@ -48,6 +49,9 @@ public class HomeActivity extends AppCompatActivity implements CallbackActivity 
     private Button btnTracuumucphat;
     private Button btnTracuubienbao;
     private Button btnTracuuvachkeduong;
+    private ConstraintLayout ctnLayoutTracuuMucphat;
+    private ConstraintLayout ctnLayoutTracuuBienbao;
+    private ConstraintLayout ctnLayoutTracuuVachkeduong;
     private Button btnHuongdanluat;
     private Button btnChungtoilaai;
     private TextView versionInfo;
@@ -280,6 +284,15 @@ public class HomeActivity extends AppCompatActivity implements CallbackActivity 
                     }
                 }
         );
+        ctnLayoutTracuuMucphat = (ConstraintLayout) findViewById(R.id.mucphatView);
+        ctnLayoutTracuuMucphat.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        openTracuumucphatScreen();
+                    }
+                }
+        );
         btnTracuubienbao = (Button) findViewById(R.id.btnTracuubienbaohieu);
         btnTracuubienbao.setOnClickListener(
                 new View.OnClickListener() {
@@ -289,8 +302,26 @@ public class HomeActivity extends AppCompatActivity implements CallbackActivity 
                     }
                 }
         );
+        ctnLayoutTracuuBienbao = (ConstraintLayout) findViewById(R.id.bienbaoView);
+        ctnLayoutTracuuBienbao.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        openTracuuBienbaoScreen();
+                    }
+                }
+        );
         btnTracuuvachkeduong = (Button) findViewById(R.id.btnTracuuvachkeduong);
         btnTracuuvachkeduong.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        openTracuuVachkeduongScreen();
+                    }
+                }
+        );
+        ctnLayoutTracuuVachkeduong = (ConstraintLayout) findViewById(R.id.vachkeView);
+        ctnLayoutTracuuVachkeduong.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
