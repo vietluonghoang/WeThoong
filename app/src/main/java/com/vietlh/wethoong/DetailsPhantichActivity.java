@@ -1,6 +1,5 @@
 package com.vietlh.wethoong;
 
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.View;
@@ -10,12 +9,15 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.vietlh.wethoong.entities.Phantich;
 import com.vietlh.wethoong.entities.interfaces.CallbackActivity;
-import com.vietlh.wethoong.networking.DeviceInfoCollector;
+import com.vietlh.wethoong.networking.DeviceInfoCollectorRunnable;
 import com.vietlh.wethoong.networking.NetworkHandler;
+import com.vietlh.wethoong.networking.NetworkHandlerRunnable;
 import com.vietlh.wethoong.utils.AdsHelper;
 import com.vietlh.wethoong.utils.DBConnection;
 import com.vietlh.wethoong.utils.GeneralSettings;
@@ -62,7 +64,8 @@ public class DetailsPhantichActivity extends AppCompatActivity implements Callba
             findViewById(R.id.authorView).setVisibility(View.GONE);
             lblTitle.setText("Lỗi kết nối mạng!\nHãy kiểm tra lại kết nối và thử mở lại màn hình này!");
         } else {
-            new DeviceInfoCollector(this, getApplicationContext(), ACTION_CASE_SEND_ANALYTICS).execute(deviceInfo);
+//            new DeviceInfoCollector(this, getApplicationContext(), ACTION_CASE_SEND_ANALYTICS).execute(deviceInfo);
+            new Thread(new DeviceInfoCollectorRunnable(this, getApplicationContext(), ACTION_CASE_SEND_ANALYTICS, deviceInfo)).start();
             phantich = queries.getPhantichById(phantichId).get(phantichId);
             showPhantich();
         }
@@ -167,7 +170,7 @@ public class DetailsPhantichActivity extends AppCompatActivity implements Callba
             counter += 1;
         }
 
-        for (int i = 0; i < orderList.size(); i++){
+        for (int i = 0; i < orderList.size(); i++) {
             phantichDetailsView.addView(orderList.get(String.valueOf(i)));
         }
     }
@@ -178,7 +181,11 @@ public class DetailsPhantichActivity extends AppCompatActivity implements Callba
         deviceInfo.put("actiontype", "view_detail");
         deviceInfo.put("actionvalue", phantichId);
         String analyticsUrl = "https://wethoong-server.herokuapp.com/analytics/";
-        new NetworkHandler(this, analyticsUrl, NetworkHandler.METHOD_POST, NetworkHandler.CONTENT_TYPE_APPLICATION_JSON, NetworkHandler.MIME_TYPE_APPLICATION_JSON, deviceInfo, "").execute();
+//        new NetworkHandler(this, analyticsUrl, NetworkHandler.METHOD_POST, NetworkHandler.CONTENT_TYPE_APPLICATION_JSON, NetworkHandler.MIME_TYPE_APPLICATION_JSON, deviceInfo, "").execute();
+        //            Replace AsyncTask by Thread
+        NetworkHandlerRunnable networkRunnable = new NetworkHandlerRunnable(this, analyticsUrl, NetworkHandler.METHOD_POST, NetworkHandler.CONTENT_TYPE_APPLICATION_JSON, NetworkHandler.MIME_TYPE_APPLICATION_JSON, deviceInfo, "");
+        new Thread(networkRunnable).start();
+        networkRunnable.updateResult();
     }
 
     @Override

@@ -60,4 +60,6 @@ dependencies {
     // When using the BoM, you don't specify versions in Firebase library dependencies
     implementation 'com.google.firebase:firebase-inappmessaging-display'
     implementation 'com.google.code.gson:gson:2.10.1'
+    // Add MixPanel
+    implementation 'com.mixpanel.android:mixpanel-android:7.+'
 }

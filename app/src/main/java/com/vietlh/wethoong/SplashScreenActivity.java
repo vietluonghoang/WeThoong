@@ -1,7 +1,6 @@
 package com.vietlh.wethoong;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -12,10 +11,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
-import com.vietlh.wethoong.entities.interfaces.CallbackActivity;
-import com.vietlh.wethoong.utils.GeneralSettings;
-
 import com.google.gson.Gson;
+import com.vietlh.wethoong.entities.interfaces.CallbackActivity;
+import com.vietlh.wethoong.utils.AnalyticsHelper;
+import com.vietlh.wethoong.utils.GeneralSettings;
 
 import java.util.HashMap;
 
@@ -26,12 +25,16 @@ public class SplashScreenActivity extends AppCompatActivity implements CallbackA
     private FirebaseRemoteConfig mFirebaseRemoteConfig;
     private FirebaseRemoteConfigSettings configSettings;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
         System.out.println("===== SplashScreenActivity: onCreate");
+
+        System.out.println("----- SplashScreenActivity: Initialized Mixpanel");
+        AnalyticsHelper.initMixPanel(this, null);
+        System.out.println("----- SplashScreenActivity: Sent app_open event");
+        AnalyticsHelper.sendAnalyticEvent("app_open", null);
 
         // Obtain the FirebaseAnalytics instance.
         System.out.println("----- SplashScreenActivity: Initializing Firebase remote config");
@@ -81,7 +84,7 @@ public class SplashScreenActivity extends AppCompatActivity implements CallbackA
         super.onResume();
 
         System.out.println("===== SplashScreenActivity: onResume");
-        AsyncTask.execute(new Runnable() {
+        new Thread(new Runnable() {
             @Override
             public void run() {
                 while (!GeneralSettings.isRemoteConfigFetched && (totalSplashTime < maxSplashTime)) {
@@ -95,7 +98,7 @@ public class SplashScreenActivity extends AppCompatActivity implements CallbackA
                 Intent i = new Intent(getApplicationContext(), HomeActivity.class);
                 startActivity(i);
             }
-        });
+        }).start();
 
         System.out.println("===== SplashScreenActivity: onResume ---- Opening Homescreen");
 
@@ -154,5 +157,20 @@ public class SplashScreenActivity extends AppCompatActivity implements CallbackA
 //        GeneralSettings.isAdsOptout = mFirebaseRemoteConfig.getBoolean("adsOptout");
         GeneralSettings.setTamgiuPhuongtienDieukhoanID(new Gson().fromJson(mFirebaseRemoteConfig.getString("tamgiuPhuongtienDieukhoanID"), new HashMap<Integer, String>().getClass()));
         GeneralSettings.isRemoteConfigFetched = true; //indicate that remote configs are set
+
+// send app_config event
+        System.out.println("----- SplashScreenActivity: Sent app_config event");
+        HashMap<String, String> params = new HashMap<>();
+        params.put("requiredDBVersion", GeneralSettings.requiredDBVersion + "");
+        params.put("MINIMUM_APP_VERSION_REQUIRED", GeneralSettings.MINIMUM_APP_VERSION_REQUIRED);
+        params.put("MINIMUM_ADS_INTERVAL", GeneralSettings.MINIMUM_ADS_INTERVAL + "");
+        params.put("ENABLE_INTERSTITIAL_ADS", GeneralSettings.ENABLE_INTERSTITIAL_ADS + "");
+        params.put("ENABLE_INAPP_NOTIF", GeneralSettings.ENABLE_INAPP_NOTIF + "");
+        params.put("ENABLE_BANNER_ADS", GeneralSettings.ENABLE_BANNER_ADS + "");
+        params.put("isDevMode", GeneralSettings.isDevMode + "");
+        params.put("DefaultActiveQC41Id", GeneralSettings.getDefaultActiveQC41Id() + "");
+        params.put("DefaultActiveNDXPId", GeneralSettings.getDefaultActiveNDXPId() + "");
+        params.put("TamgiuPhuongtienDieukhoanID", GeneralSettings.getTamgiuPhuongtienDieukhoanID(GeneralSettings.getDefaultActiveNDXPId()));
+        AnalyticsHelper.sendAnalyticEvent("app_config", params);
     }
 }

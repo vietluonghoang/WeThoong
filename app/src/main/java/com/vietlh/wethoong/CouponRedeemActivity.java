@@ -1,16 +1,18 @@
 package com.vietlh.wethoong;
 
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.vietlh.wethoong.entities.interfaces.CallbackActivity;
-import com.vietlh.wethoong.networking.DeviceInfoCollector;
+import com.vietlh.wethoong.networking.DeviceInfoCollectorRunnable;
 import com.vietlh.wethoong.networking.MessageContainer;
 import com.vietlh.wethoong.networking.NetworkHandler;
+import com.vietlh.wethoong.networking.NetworkHandlerRunnable;
 import com.vietlh.wethoong.utils.DBConnection;
 import com.vietlh.wethoong.utils.GeneralSettings;
 import com.vietlh.wethoong.utils.Queries;
@@ -23,6 +25,7 @@ public class CouponRedeemActivity extends AppCompatActivity implements CallbackA
     private EditText txtCouponCode;
     private Button btnRedeem;
     private NetworkHandler net;
+    private NetworkHandlerRunnable networkRunnable;
     private Queries queries = new Queries(DBConnection.getInstance(this));
     private HashMap<String, String> deviceInfo = new HashMap<>();
 
@@ -88,13 +91,14 @@ public class CouponRedeemActivity extends AppCompatActivity implements CallbackA
         System.out.println("############ Redeeming coupon now. Checking....");
         String couponCode = txtCouponCode.getText().toString().toLowerCase().trim();
         deviceInfo.put("couponCode", couponCode);
-        new DeviceInfoCollector(this, getApplicationContext(), ACTION_CASE_REDEEM_CODE).execute(deviceInfo);
+//        new DeviceInfoCollector(this, getApplicationContext(), ACTION_CASE_REDEEM_CODE).execute(deviceInfo);
+        new Thread(new DeviceInfoCollectorRunnable(this, getApplicationContext(), ACTION_CASE_REDEEM_CODE, deviceInfo)).start();
     }
 
     private void checkCodeState() {
         System.out.println("############# check code message");
         try {
-            HashMap<String, String> message = (HashMap<String, String>) net.getMessages().getValue(MessageContainer.DATA);
+            HashMap<String, String> message = (HashMap<String, String>) networkRunnable.getMessages().getValue(MessageContainer.DATA);
             System.out.println("message: " + message);
 
             if ("Success".equals(message.get("status"))) {
@@ -118,11 +122,15 @@ public class CouponRedeemActivity extends AppCompatActivity implements CallbackA
             case ACTION_CASE_REDEEM_CODE:
                 System.out.println("########### Sending coupon code.....");
                 String redeemCouponUrl = "https://wethoong-server.herokuapp.com/redeemcoupon";
-                net = new NetworkHandler(this, redeemCouponUrl, NetworkHandler.METHOD_POST, NetworkHandler.CONTENT_TYPE_APPLICATION_JSON, NetworkHandler.MIME_TYPE_APPLICATION_JSON, deviceInfo, ACTION_CASE_UPDATE_STATE);
-                net.execute();
+//                net = new NetworkHandler(this, redeemCouponUrl, NetworkHandler.METHOD_POST, NetworkHandler.CONTENT_TYPE_APPLICATION_JSON, NetworkHandler.MIME_TYPE_APPLICATION_JSON, deviceInfo, ACTION_CASE_UPDATE_STATE);
+//                net.execute();
+                //            Replace AsyncTask by Thread
+                networkRunnable = new NetworkHandlerRunnable(this, redeemCouponUrl, NetworkHandler.METHOD_POST, NetworkHandler.CONTENT_TYPE_APPLICATION_JSON, NetworkHandler.MIME_TYPE_APPLICATION_JSON, deviceInfo, ACTION_CASE_UPDATE_STATE);
+                new Thread(networkRunnable).start();
+                networkRunnable.updateResult();
                 break;
             case ACTION_CASE_UPDATE_STATE:
-                net.parseResultStatusData();
+                networkRunnable.parseResultStatusData();
                 checkCodeState();
                 break;
             default:

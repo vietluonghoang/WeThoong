@@ -1,34 +1,25 @@
 package com.vietlh.wethoong;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.analytics.FirebaseAnalytics;
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
-import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.vietlh.wethoong.entities.AppConfiguration;
 import com.vietlh.wethoong.entities.interfaces.CallbackActivity;
-import com.vietlh.wethoong.networking.DeviceInfoCollector;
+import com.vietlh.wethoong.networking.DeviceInfoCollectorRunnable;
 import com.vietlh.wethoong.networking.MessageContainer;
 import com.vietlh.wethoong.networking.NetworkHandler;
+import com.vietlh.wethoong.networking.NetworkHandlerRunnable;
 import com.vietlh.wethoong.utils.AdsHelper;
 import com.vietlh.wethoong.utils.AnalyticsHelper;
 import com.vietlh.wethoong.utils.DBConnection;
@@ -57,7 +48,9 @@ public class HomeActivity extends AppCompatActivity implements CallbackActivity 
     private TextView versionInfo;
     private AdsHelper adsHelper;
     private NetworkHandler network;
+    private NetworkHandlerRunnable networkRunnable;
     private NetworkHandler net;
+    private NetworkHandlerRunnable netRunnable;
     private MessageContainer msg;
     private HashMap<String, String> deviceInfo = new HashMap<>();
     private Queries queries = new Queries(DBConnection.getInstance(this));
@@ -95,7 +88,7 @@ public class HomeActivity extends AppCompatActivity implements CallbackActivity 
         long now = System.currentTimeMillis() / 1000;
         if (GeneralSettings.isAppClosed && (now - GeneralSettings.lastApplicationStateCheckTimestamp > GeneralSettings.defaultApplicationStateCheckInterval)) {
             System.out.println("!@#$%&*(*(&^&^%%$^#%#@$#!$@#%& con me no ==============");
-            new DeviceInfoCollector(this, getApplicationContext(), ACTION_CASE_SEND_ANALYTICS).execute(deviceInfo);
+            new Thread(new DeviceInfoCollectorRunnable(this, getApplicationContext(), ACTION_CASE_SEND_ANALYTICS, deviceInfo)).start();
             getAppConfigs();
             GeneralSettings.isAppClosed = false;
             GeneralSettings.lastApplicationStateCheckTimestamp = now;
@@ -144,7 +137,7 @@ public class HomeActivity extends AppCompatActivity implements CallbackActivity 
                 updateAppConfigs();
                 break;
             case ACTION_CASE_CHECK_ADS_OPTOUT_STATE:
-                net.parseResultStatusData();
+                netRunnable.parseResultStatusData();
                 checkCodeState();
                 break;
             default:
@@ -159,10 +152,13 @@ public class HomeActivity extends AppCompatActivity implements CallbackActivity 
         deviceInfo.put("actionvalue", "");
         deviceInfo.put("dbversion", "" + dbConnection.getCurrentDBVersion());
         String analyticsUrl = "https://wethoong-server.herokuapp.com/analytics/";
-        new NetworkHandler(this, analyticsUrl, NetworkHandler.METHOD_POST, NetworkHandler.CONTENT_TYPE_APPLICATION_JSON, NetworkHandler.MIME_TYPE_APPLICATION_JSON, deviceInfo, "").execute();
-
+//        new NetworkHandler(this, analyticsUrl, NetworkHandler.METHOD_POST, NetworkHandler.CONTENT_TYPE_APPLICATION_JSON, NetworkHandler.MIME_TYPE_APPLICATION_JSON, deviceInfo, "").execute();
+//            Replace AsyncTask by Thread
+        networkRunnable = new NetworkHandlerRunnable(this, analyticsUrl, NetworkHandler.METHOD_POST, NetworkHandler.CONTENT_TYPE_APPLICATION_JSON, NetworkHandler.MIME_TYPE_APPLICATION_JSON, deviceInfo, "");
+        new Thread(networkRunnable).start();
+        networkRunnable.updateResult();
         //sending app_open event to Google Analytics here to make sure all params are filled
-        AnalyticsHelper.sendAnalyticEvent(this,"app_open",null);
+        AnalyticsHelper.sendAnalyticEvent(this, "app_open", null);
     }
 
     private void getAppConfigs() {
@@ -170,15 +166,19 @@ public class HomeActivity extends AppCompatActivity implements CallbackActivity 
         if (!GeneralSettings.isRemoteConfigFetched) {
             String getConfigUrl = "https://wethoong-server.herokuapp.com/getconfig/";
 
-            network = new NetworkHandler(this, getConfigUrl, NetworkHandler.METHOD_GET, NetworkHandler.MIME_TYPE_APPLICATION_JSON, null, ACTION_CASE_UPDATE_APP_CONFIG);
-            network.execute();
+//            network = new NetworkHandler(this, getConfigUrl, NetworkHandler.METHOD_GET, NetworkHandler.MIME_TYPE_APPLICATION_JSON, null, ACTION_CASE_UPDATE_APP_CONFIG);
+//            network.execute();
+//            Replace AsyncTask by Thread
+            networkRunnable = new NetworkHandlerRunnable(this, getConfigUrl, NetworkHandler.METHOD_GET, NetworkHandler.MIME_TYPE_APPLICATION_JSON, null, ACTION_CASE_UPDATE_APP_CONFIG);
+            new Thread(networkRunnable).start();
+            networkRunnable.updateResult();
         }
     }
 
     private void updateAppConfigs() {
         System.out.println("----- HomeActivity: update settings from heroku");
-        network.parseAppConfigData();
-        msg = network.getMessages();
+        networkRunnable.parseAppConfigData();
+        msg = networkRunnable.getMessages();
 
         if (msg != null && msg.getValue(MessageContainer.DATA) != null) {
             AppConfiguration appConfig = new AppConfiguration();
@@ -227,14 +227,20 @@ public class HomeActivity extends AppCompatActivity implements CallbackActivity 
             case "1":
                 System.out.println("adsoptout state set in database: True");
                 GeneralSettings.isAdsOptout = true;
+                break;
             case "0":
                 System.out.println("adsoptout state set in database: Failed");
                 GeneralSettings.isAdsOptout = false;
+                break;
             default:
                 System.out.println("send request to check adsoptout state");
                 String target = "https://wethoong-server.herokuapp.com/hasoptout";
-                net = new NetworkHandler(this, target, NetworkHandler.METHOD_POST, NetworkHandler.CONTENT_TYPE_APPLICATION_JSON, NetworkHandler.MIME_TYPE_APPLICATION_JSON, deviceInfo, ACTION_CASE_CHECK_ADS_OPTOUT_STATE);
-                net.execute();
+//                net = new NetworkHandler(this, target, NetworkHandler.METHOD_POST, NetworkHandler.CONTENT_TYPE_APPLICATION_JSON, NetworkHandler.MIME_TYPE_APPLICATION_JSON, deviceInfo, ACTION_CASE_CHECK_ADS_OPTOUT_STATE);
+//                net.execute();
+                //      Replace AsyncTask by Thread
+                netRunnable = new NetworkHandlerRunnable(this, target, NetworkHandler.METHOD_POST, NetworkHandler.CONTENT_TYPE_APPLICATION_JSON, NetworkHandler.MIME_TYPE_APPLICATION_JSON, deviceInfo, ACTION_CASE_CHECK_ADS_OPTOUT_STATE);
+                new Thread(netRunnable).start();
+                netRunnable.updateResult();
         }
 
     }
@@ -242,7 +248,7 @@ public class HomeActivity extends AppCompatActivity implements CallbackActivity 
     private void checkCodeState() {
         System.out.println("############# check code message.....");
         try {
-            HashMap<String, String> message = (HashMap<String, String>) net.getMessages().getValue(MessageContainer.DATA);
+            HashMap<String, String> message = (HashMap<String, String>) networkRunnable.getMessages().getValue(MessageContainer.DATA);
             System.out.println("code message: " + message);
 
             HashMap<String, String> config = new HashMap<>();
@@ -412,9 +418,9 @@ public class HomeActivity extends AppCompatActivity implements CallbackActivity 
     }
 
     private void openTracuuvanbanScreen() {
-        HashMap<String,String> params = new HashMap<>();
-        params.put("screen_name",AnalyticsHelper.SCREEN_NAME_TRACUUVANBAN);
-        AnalyticsHelper.sendAnalyticEvent(this,"open_screen",params);
+        HashMap<String, String> params = new HashMap<>();
+        params.put("screen_name", AnalyticsHelper.SCREEN_NAME_TRACUUVANBAN);
+        AnalyticsHelper.sendAnalyticEvent("screen_open", params);
         Intent i = new Intent(getApplicationContext(), SearchActivity.class);
         //TODO: need to change the hardcode searchType to something that configurable.
         i.putExtra("searchType", "vanban");
@@ -422,9 +428,9 @@ public class HomeActivity extends AppCompatActivity implements CallbackActivity 
     }
 
     private void openTracuumucphatScreen() {
-        HashMap<String,String> params = new HashMap<>();
-        params.put("screen_name",AnalyticsHelper.SCREEN_NAME_TRACUUMUCPHAT);
-        AnalyticsHelper.sendAnalyticEvent(this,"open_screen",params);
+        HashMap<String, String> params = new HashMap<>();
+        params.put("screen_name", AnalyticsHelper.SCREEN_NAME_TRACUUMUCPHAT);
+        AnalyticsHelper.sendAnalyticEvent("screen_open", params);
         Intent i = new Intent(getApplicationContext(), SearchActivity.class);
         //TODO: need to change the hardcode searchType to something that configurable.
         i.putExtra("searchType", "mucphat");
@@ -432,9 +438,9 @@ public class HomeActivity extends AppCompatActivity implements CallbackActivity 
     }
 
     private void openTracuuBienbaoScreen() {
-        HashMap<String,String> params = new HashMap<>();
-        params.put("screen_name",AnalyticsHelper.SCREEN_NAME_TRACUUBIENBAO);
-        AnalyticsHelper.sendAnalyticEvent(this,"open_screen",params);
+        HashMap<String, String> params = new HashMap<>();
+        params.put("screen_name", AnalyticsHelper.SCREEN_NAME_TRACUUBIENBAO);
+        AnalyticsHelper.sendAnalyticEvent("screen_open", params);
         Intent i = new Intent(getApplicationContext(), BienbaoActivity.class);
         //TODO: need to change the hardcode searchType to something that configurable.
         i.putExtra("searchType", "bienbao");
@@ -442,9 +448,9 @@ public class HomeActivity extends AppCompatActivity implements CallbackActivity 
     }
 
     private void openTracuuVachkeduongScreen() {
-        HashMap<String,String> params = new HashMap<>();
-        params.put("screen_name",AnalyticsHelper.SCREEN_NAME_TRACUUVACHKEDUONG);
-        AnalyticsHelper.sendAnalyticEvent(this,"open_screen",params);
+        HashMap<String, String> params = new HashMap<>();
+        params.put("screen_name", AnalyticsHelper.SCREEN_NAME_TRACUUVACHKEDUONG);
+        AnalyticsHelper.sendAnalyticEvent("screen_open", params);
         Intent i = new Intent(getApplicationContext(), VachkeduongActivity.class);
         //TODO: need to change the hardcode searchType to something that configurable.
         i.putExtra("searchType", "vachkeduong");
@@ -452,9 +458,9 @@ public class HomeActivity extends AppCompatActivity implements CallbackActivity 
     }
 
     private void openHuongdanluatScreen() {
-        HashMap<String,String> params = new HashMap<>();
-        params.put("screen_name",AnalyticsHelper.SCREEN_NAME_HUONGDANLUAT);
-        AnalyticsHelper.sendAnalyticEvent(this,"open_screen",params);
+        HashMap<String, String> params = new HashMap<>();
+        params.put("screen_name", AnalyticsHelper.SCREEN_NAME_HUONGDANLUAT);
+        AnalyticsHelper.sendAnalyticEvent("screen_open", params);
         Intent i = new Intent(getApplicationContext(), SearchPhantichActivity.class);
         //TODO: need to change the hardcode searchType to something that configurable.
 //        i.putExtra("searchType", "vachkeduong");
@@ -462,25 +468,25 @@ public class HomeActivity extends AppCompatActivity implements CallbackActivity 
     }
 
     private void openChungtoiScreen() {
-        HashMap<String,String> params = new HashMap<>();
-        params.put("screen_name",AnalyticsHelper.SCREEN_NAME_CHUNGTOI);
-        AnalyticsHelper.sendAnalyticEvent(this,"open_screen",params);
+        HashMap<String, String> params = new HashMap<>();
+        params.put("screen_name", AnalyticsHelper.SCREEN_NAME_CHUNGTOI);
+        AnalyticsHelper.sendAnalyticEvent("screen_open", params);
         Intent i = new Intent(getApplicationContext(), ChungtoiActivity.class);
         startActivity(i);
     }
 
     private void openUnderconstructionScreen() {
-        HashMap<String,String> params = new HashMap<>();
-        params.put("screen_name",AnalyticsHelper.SCREEN_NAME_UNDERCONSTRUCTION);
-        AnalyticsHelper.sendAnalyticEvent(this,"open_screen",params);
+        HashMap<String, String> params = new HashMap<>();
+        params.put("screen_name", AnalyticsHelper.SCREEN_NAME_UNDERCONSTRUCTION);
+        AnalyticsHelper.sendAnalyticEvent("screen_open", params);
         Intent i = new Intent(getApplicationContext(), UnderconstructionActivity.class);
         startActivity(i);
     }
 
     private void openUpdateScreen() {
-        HashMap<String,String> params = new HashMap<>();
-        params.put("screen_name",AnalyticsHelper.SCREEN_NAME_UPDATEVERSION);
-        AnalyticsHelper.sendAnalyticEvent(this,"open_screen",params);
+        HashMap<String, String> params = new HashMap<>();
+        params.put("screen_name", AnalyticsHelper.SCREEN_NAME_UPDATEVERSION);
+        AnalyticsHelper.sendAnalyticEvent("screen_open", params);
         Intent i = new Intent(getApplicationContext(), UpdateActivity.class);
         startActivity(i);
     }

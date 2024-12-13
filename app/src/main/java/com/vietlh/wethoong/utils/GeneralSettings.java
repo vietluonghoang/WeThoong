@@ -41,6 +41,10 @@ public class GeneralSettings {
     private static int defaultActiveQC41Id = 7; //this would be used for the search of querying the lastest road sign
     private static int defaultActiveNDXPId = 17; //this would be used for the search of querying the latest NDXP
 
+    public static final String MIXPANEL_PROJECT_TOKEN = "df5055fa1fab32aa05305dab957d7674";
+    public static final String DEFAULT_MIXPANEL_USER_ID = "USER_ID";
+    public static boolean TRACK_AUTOMATIC_EVENTS = false;
+    public static boolean MIXPANEL_ENABLED = true;
     public static String MINIMUM_APP_VERSION_REQUIRED = "1.0";
     public static boolean ENABLE_INAPP_NOTIF = false;
     public static boolean ENABLE_BANNER_ADS = false;

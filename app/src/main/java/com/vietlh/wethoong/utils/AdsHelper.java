@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.AsyncTask;
 import android.view.ViewGroup;
 import android.widget.Button;
 
@@ -13,11 +12,7 @@ import com.google.android.gms.ads.AdView;
 import com.tapjoy.Tapjoy;
 import com.tapjoy.TapjoyConnectFlag;
 import com.vietlh.wethoong.entities.TapjoyAdsListener;
-import com.vietlh.wethoong.entities.interfaces.CallbackActivity;
-import com.vietlh.wethoong.networking.NetworkHandler;
 
-import java.io.OutputStream;
-import java.net.InetAddress;
 import java.util.Hashtable;
 
 /**

@@ -229,17 +229,18 @@ public class SearchActivity extends AppCompatActivity {
         tfSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                System.out.println("@@@@@ beforeTextChanged\n" + "Char: " + s +"\nstart: " + start + "\ncount: " + count + "\nafter: " + after);
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 updateResultList(s.toString());
+                System.out.println("@@@@@ onTextChanged\n" + "Char: " + s +"\nstart: " + start + "\ncount: " + count + "\nbefore: " + before);
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                System.out.println("@@@@@ afterTextChanged\n" + "Char: " + s);
             }
         });
     }

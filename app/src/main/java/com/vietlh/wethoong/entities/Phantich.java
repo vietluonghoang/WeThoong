@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.vietlh.wethoong.R;
 import com.vietlh.wethoong.utils.RedirectionHelper;
 
 import java.util.ArrayList;
@@ -102,15 +101,15 @@ public class Phantich {
 
     public HashMap<String, ViewGroup> getContentDetails(Context context) {
         HashMap<String, ViewGroup> contentDetailed = new HashMap<>();
-            for (HashMap<String, String> content : rawContentDetailed) {
-                PhantichChitiet phantichChitiet = new PhantichChitiet(context);
-                if ("img".equals(content.get("minhhoatype"))) {
-                    phantichChitiet.initChitietWithImage(Integer.parseInt(content.get("contentorder")), content.get("content"), content.get("minhhoa"));
-                }else{
-                    phantichChitiet.initChitietWithLink(Integer.parseInt(content.get("contentorder")), content.get("content"), content.get("minhhoa"));
-                }
-                contentDetailed.put(String.valueOf(phantichChitiet.getOrder()),phantichChitiet.getWrapper());
+        for (HashMap<String, String> content : rawContentDetailed) {
+            PhantichChitiet phantichChitiet = new PhantichChitiet(context);
+            if ("img".equals(content.get("minhhoatype"))) {
+                phantichChitiet.initChitietWithImage(Integer.parseInt(content.get("contentorder")), content.get("content"), content.get("minhhoa"));
+            } else {
+                phantichChitiet.initChitietWithLink(Integer.parseInt(content.get("contentorder")), content.get("content"), content.get("minhhoa"));
             }
+            contentDetailed.put(String.valueOf(phantichChitiet.getOrder()), phantichChitiet.getWrapper());
+        }
         return contentDetailed;
     }
 
@@ -136,61 +135,66 @@ public class Phantich {
             wrapper = new LinearLayout(context);
             wrapper.setLayoutParams(layoutParams);
             wrapper.setOrientation(LinearLayout.VERTICAL);
-            wrapper.setPadding(2,2,2,2);
+            wrapper.setPadding(2, 2, 2, 2);
             lblNoidung = new TextView(context);
             lblNoidung.setLayoutParams(layoutParams);
         }
 
-            public int getOrder() {
-                return order;
-            }
+        public int getOrder() {
+            return order;
+        }
 
-            public LinearLayout getWrapper() {
-                return wrapper;
-            }
+        public LinearLayout getWrapper() {
+            return wrapper;
+        }
 
-            //TO DO: cần xử lý ảnh từ web
-            public void initChitietWithImage(int order, String noidung, String imgSrc){
-                this.order = order;
-                this.imageLink = imgSrc;
-                ImageView minhhoaImg = new ImageView(context);
-                WebImage webImage = new WebImage(minhhoaImg);
-                webImage.execute(imgSrc);
-                generateWrapper(noidung, minhhoaImg);
-            }
+        //TO DO: cần xử lý ảnh từ web
+        public void initChitietWithImage(int order, String noidung, String imgSrc) {
+            this.order = order;
+            this.imageLink = imgSrc;
+            ImageView minhhoaImg = new ImageView(context);
 
-            public void initChitietWithLink(int order, String noidung, final String urlLink) {
-                this.order = order;
-                Button minhhoaLink = new Button(context);
-                minhhoaLink.setBackgroundColor(Color.TRANSPARENT);
-                minhhoaLink.setText(urlLink);
-                minhhoaLink.setTextColor(Color.BLUE);
-                minhhoaLink.setTextSize(9);
-                minhhoaLink.setMinHeight(0);
-                minhhoaLink.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        redirectionHelper.openUrlInExternalBrowser(context, urlLink);
-                    }
-                });
-                if (urlLink.length() > 0) {
-                    generateWrapper(noidung, minhhoaLink);
-                }else{
-                    generateWrapper(noidung);
+//                WebImage webImage = new WebImage(minhhoaImg);
+//                webImage.execute(imgSrc);
+//              Replace deprecated AsyncTask with Thread
+            WebImageRunnable webImage = new WebImageRunnable(minhhoaImg, imgSrc);
+            new Thread(webImage).start();
+
+            generateWrapper(noidung, minhhoaImg);
+        }
+
+        public void initChitietWithLink(int order, String noidung, final String urlLink) {
+            this.order = order;
+            Button minhhoaLink = new Button(context);
+            minhhoaLink.setBackgroundColor(Color.TRANSPARENT);
+            minhhoaLink.setText(urlLink);
+            minhhoaLink.setTextColor(Color.BLUE);
+            minhhoaLink.setTextSize(9);
+            minhhoaLink.setMinHeight(0);
+            minhhoaLink.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    redirectionHelper.openUrlInExternalBrowser(context, urlLink);
                 }
-
+            });
+            if (urlLink.length() > 0) {
+                generateWrapper(noidung, minhhoaLink);
+            } else {
+                generateWrapper(noidung);
             }
 
-            private void generateWrapper(String noidung) {
-                lblNoidung.setText(noidung);
-                wrapper.addView(lblNoidung);
-            }
+        }
 
-            private void generateWrapper(String noidung, View minhhoa)  {
-                lblNoidung.setText(noidung);
-                wrapper.addView(lblNoidung);
-                wrapper.addView(minhhoa);
-            }
+        private void generateWrapper(String noidung) {
+            lblNoidung.setText(noidung);
+            wrapper.addView(lblNoidung);
+        }
+
+        private void generateWrapper(String noidung, View minhhoa) {
+            lblNoidung.setText(noidung);
+            wrapper.addView(lblNoidung);
+            wrapper.addView(minhhoa);
+        }
 
     }
 }

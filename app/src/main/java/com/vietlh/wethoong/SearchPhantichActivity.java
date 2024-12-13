@@ -22,6 +22,7 @@ import com.vietlh.wethoong.entities.Phantich;
 import com.vietlh.wethoong.entities.interfaces.CallbackActivity;
 import com.vietlh.wethoong.networking.MessageContainer;
 import com.vietlh.wethoong.networking.NetworkHandler;
+import com.vietlh.wethoong.networking.NetworkHandlerRunnable;
 import com.vietlh.wethoong.utils.AdsHelper;
 import com.vietlh.wethoong.utils.DBConnection;
 import com.vietlh.wethoong.utils.GeneralSettings;
@@ -48,6 +49,7 @@ public class SearchPhantichActivity extends AppCompatActivity implements Callbac
     private LinearLayout adsView;
     private TextView coverMessage;
     private NetworkHandler net;
+    private NetworkHandlerRunnable netRunnable;
     private UtilsHelper helper = new UtilsHelper();
     private AdsHelper adsHelper = new AdsHelper();
     private RedirectionHelper redirectionHelper = new RedirectionHelper();
@@ -242,13 +244,17 @@ public class SearchPhantichActivity extends AppCompatActivity implements Callbac
 
     private void getPhantichList() {
         String target = "https://wethoong-server.herokuapp.com/phantich/getphantich/";
-        net = new NetworkHandler(this, target, NetworkHandler.METHOD_GET, NetworkHandler.MIME_TYPE_APPLICATION_JSON, null, ACTION_CASE_UPDATE_PHANTICH);
-        net.execute();
+//        net = new NetworkHandler(this, target, NetworkHandler.METHOD_GET, NetworkHandler.MIME_TYPE_APPLICATION_JSON, null, ACTION_CASE_UPDATE_PHANTICH);
+//        net.execute();
+//      Replace AsyncTask by Thread
+        netRunnable = new NetworkHandlerRunnable(this, target, NetworkHandler.METHOD_GET, NetworkHandler.MIME_TYPE_APPLICATION_JSON, null, ACTION_CASE_UPDATE_PHANTICH);
+        new Thread(netRunnable).start();
+        netRunnable.updateResult();
     }
 
     private void initPhantichList() {
         System.out.println("Initializing raw data");
-        MessageContainer result = net.getMessages();
+        MessageContainer result = netRunnable.getMessages();
         if (result != null) {
             if (result.getValue(MessageContainer.DATA) instanceof HashMap) {
                 rawPhantichList = (HashMap<String, Phantich>) result.getValue(MessageContainer.DATA);
@@ -276,7 +282,7 @@ public class SearchPhantichActivity extends AppCompatActivity implements Callbac
         System.out.println("==== actionCase: " + actionCase);
         switch (actionCase) {
             case ACTION_CASE_UPDATE_PHANTICH:
-                net.parsePhantichData();
+                netRunnable.parsePhantichData();
                 initPhantichList();
                 checkPhantichList();
                 break;

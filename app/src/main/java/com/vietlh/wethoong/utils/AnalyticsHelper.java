@@ -4,6 +4,9 @@ import android.content.Context;
 import android.os.Bundle;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
+
+import org.json.JSONObject;
 
 import java.util.HashMap;
 
@@ -17,6 +20,8 @@ public class AnalyticsHelper {
     public static String SCREEN_NAME_CHUNGTOI = "AboutUs";
     public static String SCREEN_NAME_UNDERCONSTRUCTION = "Underconstruction";
     public static String SCREEN_NAME_UPDATEVERSION = "UpdateVersion";
+
+    private static MixpanelAPI mp;
 
     //these parameters are cross-updated by DeviceInfoCollector. Always make sure that it runs first before sending any analytics event
     public static String idForVendor = "";
@@ -42,5 +47,35 @@ public class AnalyticsHelper {
         }
         mFirebaseAnalytics.logEvent(eventName, bundle);
         System.out.println("+++++ analytics tracking sent: " + payload);
+    }
+
+    public static void initMixPanel(Context context, String userID) {
+        if (userID == null) {
+            userID = GeneralSettings.DEFAULT_MIXPANEL_USER_ID;
+        } else {
+            userID = userID.trim().toLowerCase();
+        }
+        // Init Mixpanel
+        mp = MixpanelAPI.getInstance(context, GeneralSettings.MIXPANEL_PROJECT_TOKEN, GeneralSettings.TRACK_AUTOMATIC_EVENTS);
+        mp.identify(userID, true);
+    }
+
+    public static void sendAnalyticEvent(String eventName, HashMap<String, String> params) {
+        JSONObject props = new JSONObject();
+        if (params != null) {
+            for (String key : params.keySet()) {
+                try {
+                    props.put(key, params.get(key));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        if(GeneralSettings.MIXPANEL_ENABLED) {
+            mp.track(eventName, props);
+            System.out.println("+++++ MixPanel enabled\n" + eventName + "\n" + props);
+        }else {
+            System.out.println("+++++ MixPanel disabled\n" + eventName + "\n" + props);
+        }
     }
 }
