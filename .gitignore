@@ -3,6 +3,7 @@
 *.ap_
 *.DS_Store
 app/release/
+app/debug/
 
 # Files for the ART/Dalvik VM
 *.dex
