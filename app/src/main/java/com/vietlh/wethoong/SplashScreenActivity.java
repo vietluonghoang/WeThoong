@@ -135,42 +135,59 @@ public class SplashScreenActivity extends AppCompatActivity implements CallbackA
     private void fetchRemoteConfig() {
         //update settings from remote config
         System.out.println("----- SplashScreenActivity: update settings from remote config");
-        System.out.println("----- SplashScreenActivity: requiredDBVersion: " + (int) mFirebaseRemoteConfig.getLong("requiredDBVersion"));
-        GeneralSettings.requiredDBVersion = (int) mFirebaseRemoteConfig.getLong("requiredDBVersion");
-        System.out.println("----- SplashScreenActivity: MINIMUM_APP_VERSION_REQUIRED: " + mFirebaseRemoteConfig.getString("minimumAppVersion"));
-        GeneralSettings.MINIMUM_APP_VERSION_REQUIRED = mFirebaseRemoteConfig.getString("minimumAppVersion");
-        System.out.println("----- SplashScreenActivity: MINIMUM_ADS_INTERVAL: " + (int) mFirebaseRemoteConfig.getLong("minimumAdsInterval"));
-        GeneralSettings.MINIMUM_ADS_INTERVAL = (int) mFirebaseRemoteConfig.getLong("minimumAdsInterval");
-        System.out.println("----- SplashScreenActivity: ENABLE_INTERSTITIAL_ADS: " + mFirebaseRemoteConfig.getBoolean("enableInterstitialAds"));
-        GeneralSettings.ENABLE_INTERSTITIAL_ADS = mFirebaseRemoteConfig.getBoolean("enableInterstitialAds");
-        System.out.println("----- SplashScreenActivity: ENABLE_INAPP_NOTIF: " + mFirebaseRemoteConfig.getBoolean("enableInappNotif"));
-        GeneralSettings.ENABLE_INAPP_NOTIF = mFirebaseRemoteConfig.getBoolean("enableInappNotif");
-        System.out.println("----- SplashScreenActivity: ENABLE_BANNER_ADS: " + mFirebaseRemoteConfig.getBoolean("enableBannerAds"));
-        GeneralSettings.ENABLE_BANNER_ADS = mFirebaseRemoteConfig.getBoolean("enableBannerAds");
-        System.out.println("----- SplashScreenActivity: isDevMode: " + mFirebaseRemoteConfig.getBoolean("developementMode"));
-        GeneralSettings.isDevMode = mFirebaseRemoteConfig.getBoolean("developementMode");
-        System.out.println("----- SplashScreenActivity: setDefaultActiveQC41Id: " + mFirebaseRemoteConfig.getLong("defaultActiveQC41Id"));
-        GeneralSettings.setDefaultActiveQC41Id((int) mFirebaseRemoteConfig.getLong("defaultActiveQC41Id"));
         System.out.println("----- SplashScreenActivity: setDefaultActiveNDXPId: " + mFirebaseRemoteConfig.getLong("defaultActiveNDXPId"));
         GeneralSettings.setDefaultActiveNDXPId((int) mFirebaseRemoteConfig.getLong("defaultActiveNDXPId"));
+        System.out.println("----- SplashScreenActivity: setDefaultActiveQC41Id: " + mFirebaseRemoteConfig.getLong("defaultActiveQC41Id"));
+        GeneralSettings.setDefaultActiveQC41Id((int) mFirebaseRemoteConfig.getLong("defaultActiveQC41Id"));
+        System.out.println("----- SplashScreenActivity: defaultConnectionTries: " + mFirebaseRemoteConfig.getLong("defaultConnectionTries"));
+        //TO DO: set defaultConnectionTries here
+        System.out.println("----- SplashScreenActivity: defaultMixPanelEventSendTimeout: " + mFirebaseRemoteConfig.getLong("defaultMixPanelEventSendTimeout"));
+        GeneralSettings.DEFAULT_MIXPANEL_EVENT_SEND_TIMEOUT = (int) mFirebaseRemoteConfig.getLong("defaultMixPanelEventSendTimeout");
+        System.out.println("----- SplashScreenActivity: isDevMode: " + mFirebaseRemoteConfig.getBoolean("developementMode"));
+        GeneralSettings.isDevMode = mFirebaseRemoteConfig.getBoolean("developementMode");
+        System.out.println("----- SplashScreenActivity: ENABLE_BANNER_ADS: " + mFirebaseRemoteConfig.getBoolean("enableBannerAds"));
+        GeneralSettings.ENABLE_BANNER_ADS = mFirebaseRemoteConfig.getBoolean("enableBannerAds");
+        System.out.println("----- SplashScreenActivity: ENABLE_INAPP_NOTIF: " + mFirebaseRemoteConfig.getBoolean("enableInappNotif"));
+        GeneralSettings.ENABLE_INAPP_NOTIF = mFirebaseRemoteConfig.getBoolean("enableInappNotif");
+        System.out.println("----- SplashScreenActivity: ENABLE_INTERSTITIAL_ADS: " + mFirebaseRemoteConfig.getBoolean("enableInterstitialAds"));
+        GeneralSettings.ENABLE_INTERSTITIAL_ADS = mFirebaseRemoteConfig.getBoolean("enableInterstitialAds");
+        System.out.println("----- SplashScreenActivity: MINIMUM_ADS_INTERVAL: " + (int) mFirebaseRemoteConfig.getLong("minimumAdsInterval"));
+        GeneralSettings.MINIMUM_ADS_INTERVAL = (int) mFirebaseRemoteConfig.getLong("minimumAdsInterval");
+        System.out.println("----- SplashScreenActivity: MINIMUM_APP_VERSION_REQUIRED: " + mFirebaseRemoteConfig.getString("minimumAppVersion"));
+        GeneralSettings.MINIMUM_APP_VERSION_REQUIRED = mFirebaseRemoteConfig.getString("minimumAppVersion");
+        System.out.println("----- SplashScreenActivity: mixPanelEnabled: " + mFirebaseRemoteConfig.getBoolean("mixPanelEnabled"));
+        GeneralSettings.MIXPANEL_ENABLED = mFirebaseRemoteConfig.getBoolean("mixPanelEnabled");
+        System.out.println("----- SplashScreenActivity: requiredDBVersion: " + (int) mFirebaseRemoteConfig.getLong("requiredDBVersion"));
+        GeneralSettings.requiredDBVersion = (int) mFirebaseRemoteConfig.getLong("requiredDBVersion");
+        System.out.println("----- SplashScreenActivity: tamgiuPhuongtienDieukhoanID: " + mFirebaseRemoteConfig.getString("tamgiuPhuongtienDieukhoanID"));
+        GeneralSettings.setTamgiuPhuongtienDieukhoanID(new Gson().fromJson(mFirebaseRemoteConfig.getString("tamgiuPhuongtienDieukhoanID"), new HashMap<Integer, String>().getClass()));
+        System.out.println("----- SplashScreenActivity: trackAutomaticEvents: " + mFirebaseRemoteConfig.getBoolean("trackAutomaticEvents"));
+        GeneralSettings.TRACK_AUTOMATIC_EVENTS = mFirebaseRemoteConfig.getBoolean("trackAutomaticEvents");
+
 //        System.out.println("----- SplashScreenActivity: isAdsOptout: " + mFirebaseRemoteConfig.getBoolean("adsOptout"));
 //        GeneralSettings.isAdsOptout = mFirebaseRemoteConfig.getBoolean("adsOptout");
-        GeneralSettings.setTamgiuPhuongtienDieukhoanID(new Gson().fromJson(mFirebaseRemoteConfig.getString("tamgiuPhuongtienDieukhoanID"), new HashMap<Integer, String>().getClass()));
+
         GeneralSettings.isRemoteConfigFetched = true; //indicate that remote configs are set
 
 // send app_config event
         System.out.println("----- SplashScreenActivity: Sent app_config event");
         HashMap<String, String> params = new HashMap<>();
+
+        params.put("defaultActiveNDXPId", GeneralSettings.getDefaultActiveNDXPId() + "");
+        params.put("defaultActiveQC41Id", GeneralSettings.getDefaultActiveQC41Id() + "");
+        //TO DO: get defaultConnectionTries here
+        params.put("defaultMixPanelEventSendTimeout", GeneralSettings.DEFAULT_MIXPANEL_EVENT_SEND_TIMEOUT + "");
+        params.put("developementMode", GeneralSettings.isDevMode + "");
+        params.put("enableBannerAds", GeneralSettings.ENABLE_BANNER_ADS + "");
+        params.put("enableInappNotif", GeneralSettings.ENABLE_INAPP_NOTIF + "");
+        params.put("enableInterstitialAds", GeneralSettings.ENABLE_INTERSTITIAL_ADS + "");
+        params.put("minimumAdsInterval", GeneralSettings.MINIMUM_ADS_INTERVAL + "");
+        params.put("minimumAppVersion", GeneralSettings.MINIMUM_APP_VERSION_REQUIRED);
+        params.put("mixPanelEnabled", GeneralSettings.MIXPANEL_ENABLED + "");
         params.put("requiredDBVersion", GeneralSettings.requiredDBVersion + "");
-        params.put("MINIMUM_APP_VERSION_REQUIRED", GeneralSettings.MINIMUM_APP_VERSION_REQUIRED);
-        params.put("MINIMUM_ADS_INTERVAL", GeneralSettings.MINIMUM_ADS_INTERVAL + "");
-        params.put("ENABLE_INTERSTITIAL_ADS", GeneralSettings.ENABLE_INTERSTITIAL_ADS + "");
-        params.put("ENABLE_INAPP_NOTIF", GeneralSettings.ENABLE_INAPP_NOTIF + "");
-        params.put("ENABLE_BANNER_ADS", GeneralSettings.ENABLE_BANNER_ADS + "");
-        params.put("isDevMode", GeneralSettings.isDevMode + "");
-        params.put("DefaultActiveQC41Id", GeneralSettings.getDefaultActiveQC41Id() + "");
-        params.put("DefaultActiveNDXPId", GeneralSettings.getDefaultActiveNDXPId() + "");
-        params.put("TamgiuPhuongtienDieukhoanID", GeneralSettings.getTamgiuPhuongtienDieukhoanID(GeneralSettings.getDefaultActiveNDXPId()));
+        params.put("tamgiuPhuongtienDieukhoanID", GeneralSettings.getTamgiuPhuongtienDieukhoanID(GeneralSettings.getDefaultActiveNDXPId()));
+        params.put("trackAutomaticEvents", GeneralSettings.TRACK_AUTOMATIC_EVENTS + "");
+
         AnalyticsHelper.sendAnalyticEvent("app_config", params);
     }
 }
