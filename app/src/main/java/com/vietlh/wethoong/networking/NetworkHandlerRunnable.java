@@ -241,7 +241,9 @@ public class NetworkHandlerRunnable implements Runnable{
 
     public void updateResult(){
         System.out.println("############ onPostExecute....\n" + messages);
-        if (ACTION_CASE_CHECK_CONNECTION.equals(callbackActionCase)) {
+        if (messages == null) {
+            System.out.println("############ ........ null");
+        } else if (ACTION_CASE_CHECK_CONNECTION.equals(callbackActionCase)) {
             if (messages.getValue(MessageContainer.DATA) != null) {
                 System.out.println("===== Internet connection available ");
                 GeneralSettings.wasConnectedToInternet = true;
@@ -250,7 +252,7 @@ public class NetworkHandlerRunnable implements Runnable{
                 GeneralSettings.wasConnectedToInternet = false;
             }
         } else {
-            if (messages != null && GeneralSettings.wasConnectedToInternet) {
+            if (GeneralSettings.wasConnectedToInternet) {
                 parent.triggerCallbackAction(callbackActionCase);
             } else {
                 System.out.println("############ onPostExecute: Unable to trigger callback action....\n" + messages.getValue(MessageContainer.ERROR) + " : " + messages.getValue(MessageContainer.MESSAGE));
