@@ -37,7 +37,7 @@ public class GeneralSettings {
     public static boolean isRemoteConfigFetched = false;
     public static boolean isAdsOptout = false; //false will allow ads to display
     public static boolean isDevMode = false;
-    public static int requiredDBVersion = 14;
+    public static int requiredDBVersion = 15;
     private static int defaultActiveQC41Id = 7; //this would be used for the search of querying the lastest road sign
     private static int defaultActiveNDXPId = 17; //this would be used for the search of querying the latest NDXP
 
