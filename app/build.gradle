@@ -9,8 +9,8 @@ android {
         applicationId "com.vietlh.wethoong"
         minSdkVersion 21
         targetSdkVersion 35
-        versionCode 20071001
-        versionName "2.1"
+        versionCode 24122401
+        versionName "2.6"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
