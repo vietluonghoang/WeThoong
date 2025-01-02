@@ -1,12 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <defaults>
   <entry>
-    <key>minimumAppVersion</key>
-    <value>1.0</value>
+    <key>tamgiuPhuongtienDieukhoanID</key>
+    <value>{"6":"6592", "2":"2820", "17":"12766", "23":"16779"}</value>
   </entry>
   <entry>
-    <key>tamgiuPhuongtienDieukhoanID</key>
-    <value>{"6":"6592", "2":"2820", "17":"12819"}</value>
+    <key>defaultActiveNDXPId</key>
+    <value>23</value>
+  </entry>
+  <entry>
+    <key>requiredDBVersion</key>
+    <value>16</value>
+  </entry>
+  <entry>
+    <key>defaultActiveQC41Id</key>
+    <value>22</value>
+  </entry>
+  <entry>
+    <key>trackAutomaticEvents</key>
+    <value>false</value>
+  </entry>
+  <entry>
+    <key>developementMode</key>
+    <value>false</value>
   </entry>
   <entry>
     <key>enableInappNotif</key>
@@ -21,27 +37,23 @@
     <value>false</value>
   </entry>
   <entry>
-    <key>minimumAdsInterval</key>
-    <value>350</value>
+    <key>mixPanelEnabled</key>
+    <value>true</value>
   </entry>
   <entry>
     <key>defaultConnectionTries</key>
-    <value>30</value>
+    <value>20</value>
   </entry>
   <entry>
-    <key>requiredDBVersion</key>
-    <value>12</value>
+    <key>defaultMixPanelEventSendTimeout</key>
+    <value>3000</value>
   </entry>
   <entry>
-    <key>developementMode</key>
-    <value>false</value>
+    <key>minimumAppVersion</key>
+    <value>2.0</value>
   </entry>
   <entry>
-    <key>defaultActiveQC41Id</key>
-    <value>7</value>
-  </entry>
-  <entry>
-    <key>defaultActiveNDXPId</key>
-    <value>17</value>
+    <key>minimumAdsInterval</key>
+    <value>400</value>
   </entry>
 </defaults>
