@@ -688,14 +688,21 @@ public class Queries {
         }
 
         Cursor cursor = connection.executeQuery(sql);
-        HashMap<String, String> result = new HashMap<>();
+        HashMap<String, HashMap<String, String>> result = new HashMap<>();
         if (cursor != null) {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
                 String pid = String.valueOf(cursor.getInt(0));
                 String pname = cursor.getString(1);
-                if (pid != null) {
-                    result.put(pname, pid);
+                if (!pid.isEmpty()) {
+                    HashMap<String, String> pinfo;
+                    if(result.get(pname) == null){
+                        pinfo = new HashMap<>();
+                    }else{
+                        pinfo = result.get(pname);
+                    }
+                    pinfo.put(pid, pname);
+                    result.put(pname, pinfo);
                 }
                 cursor.moveToNext();
             }
@@ -713,16 +720,24 @@ public class Queries {
         ArrayList<String> vbid = new ArrayList<String>();
 //        vbid.add(GeneralSettings.getVanbanInfo("qc41", "id"));
         vbid.add(""+GeneralSettings.getDefaultActiveQC41Id());
-        for (Dieukhoan dk : searchDieukhoanByIDs(new ArrayList<String>(result.values()), vbid)) {
+        ArrayList<String> idList = new ArrayList<>();
+        for (HashMap<String, String> pinfo: result.values()){
+            idList.addAll(pinfo.keySet());
+        }
+        for (Dieukhoan dk : searchDieukhoanByIDs(idList, vbid)) {
             dkList.put(String.valueOf(dk.getId()), dk);
         }
 
         for (String rs : result.keySet()) {
-            Dieukhoan dk = dkList.get(result.get(rs));
-            Dieukhoan fdk = new Dieukhoan(0, 0, null);
-            fdk.cloneDieukhoan(dk);
-            fdk.setDefaultMinhhoa(rs);
-            finalResult.add(fdk);
+            for (String pid: result.get(rs).keySet()){
+                Dieukhoan dk = dkList.get(pid);
+                if (dk != null){
+                    Dieukhoan fdk = new Dieukhoan(0, 0, null);
+                    fdk.cloneDieukhoan(dk);
+                    fdk.setDefaultMinhhoa(rs);
+                    finalResult.add(fdk);
+                }
+            }
         }
 
         return finalResult;
@@ -764,14 +779,21 @@ public class Queries {
         }
 
         Cursor cursor = connection.executeQuery(sql);
-        HashMap<String, String> result = new HashMap<>();
+        HashMap<String, HashMap<String, String>> result = new HashMap<>();
         if (cursor != null) {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
                 String pid = String.valueOf(cursor.getInt(0));
                 String pname = cursor.getString(1);
-                if (pid != null) {
-                    result.put(pname, pid);
+                if (!pid.isEmpty()) {
+                    HashMap<String, String> pinfo;
+                    if(result.get(pname) == null){
+                        pinfo = new HashMap<>();
+                    }else{
+                        pinfo = result.get(pname);
+                    }
+                    pinfo.put(pid, pname);
+                    result.put(pname, pinfo);
                 }
                 cursor.moveToNext();
             }
@@ -787,17 +809,26 @@ public class Queries {
 
         HashMap<String, Dieukhoan> dkList = new HashMap<>();
         ArrayList<String> vbid = new ArrayList<String>();
-        vbid.add(GeneralSettings.getDefaultActiveQC41Id() + "");
-        for (Dieukhoan dk : searchDieukhoanByIDs(new ArrayList<String>(result.values()), vbid)) {
+//        vbid.add(GeneralSettings.getVanbanInfo("qc41", "id"));
+        vbid.add(""+GeneralSettings.getDefaultActiveQC41Id());
+        ArrayList<String> idList = new ArrayList<>();
+        for (HashMap<String, String> pinfo: result.values()){
+            idList.addAll(pinfo.keySet());
+        }
+        for (Dieukhoan dk : searchDieukhoanByIDs(idList, vbid)) {
             dkList.put(String.valueOf(dk.getId()), dk);
         }
 
         for (String rs : result.keySet()) {
-            Dieukhoan dk = dkList.get(result.get(rs));
-            Dieukhoan fdk = new Dieukhoan(0, 0, null);
-            fdk.cloneDieukhoan(dk);
-            fdk.setDefaultMinhhoa(rs);
-            finalResult.add(fdk);
+            for (String pid: result.get(rs).keySet()){
+                Dieukhoan dk = dkList.get(pid);
+                if (dk != null){
+                    Dieukhoan fdk = new Dieukhoan(0, 0, null);
+                    fdk.cloneDieukhoan(dk);
+                    fdk.setDefaultMinhhoa(rs);
+                    finalResult.add(fdk);
+                }
+            }
         }
 
         return finalResult;

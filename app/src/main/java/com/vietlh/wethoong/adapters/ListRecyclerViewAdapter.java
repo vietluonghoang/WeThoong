@@ -150,7 +150,7 @@ public class ListRecyclerViewAdapter extends RecyclerView.Adapter<ListRecyclerVi
     }
 
     private String populateMatchingKeyword(String noidung) {
-        if (keyword.length() > 0) {
+        if (keyword != null && !keyword.isEmpty()) {
             String[] slicedKeyword = keyword.split(" ");
             int matchingLength = slicedKeyword.length;
 
