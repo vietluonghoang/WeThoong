@@ -185,7 +185,7 @@ public class SplashScreenActivity extends AppCompatActivity implements CallbackA
         params.put("minimumAppVersion", GeneralSettings.MINIMUM_APP_VERSION_REQUIRED);
         params.put("mixPanelEnabled", GeneralSettings.MIXPANEL_ENABLED + "");
         params.put("requiredDBVersion", GeneralSettings.requiredDBVersion + "");
-        params.put("tamgiuPhuongtienDieukhoanID", GeneralSettings.getTamgiuPhuongtienDieukhoanID(GeneralSettings.getDefaultActiveNDXPId()));
+        params.put("tamgiuPhuongtienDieukhoanID", GeneralSettings.getTamgiuPhuongtienDieukhoanID());
         params.put("trackAutomaticEvents", GeneralSettings.TRACK_AUTOMATIC_EVENTS + "");
 
         AnalyticsHelper.sendAnalyticEvent("app_config", params);

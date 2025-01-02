@@ -125,6 +125,20 @@ public class GeneralSettings {
         return tamgiuPhuongtienDieukhoanID.get(id);
     }
 
+    public static String getTamgiuPhuongtienDieukhoanID() {
+        String tamgiuPTDKID = "{";
+
+        //Not sure why casting the config from JSON to HashMap, then update the tamgiuPhuongtienDieukhoanID hashmap via making the call to
+        //the 'setTamgiuPhuongtienDieukhoanID' function, the hashmap turn to <String, String> successfully instead of <Integer, String> as declared.
+        //there is no way to declare String in this foreach loop since it violate the declaration above, but it putting int/Integer in the loop,
+        //a casting error happens "java.lang.ClassCastException: java.lang.String cannot be cast to java.lang.Integer"
+        //Thus, put Object here to bypass the issue
+        for (Object id : tamgiuPhuongtienDieukhoanID.keySet()) {
+            tamgiuPTDKID += "\"" + id + "\":\"" + tamgiuPhuongtienDieukhoanID.get(id) + "\", ";
+        }
+        return new UtilsHelper().removeLastCharacters(tamgiuPTDKID,2) + "}";
+    }
+
     public static void setTamgiuPhuongtienDieukhoanID(HashMap<Integer,String> tamgiuPhuongtienDkID) {
         tamgiuPhuongtienDieukhoanID = tamgiuPhuongtienDkID;
     }
